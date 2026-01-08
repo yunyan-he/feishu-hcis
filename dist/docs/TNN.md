@@ -487,4 +487,427 @@ Pros and cons
 
 数学推导再来一遍
 
-# 
+# L8 ART & Hopfield
+
+## ART
+
+### Definition and types
+
+definition of ART : a family of neural network paradigms, developed by  G.Carpenter  and S.Grossberg since 1976.
+
+> ART; Adaptive Resonance Theory is a family of neural  network paradigms that have been developed by G.Carpenter  and S.Grossberg since 1976.
+
+Members of ART network family:
+
+- ART 1 1976 and 1987,  
+- ART 2 1987, 
+- ART 2A-2C 1991,  
+- ART 3 1990,  
+- ART MAP 1991, Fuzzy ART 1991,  
+- Fuzzy ART MAP 1992.  
+
+### motivation and ability
+
+Motivation for ART-1: aim to overcome the <b>stability-plasticity dilemma</b>( competitive learning paradigms has such problem)
+
+ability of ART networks:【无监督】
+
+- Pattern recognition【classification任务，但是不是监督式 ART 会把输入模式映射到 F2 层的某个神经元（类别原型）。】
+- Content-addressable memory
+- <b>Unsupervised</b> learning【ART1 完全不需要标签。 它通过“共振（resonance）”机制决定是否创建新类别。】
+- Clustering 【ART 的 F2 层神经元本质上就是聚类中心。 每个 F2 神经元代表一个 cluster。】
+
+### ART-1
+
+- 2 layers F1 F2
+    - F1 Comparison layer
+        - Contains N neurons
+        - Receives binary input vector X(dim = N)
+        - Produces comparison signals $s_n$
+    - F2 Recognition layer
+        - Contains M neurons, each neuron represents a category
+        - Produces recognition responses $r_m$
+        - Outputs a one‑out‑of‑M winner vector Y(F2 使用 Winner-Takes-All（WTA）：响应最大的神经元 = 1;其他所有神经元 = 0)
+
+- 2 weight matrices
+    - Forward weights W
+        - Real‑valued $W_{nm}$
+        - Carry signals from F1 → F2
+    - Backward weights V
+        - Binary $V_{nm}$
+        - Project from F2 → F1
+
+- 2 layers represents short-term memory STM or working-memory
+- ART-1  is a binary network(input 0/1)
+
+<img src="/assets/SPgXbb0JgooIkexVfBfcukSAnNv.png" src-width="934" src-height="398" align="center"/>
+
+procedure：
+
+1. F1 receive binary input $X_n$
+    1. Each F1 neuron n receives one component xn
+    2. No transformation is applied
+    3. output:  $s_n$ =  $X_n$
+
+2. F1 connect with F2 via W
+    1. W is real‑valued, size N×M
+    2. Each neuron connect with all neurons of F2 with weight  matrix W
+
+3. F2 receive from F1
+    1. F2 neuron j receives  $x_n*w_{nj}$from F1 neuron n
+    2. Each neuron j in F2 will receive $r_j=∑_{n=1}^N x_n w_{nj}$
+    3. Select one winner that is largest, output $Y_m$ only one dim is 1 else 0【WTA winner takes all】
+
+<img src="/assets/Jm4RbQTN0oEWNqxzmkNcVLyTnyd.png" src-width="938" src-height="430" align="center"/>
+
+1. F2 project back to F1 via V
+    1. F2 send back to F1 by weight matrix V(binary)
+    2. For F2 neuron j , send out  $Y_j$(0 or 1) *  Vji to neuron i in F1【相当于 选中的那个F2 neuron发送出去的才是有效的】
+
+2. F1 receive returns from F2
+    1. Each neuron will receive  $net_n$(dim = n)
+    2. For neuron i  $net_i=∑_{m=1}^Mv_{mi}y_m$
+    3. Only $y_j$ is 1 so   $net_i=v_{ji}$
+    4. Backward projection 将 F2 胜者神经元 j 的 prototype（V 的第 j 行）完整地投射回 F1，使得 F1 收到的向量正是V的第j行 就是WTA里面那个胜利者对应的prototype
+
+3. F1 neuron computes new output 
+    每个 F1 神经元 n 有三个输入：
+    1. 输入向量xn
+    2. 从 F2 返回的类别模版 $net_n=v_{jn}$
+    3. 控制信号 gain<b> </b>g1
+    $$s_n =
+\begin{cases}
+1, & \text{if } x_n \cdot \text{net}_n = 1 \\
+1, & \text{if } x_n \cdot g_1 = 1 \\
+1, & \text{if } \text{net}_n \cdot g_1 = 1 \\
+0, & \text{otherwise}
+\end{cases}$$
+    2/3 rule
+    解释：
+    - <b>如果输入和模板都为 1 → 保持 1</b>
+    - <b>如果输入为 1 且 g1 激活 → 1</b>
+    - <b>如果模板为 1 且 g1 激活 → 1</b>
+    - 否则输出 0
+
+4. New F1 output
+    1. Send the new s' to F2
+    2. Repite the cycle until resonance
+    这就是所谓的 <b>two‑third rule</b>（三个条件中满足任意一个即可）。
+
+## Hopfield
+
+### 动机与科学背景 (Motivation)
+
+Hopfield 网络在 1982 年由 John J. Hopfield 提出，它的出现是神经网络研究重新回到国际舞台的“发令枪” (1)(1)(1)(1)。讲义指出其灵感来源于三大领域：
+
+- <b>神经生物学</b>：模拟生物神经元的二值发放状态（Firing 或 Not Firing） (2)(2)(2)(2)。
+- <b>计算机科学</b>：旨在实现<b>内容可寻址存储（Content-addressable memory, CAM）</b> (3)(3)(3)(3)。
+- <b>统计物理学</b>：借鉴了磁性材料（自旋玻璃 Spin-Glasses）的特性，利用原子自旋（北极/南极）的二值状态进行信息处理 (4)(4)(4)(4)。
+
+---
+
+### 核心任务 (Task)
+
+文档明确了 Hopfield 网络的两个主要用途：
+
+1. <b>联想记忆（Associative Memory）</b>：
+    - 这是一种“以内容为索引”的存储方式 (5)。
+    - 即使提供的是原始信息的碎片或残缺部分，系统也能检索并还原出完整的原始信息（例如：输入图片的一部分，系统恢复完整图片） (6)。
+
+2. <b>解决优化问题</b>：利用其能量最小化的特性来寻找问题的最优解 (7)。
+
+---
+
+### 数学结构 (Structure)
+
+讲义详细定义了硬件和参数的设置规则：
+
+- <b>神经元定义</b>：
+    - 由 $K$ 个完全相同的二值神经元组成。
+    - 状态 $x_k \in \{-1, +1\}$ 。
+    - 整个网络的状态是一个 $K$ 维二进制向量 $X$ (10)。
+
+- <b>权重矩阵 </b>$W$<b> 的三大铁律</b>：
+    - <b>全连接</b>：每个神经元 $i$ 与除自己外的所有神经元 $j$ 相连 。
+    - <b>对称性</b>：必须满足 $w_{ij} = w_{ji}$ 。
+    - <b>无自反馈</b>：对角线元素必须为零，即 $w_{ii} = 0$ 。
+
+---
+
+### 动力学与更新规则 (Functionality: Dynamics)
+
+这是网络如何“运行”的核心逻辑。
+
+#### 更新公式
+
+每个神经元 $k$ 的下一个状态 $x_k(t+1)$ 取决于加权总和与阈值 $\theta_k$ 的比较 ：
+
+- <b>标准规则</b>：如果加权和 $z > \theta_k$，则 $x_k = +1$；否则为 $-1$ 。
+- <b>变体规则</b>：如果加权和正好等于阈值$\theta_k$，神经元保持前一个状态 $x_k(t)$ 不变 。
+
+#### 异步更新 (Asynchronous Update) —— 文档强调这是标准操作
+
+- <b>机制</b>：在每一个更新步骤中，<b>只选择一个</b>神经元 $j$ 进行状态更新。
+- <b>反馈效应</b>：下一个神经元的计算会“看到”这个已经改变的状态，这种反馈推动了系统的演化 。
+- <b>顺序</b>：神经元的更新序列应该是随机的，且每个神经元在每一轮（时间步 $t$）中应恰好被选中一次 。
+
+#### 能量函数 (Energy Function)
+
+文档引入了能量 $E$ 的概念来证明收敛性 212121：
+
+$$E = -\frac{1}{2}\sum_{i}^{K}\sum_{j}^{K}w_{ij}x_{i}x_{j} + \sum_{k}^{K}\theta_{k}x_{k}$$
+
+- <b>收敛证明点</b>：在对称权重和异步更新下，每一次更新都会使 $E$ 减小或保持不变。
+- <b>最终态</b>：系统最终会停在一个稳定的最终模式 $X^*$ 上 。
+
+---
+
+### 学习与训练 (Learning)
+
+学习的过程就是通过设置权重 $w_{ij}$，在能量曲面上“挖坑”（创造极小值点），使训练模式处于坑底 。
+
+1. <b>存储单个模式</b>：
+    - <b>逻辑</b>：如果两个神经元在模式中状态相同，权重应为正；不同则为负 。
+    - <b>公式</b>：$w_{ik} = x_i \cdot x_k$。
+
+2. <b>存储 </b>$P$<b> 个模式</b>：
+    - <b>公式</b>：$w_{ik} = \sum_{p=1}^{P} x_i^p \cdot x_k^p$ 。
+    - <b>实现方式</b>：将 $P$ 个单模式生成的矩阵进行累加。
+
+---
+
+### 局限性与应用 (Limitations & Applications)
+
+- <b>存储容量限制</b>：最大存储数量 $P_{max} \approx 0.138 \times K$。
+- <b>操作模式</b>：
+    - <b>自动联想模式 (Autoassociator)</b>：将模式与自身关联（对称矩阵） (30)。
+    - <b>异联想模式 (Heteroassociator)</b>：将模式 $p$ 与模式 $q$ 关联（矩阵不再对称），可用于学习序列。
+
+- <b>实际应用</b>：模式识别、去噪、字符识别，甚至是量子计算的相关研究。
+- <b>硬件实现</b>：包括 80 年代的数字稀疏编码、自旋玻璃模拟以及光学实现方案。
+
+# L9 Recurrent MLPs & Neocognitron
+
+## Recurrent MLPs
+
+### Motivation
+
+1. 为什么我们需要“递归神经网络（Recurrent Networks）”。
+
+三种典型的神经网络拓扑结构
+
+讲义想表达的核心：
+
+> <b>现实世界很多任务是时间相关的（序列），前馈网络无法处理“过去的信息”，所以需要 Recurrent Networks。</b>
+
+1. 什么是 Recurrent MLP？
+
+讲义说：
+
+> 一种特殊的递归网络，其本质是 MLP（多层感知机），但加入了少量显式的反馈连接。
+
+也就是说：
+
+- 结构上仍然是 MLP（输入层 → 隐藏层 → 输出层）
+- 但加入了从后层返回前层的连接（带时间延迟）
+- 这样网络就能“记住过去”
+
+1. MLP structure 回顾
+
+MLP 的三个层次：
+
+1. Backpropagation（回顾）
+
+权重更新公式：
+
+$$Δw_ij=η⋅δ_j⋅out_i$$
+
+δ 的计算：
+
+讲义在这里复习 BP，是为了后面讲：
+
+> <b>普通 BP 不能直接用于 Recurrent MLP，因为反馈会导致无限反向传播。</b>
+
+### Recurrent MLP
+
+1. Recurrent MLP 的特点：
+    - 在普通 MLP 的基础上<b>加上反馈连接feedback connections.</b>
+    - 反馈来自“后面的层” → “前面的层”
+    - 反馈信号带有<b>时间延迟</b>（t → t+1） time delay 
+    - 这样网络就能“记住过去的输出或隐藏状态”
+
+2. 为什么要有时间延迟 Δt？
+
+讲义说：
+
+> feedback lines typically have an explicit time delay … suspend the transmission by one time step t → t+1
+
+意思是：
+
+- 反馈信号不是立即回到网络
+- 而是延迟一个时间步
+- 这样网络在 t+1 时刻能看到 t 时刻的输出
+
+这就是 RNN 的“记忆”。
+
+1. <b>两种典型的 Recurrent MLP 结构</b>
+
+讲义说：
+
+> The two typical MLP architectures with feedback connections are:
+<b>Jordan-Networks</b> and <b>Elman-Networks</b>
+
+<b>They differ in the way the feedback connections are located.</b>
+
+它们的区别在于：
+
+- Jordan：反馈来自 <b>输出层</b>
+- Elman：反馈来自 <b>隐藏层</b>
+
+#### Jordan Network——反馈来自输出层
+
+Jordan 网络结构：
+
+- 输出层 Y(t) → 反馈（weighted with g） → <b>context neurons（上下文神经元）</b>
+- context neurons 存储过去的输出 Y(t−1)，weighted with g，通常是1
+- context neurons 的输出作为<b>额外输入additional input </b>传给隐藏层【相当于与输入层位置一样 增强输入 传给隐藏层】
+- context neuron 的输出也会反馈给自己（自反馈），权重是 λ（通常是0）不保留更久的记忆，只记住上一时刻。
+- context neuron 的输入:$c_m(t)=g⋅y_m(t−1)+λ⋅c_m(t−1)$
+- context neuron 的输出 = 它当前的值 c(t)
+- 输入层 → 隐藏层的权重数量是：
+    - (1+N+M)×H
+    - 1 = bias
+    - N = 输入维度
+    - M = context neurons 数量
+    - H = 隐藏层神经元数
+
+```text
+输入层： X(t) = [x1(t), x2(t), ..., xN(t)]
+context： C(t) = g * Y(t-1)<-|  
+隐藏层： H(t)                 |
+输出层： Y(t)-----------------
+```
+
+#### Elman
+
+1. Elman Network 到底是什么？
+
+> <b>Elman 网络 = 普通 MLP + 把隐藏层的输出 H(t) 反馈到隐藏层（通过 context neurons），带时间延迟 Δt。</b>
+
+也就是说：
+
+> <b>隐藏层有自己的“记忆输入”。</b>
+
+1. 每一层（除了最后一层）都有 context neurons（上下文神经元）：
+
+- 它们存储上一时刻的隐藏层输出 H(t−1)
+- 然后把这些值作为额外输入送回隐藏层
+-  对隐藏层来说：
+    - 隐藏层有 H 个神经元
+    - 就会有 H 个 context neurons
+
+因为每个隐藏神经元都需要一个对应的记忆单元。
+
+1. 和 Jordan 不同：
+    - <b>Elman 没有 λ 自反馈</b>
+    - context neurons 只存储上一时刻的隐藏层输出
+    - $$c_h(t)=h_h(t−1)$$
+
+Jordan 有 λ，Elman 没有。
+
+#### <b>Jordan vs Elman</b>
+
+#### Recurrent MLPs（递归多层感知机） 的运行模式（operation modes）
+
+> <b>Recurrent MLPs（递归 MLP）和普通前馈 MLP 不一样，它们的输出不仅取决于当前输入，还取决于过去的输出或状态，因此具有“动态行为”。dynamical behavior</b>
+
+#### “<b>dynamical behavior</b>”？
+
+因为：
+
+- 普通 MLP 是静态映射：
+ [ $X(t) \rightarrow Y(t)$ ] 每次输入一样，输出就一样。
+- 递归 MLP 是动态映射：
+ [ $Y(t) = f(X(t), Y(t-1))$ ] 即使输入 $X(t)$ 不变，输出 $Y(t)$也可能变化，因为它还依赖过去的输出。
+
+---
+
+1. Jordan 网络的特殊行为（讲义重点）
+
+讲义反复强调：
+
+> 如果是一个 <b>Jordan 网络</b>，权重固定（不学习），输入不变 $X(t+1) = X(t)$，它仍然可以生成一个<b>无限的输出序列 </b>$Y(t)$。
+
+这说明：
+
+- 网络有“记忆”
+- 即使输入不变，输出也能变化
+- Jordan 网络可以生成时间序列、状态序列
+
+---
+
+1. 初始化过程
+
+运行 Jordan 网络时：
+
+1. <b>初始化 context neurons</b>  
+ 比如： [ $c_1(t_0) = 0.0,\quad c_2(t_0) = 0.0$ ]
+2. <b>输入第一个模式</b>$X(t_0)$
+ 网络计算出第一个输出 $Y(t_0)$
+3. <b>输出 </b>$Y(t_0)$<b> 被反馈到 context neurons</b>  
+ 在下一时刻 $t_1 = t_0 + 1$，context neurons 的值变了
+4. <b>隐藏层接收到新的 context 输入</b>  
+ 所以即使 $X(t_1) = X(t_0)$，输出 $Y(t_1) \ne Y(t_0)$
+
+这就是“动态行为”。
+
+---
+
+#### 四种运行模式（operation modes）
+
+讲义后面列出了 <b>四种运行模式</b>，非常重要：
+
+Mode 1:  Input is constant, network output converges to a const. value.  
+
+Mode 2:  Input is varying with time, network output converges.  
+
+Mode 3:  Input is constant, network output <b>generates a sequence of states,  values or a continuous time series</b>.  
+
+Mode 4:  Input is varying with time, network output generates a sequence of  states, values or a continuous time series.
+
+### Train & Learning
+
+1. <b>循环 MLP（Jordan / Elman 网络）必须处理时间序列数据。</b>
+
+因此：
+
+- 输入 X(t) 必须是随时间变化的序列  X(t) is <b>time  dependent data</b>; typically it is a complete<b> time series</b>
+- 如果是<b>监督学习</b>，教师信号 Y(t) 也必须是时间序列<b> time  dependent data</b>
+- <b>无监督或强化学习</b>时，必须明确“网络输出到底代表什么” what the result of the networks shall be.
+
+换句话说：
+<b>循环网络不是对单个样本做映射，而是对整个时间序列建模。</b>
+
+1. Why not Backpropagation
+
+> <b>经典 BP 不能用于循环网络，因为反馈连接会导致无限反向传播。</b>
+
+原因：
+
+- 循环网络内部有 feedback（例如 y(t−1) → context → 下一步输入）
+- 如果直接反向传播，误差会沿着循环结构无限回溯→ <b>梯度永远不会停止传播</b>
+
+<b>feedback loop would cause an infinite back-propagation</b>
+
+三种常见的循环网络训练方法
+
+1. BPTT（Backpropagation Through Time）也叫 <b>时间展开（Unfolding in Time）</b>
+2. RTRL（Real-Time Recurrent Learning）
+    - RTRL 是一种 <b>在线学习算法</b>
+    - 每来一个时间步就更新一次权重
+    - 计算量非常大（复杂度 $O(n^4)$）
+
+3. Open Loop Learning / Teacher Forcing
+
+#### 
+#### 

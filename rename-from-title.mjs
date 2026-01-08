@@ -1,35 +1,63 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-const distDir = path.join(process.cwd(), "dist");
+const ROOT = './dist/docs';
+const rootDocs = JSON.parse(fs.readFileSync('./dist/docs.json', 'utf-8'));
 
-function sanitizeFileName(name) {
-    return name
-        .replace(/[\/\\?%*:|"<>]/g, "") // 去掉非法字符
-        .replace(/\s+/g, " ")           // 合并多空格
-        .trim();
-}
+// Recursive flatten function
+const flatten = (nodes) => {
+    let result = [];
+    nodes.forEach(node => {
+        result.push(node);
+        if (node.children && node.children.length > 0) {
+            result = result.concat(flatten(node.children));
+        }
+    });
+    return result;
+};
 
-for (const file of fs.readdirSync(distDir)) {
-    const fullPath = path.join(distDir, file);
-    if (!file.endsWith(".md") || !fs.statSync(fullPath).isFile()) continue;
+const docs = flatten(rootDocs);
 
-    const content = fs.readFileSync(fullPath, "utf8");
-    const match = content.match(/---\s*([\s\S]*?)\s*---/);
-    if (!match) continue;
+// Clean illegal characters
+const clean = (name) => name.replace(/[\/:*?"<>|\\]/g, '_');
 
-    const frontmatter = match[1];
-    const titleMatch = frontmatter.match(/title:\s*(.+)/);
-    if (!titleMatch) continue;
+// Sort by slug length descending (deepest first) 
+// This ensures we rename children (files/dirs) inside a folder BEFORE we rename the folder itself.
+docs.sort((a, b) => b.slug.split('/').length - a.slug.split('/').length);
 
-    let title = titleMatch[1].trim();
-    title = title.replace(/^["']|["']$/g, "");
+docs.forEach(doc => {
+    const title = clean(doc.title);
 
-    const newName = sanitizeFileName(title) + ".md";
-    const newPath = path.join(distDir, newName);
+    // Rename Md File
+    // doc.slug is the relative path from ROOT, e.g. "parent/child"
+    const oldFile = path.join(ROOT, `${doc.slug}.md`);
+    if (fs.existsSync(oldFile)) {
+        const dir = path.dirname(oldFile);
+        const newFile = path.join(dir, `${title}.md`);
 
-    if (newPath !== fullPath) {
-        console.log(`Rename: ${file} -> ${newName}`);
-        fs.renameSync(fullPath, newPath);
+        if (oldFile !== newFile) {
+            console.log(`Renaming File: ${oldFile} -> ${newFile}`);
+            try {
+                fs.renameSync(oldFile, newFile);
+            } catch (e) {
+                console.error(`Error renaming file ${oldFile}:`, e);
+            }
+        }
     }
-}
+
+    // Rename Directory
+    const oldDir = path.join(ROOT, doc.slug);
+    if (fs.existsSync(oldDir)) {
+        const dir = path.dirname(oldDir);
+        const newDir = path.join(dir, title);
+
+        if (oldDir !== newDir) {
+            console.log(`Renaming Dir:  ${oldDir} -> ${newDir}`);
+            try {
+                fs.renameSync(oldDir, newDir);
+            } catch (e) {
+                console.error(`Error renaming dir ${oldDir}:`, e);
+            }
+        }
+    }
+});

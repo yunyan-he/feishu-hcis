@@ -12,3 +12,5 @@
 - [面试记录](GzC3wLxQeiAc7Ukf1WGcl4kzndb.md)
   - [interview](GzC3wLxQeiAc7Ukf1WGcl4kzndb/UPgbwFzCAiYbQmksdS2cCTOBnrh.md)
   - [Interview 1 背景](GzC3wLxQeiAc7Ukf1WGcl4kzndb/FQgQwKvSOib5wQkTS1Hc2O6InIe.md)
+- [ILSDS](QRiFwuy0liWXaGk5KDqcgG4dnYf.md)
+- [MMD](QQqNwziPmiYyFBknLftcE8vWnLb.md)

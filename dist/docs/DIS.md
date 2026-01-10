@@ -759,7 +759,7 @@ Reversible actions（可撤销）更好（如垃圾桶）
 
 ## Paper Prototypes
 
-在“Designing Interactive Systems I (DIS I)”关于**原型设计（Prototyping）<b>的课程大纲中，来源材料将</b>纸质原型（Paper Prototypes）**定位为设计流程中最基础、最关键的初步阶段。
+在“Designing Interactive Systems I (DIS I)”关于<b>原型设计（Prototyping）</b>的课程大纲中，来源材料将<b>纸质原型（Paper Prototypes）</b> 定位为设计流程中最基础、最关键的初步阶段。
 
 ### Characteristics
 
@@ -772,7 +772,7 @@ Reversible actions（可撤销）更好（如垃圾桶）
 来源根据交互深度和呈现方式将纸质原型分为几种类型：
 
 - <b>类故事板型 (Storyboard-like, Type A)：</b>
-    - 在一张纸上放置多个手绘的 UI 快照帧，并标注连接关系。
+    - 在一张纸上放置多个手绘的 UI 快照帧，并标注连接关系(侧重用户流程完整呈现，标注用户操作路径)。
     - <b>局限性：</b> 这种形式只能展示<b>一种固定的交互序列</b>（即特定场景），主要侧重于 UI 本身而非环境。
 
 - <b>翻页书型 (Flipbook, Type B)：</b>
@@ -922,6 +922,9 @@ Reversible actions（可撤销）更好（如垃圾桶）
 - <b>经典案例：</b> 1984 年 IBM 的语音识别编辑器测试，当时计算机尚无法实时处理语音，于是通过隐藏的打字员模拟了识别效果。
 
 ### todo：prototype lifecycle 
+
+1. Throw away prototyping
+2. Incremental develop
 
 ### 硬件原型设计 (Hardware Prototypes)
 

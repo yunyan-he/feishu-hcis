@@ -153,25 +153,54 @@ $$\mathbf{x_{new} \leftarrow x_{old} - \eta \cdot \nabla f(x)}$$
 
 ## Training Neural Networks: Backpropagation
 
-在“Mining Media Data I: Neural Networks & Gradient Descent”的背景下，来源将<b>反向传播（Backpropagation）视为训练神经网络的核心算法工具。其本质是梯度下降（Gradient Descent）与微积分链式法则（Chain Rule）的结合</b>，旨在通过迭代优化找到使损失函数 $L$ 最小化的权重 $W$。
+在“Mining Media Data I: Neural Networks & Gradient Descent”的背景下，来源将<b>反向传播（Backpropagation）</b>视为训练神经网络的核心算法工具<b>。</b>其本质是<b>梯度下降（Gradient Descent）与微积分链式法则（Chain Rule）的结合</b>，旨在通过迭代优化找到使损失函数 $L$ 最小化的权重 $W$。
+
+$L(W)=L(y,\hat y)$ 模型预测 $\hat y$ 与真实值 $y$ 的差距。
+
+隐藏层或输出层神经元的 <b>预激活输入</b> 是：
+
+$$p_b=∑_iw_{bi}a_i+b_b$$
+
+也就是说每个$a_i$ (上一层的输出也就是原输入 也就是上一层经过激活函数的值) 乘以对应权重$w_{bi}$再求和加上偏置就是预激活输入。
+
+我们想知道如果只改变一个权重$w_{bi}$（神经元b和上一层第i个神经元的权重），损失函数 $L$ 会怎么变化。
+
+$\frac{∂L}{∂w_{bi}}=\frac{∂L}{∂p_b}⋅ \frac{∂p_b}{∂w_{bi}}$  
+
+$\frac{∂p_b}{∂w_{bi}}=a_i$(展开$p_b$,只有一项与$w_{bi}$有关)
+
+因此令$\delta_b = \frac{\partial L}{\partial p_b}$  ，则$\frac{∂L}{∂w_{bi}} = \delta_b · a_i$
 
 以下是这些来源对反向传播及其在训练过程中作用的详细看法：
 
-### 1. 核心机制：误差信号（$\delta$）的定义
+### Error Signal $\delta_b$
 
 反向传播的核心在于为网络中的每个神经元 $b$ 计算一个<b>误差信号 </b>$\delta_b$。
 
-- <b>数学定义</b>：$\delta_b = \frac{\partial L}{\partial p_b}$，其中 $p_b$ 是该神经元的传播值（即预激活输入）。
+- <b>数学定义</b>：$\delta_b = \frac{\partial L}{\partial p_b}$，其中 $p_b$ 是该神经元的传播值。
 - <b>物理含义</b>：它衡量了改变该神经元的传播值对最终总损失产生的<b>影响程度</b>。
     
-### 2. “后向传递”（Backward Pass）的计算路径
+### Backward Pass(Computing )<b> </b>$\delta_b$
 
 来源详细描述了误差是如何在网络中从右向左“传播”的：
 
-- <b>输出层神经元（Output Neuron）</b>：产生直接误差。计算公式为 $\delta_o = (a_o - y) f'(p_o)$，即将预测输出与目标的差值乘以激活函数的导数。如果激活函数是 <b>Sigmoid</b>，其导数可简化为 $a_o(1-a_o)$。
+- <b>输出层神经元（Output Neuron）</b>：产生直接误差。计算公式为 $\delta_o = (a_o - y) f'(p_o)$，即将预测输出（就是经过激活函数后的$a_o$）与目标的差值乘以激活函数的导数。如果激活函数是 <b>Sigmoid</b>，其导数可简化为 $a_o(1-a_o)$。
+
+> $a_o$是$p_o$经过激活函数后的值 即$a_o = f(p_o)$(1)，损失函数以MSE为例 ：$L = \frac {1}{2} · (a_o-y)^2$ (2)
+> 1. $$δo=\frac{∂L}{∂p_o}=\frac{∂L}{∂a_o}⋅\frac{∂a_o}{∂p}$$
+> 2. 根据（2）算出 $\frac{∂L}{∂a_o} = a_o-y$
+> 3. 根据（1）算出 $\frac{∂a_o}{∂p} = f'(p_o)$
+
 - <b>隐藏层神经元（Hidden Neuron）</b>：继承来自下一层的误差。神经元 $b$ 的误差由其所有后续层神经元 $k$ 的误差信号 $\delta_k$ 加权总和决定：$\delta_b = f'(p_b) \sum_{k \in \text{next layer}} w_{kb} \delta_k$。
-    
-### 3. 权重更新规则与梯度来源
+
+> 隐藏层没有真实标签，它不会直接出现在损失函数里。它影响损失的唯一方式是：<b>通过它连接的下一层神经元 k。</b>
+> $$p_b→a_b→p_k→a_k→L$$
+> $δb=\frac{∂L}{∂p_b}=∑_k\frac{∂L}{∂p_k}⋅\frac{∂p_k}{∂a_b}⋅\frac{∂a_b}{∂p_b}$ 
+> 1. $$\frac{∂L}{∂p_k} =\delta_k$$
+> 2. $p_k = \sum_iw_{ki}·a_{i}$ ，所以$\frac{∂p_k}{∂a_b} = w_{kb}$
+> 3. $$\frac{∂a_b}{∂p_b} = f'(p_b)$$
+
+### Weight Update Rule
 
 来源指出，更新特定权重 $w_{bj}$（从神经元 $j$ 指向神经元 $b$）需要两个方向的信息：
 
@@ -179,48 +208,28 @@ $$\mathbf{x_{new} \leftarrow x_{old} - \eta \cdot \nabla f(x)}$$
 - <b>来自左侧的信息</b>：前一层神经元的激活值 $h_j$。
 - <b>最终梯度与更新</b>：梯度的计算公式为 $\frac{\partial L}{\partial w_{bj}} = \delta_b \cdot h_j$。根据梯度下降规则，权重更新为：$w_{bj} \leftarrow w_{bj} - \eta \delta_b h_j$，其中 $\eta$ 为学习率。
     
-### 4. 效率优化：随机梯度下降 (SGD)
+### Efficiency优化：Stochastic Gradient Descent（SGD)
 
-由于标准梯度下降需要计算整个数据集的误差，效率较低，因此来源推荐在反向传播中使用<b>随机梯度下降（SGD）</b>。
+由于standard梯度下降需要计算整个数据集的误差，效率较低，因此来源推荐在反向传播中使用<b>随机梯度下降（SGD）</b>。
 
-- <b>优势</b>：每次仅选取单个随机样本更新权重，速度更快，且产生的“噪声”有助于算法跳出<b>局部最小值</b>。
-- <b>代价</b>：寻找最小值的路径会变得较为“抖动”（Jittery）。
-    
-### 5. 在“通用学习循环”中的地位
+> $\frac{∂L}{∂w}=\frac{1}{N}∑_{i=1}^N\frac{∂L(i)}{∂w}$ 计算所有的样本的梯度 再平均
 
-来源将反向传播置于一个<b>四步走的通用学习循环</b>中，作为连接误差评估与参数更新的关键桥梁：
+- <b>优势</b>：
+    1. Faster updates：每次仅选取单个随机样本更新权重，速度更快
+    2. Resilient：产生的“noise”有助于算法跳出<b>局部最小值local Minima</b>。
+    > SGD 每次只用一个样本更新权重
+> 每个样本的梯度方向都不一样
+> 所以更新方向带有“随机抖动”
 
-1. <b>前馈传递</b>：计算输出。
-2. <b>衡量误差</b>：对比现实。
-3. <b>反向传播（Backward Pass）</b>：计算梯度以识别哪些参数导致了误差。
-4. <b>更新</b>：稍微调整参数。
+- <b>代价</b>：寻找最小值的路径noise path会变得较为“抖动”（Jittery）。
     
 ---
 
 <b>比喻理解：</b>
 
-反向传播就像是<b>一家公司内部的责任追溯机制</b>。当最终产品（输出层）出现缺陷（损失）时，质检员不仅指出产品错了，还会根据管理链条（权重）反向追溯，告诉每个部门（隐藏层）他们对这个错误负有多少责任（$\delta$），以便每个职员（参数）微调自己的工作方式，确保下次产出的产品更接近完美。
+反向传播就像是<b>一家公司内部的责任追溯机制</b>。当最终产品（输出层）出现缺陷（Loss）时，质检员不仅指出产品错了，还会根据管理链条（权重weighs）反向追溯，告诉每个部门（隐藏层）他们对这个错误负有多少责任（$\delta$），以便每个职员（参数）微调自己的工作方式，确保下次产出的产品更接近完美。
 
-如果是<b>标准 GD</b>，他会仔细检查四周所有方向再迈步；而 <b>SGD</b> 就像是他只随机选一个方向观察就立刻迈步——虽然路径会有些弯曲，但他走得更快，且不容易被路上的小坑洼（局部最小值）困住。
-
----
-
-### 4. 效率优化：随机梯度下降 (SGD)
-
-针对大规模媒体数据集，计算整个数据集的梯度（标准 GD）速度过慢。来源推荐使用 <b>SGD</b>：
-
-- <b>机制：</b> 每次仅随机选取**一个样本（或小批量）**来估计梯度并更新权重,。
-- <b>优势：</b> 计算速度更快，且产生的“噪声”有助于算法<b>跳出局部最小值</b>。
-- <b>代价：</b> 寻找最小值的路径会变得“抖动”（Jittery）。
-    
-### 5. 整合：通用学习循环 (Universal Learning Loop)
-
-来源最终将梯度下降置于一个<b>四步走的通用学习循环</b>中，认为这是现代机器学习模型的共同逻辑：
-
-1. <b>前向传播</b>（计算当前输出）。
-2. <b>衡量误差</b>（与真实情况对比）。
-3. <b>反向传播</b>（计算梯度以识别误差来源）。
-4. <b>更新参数</b>（利用梯度下降稍微调整参数）,。
+如果是<b>标准 GD</b>，他会仔细检查四周所有方向再迈步；而 <b>SGD</b> 就像是他只随机选一个方向观察就立刻迈步——虽然路径会有些弯曲jittery，但他走得更快，且不容易被路上的小坑洼（局部最小值local minima）困住。
 
 ## The Universal Learning Loop
 
@@ -228,39 +237,42 @@ $$\mathbf{x_{new} \leftarrow x_{old} - \eta \cdot \nabla f(x)}$$
 
 无论是在进行矩阵分解（Matrix Factorization）还是训练复杂的神经网络，该循环都被认为是一个恒定不变的四步迭代过程，旨在通过误差驱动的反馈来优化模型参数。以下是来源对该循环各阶段及其在媒体数据挖掘中意义的详细看法：
 
-### 1. 核心定义：跨算法的统一性
+### Definition：跨算法的统一性
 
 来源明确指出，尽管算法的数学形式可能不同（如因子矩阵或神经元权重），但其<b>核心逻辑是完全相同的</b>。这一循环将数据挖掘任务从静态的公式计算转变为动态的、自我修正的优化过程。
 
-### 2. 循环的四个关键阶段
+### 循环的四个关键阶段
+
+来源将反向传播置于一个<b>四步走的通用学习循环</b>中，作为连接误差评估与参数更新的关键桥梁：
+
+1. <b>Forward Pass</b>：compute current output
+2. <b>Measure error</b>：compare output to reality。
+3. <b>Backward Pass/Gradients</b>：计算梯度 ($\nabla$) 或误差信号 ($\delta$)
+4. <b>Update</b>：$\theta \leftarrow \theta - \eta \cdot \text{Gradient}$。
 
 根据来源的总结，该通用循环由以下四个步骤构成：
 
-- <b>第一步：前向传播（Forward Pass）</b>
+- <b>第一步：Forward Pass</b>
     - <b>定义</b>：根据当前的参数计算当前的输出或近似值。
     - <b>在神经网络中</b>：表现为输入数据经过各层权重和激活函数的链式运算，最终产生预测值 $\hat{y}_i$。
     - <b>在矩阵分解中</b>：表现为计算当前 $C$ 和 $P$ 矩阵的乘积 $CP^T$ 以逼近原始矩阵 $X$。
-        
-- <b>第二步：衡量误差（Measure Error）</b>
+
+- <b>第二步：Measure Error</b>
     - <b>定义</b>：将模型的输出与“现实”（真实标签或原始数据）进行比较。
     - <b>衡量指标</b>：来源提到了多种度量方式，包括<b>平方误差（Squared Error）</b>、<b>欧几里得距离（Euclidean distance）以及用于矩阵近似的平方 Frobenius 范数</b>。
-        
-- <b>第三步：反向传播/梯度计算（Backward Pass / Gradients）</b>
+
+- <b>第三步：Backward Pass / Gradients）</b>
     - <b>定义</b>：计算梯度 ($\nabla$) 或误差信号 ($\delta$)，以识别哪些参数导致了误差。
     - <b>机制</b>：在神经网络中，这一步利用<b>链式法则</b>将误差从输出层向后传播，计算每个权重对损失的影响程度。
     - <b>在约束优化中</b>：如原型分析（AA），这一步涉及计算受限特征空间内的梯度方向。
-        
+
 - <b>第四步：更新（Update）</b>
     - <b>定义</b>：根据计算出的梯度稍微调整参数。
     - <b>更新公式</b>：$\theta \leftarrow \theta - \eta \cdot \text{Gradient}$，其中 $\eta$ 是控制步长的<b>学习率</b>。
-        
-### 3. 效率优化：从批量到随机（SGD）
 
-在处理大规模媒体数据（如社交网络点赞数据或文章监测）时，完整执行该循环可能非常缓慢。因此，来源引入了<b>随机梯度下降（SGD）作为该循环的效率优化版：它不再对整个数据集进行误差衡量，而是针对单个随机样本</b>运行该循环，从而实现更快的参数微调。
+### 预测性数据挖掘的基石
 
-### 4. 预测性数据挖掘的基石
-
-这一学习循环被视为实现**预测性数据挖掘（Predictive Data Mining）**任务（如分类、回归和异常检测）的技术引擎。通过不断运行该循环，模型能够从已标记的媒体数据中提取模式，从而对未知信息进行推断，例如识别虚假新闻或分析社交媒体用户的毒性行为。
+这一学习循环被视为实现<b>预测性数据挖掘（Predictive Data Mining）</b> 任务（如分类、回归和异常检测）的技术引擎。通过不断运行该循环，模型能够从已标记的媒体数据中提取模式，从而对未知信息进行推断，例如识别虚假新闻或分析社交媒体用户的毒性行为。
 
 ---
 
@@ -273,28 +285,15 @@ $$\mathbf{x_{new} \leftarrow x_{old} - \eta \cdot \nabla f(x)}$$
 3. <b>反向传播</b>：射手在大脑中回溯刚才的动作，分析是手指松早了还是重心偏了（识别导致误差的参数）。
 4. <b>更新</b>：稍微调整站姿或拉弓的力度（利用学习率微调参数），准备下一次射击。
 
----
-
-### 训练机制：通用学习循环
-
-FFNN 的有效性取决于如何优化其参数。它被置于**“通用学习循环”（Universal Learning Loop）**中运行：
-
-1. <b>前向传播（Forward Pass）</b>：根据当前权重计算预测值 $\hat{y}_i$。
-2. <b>衡量误差（Measure Error）</b>：比较 $\hat{y}_i$ 与真实标签 $y$（例如使用欧几里得距离或平方误差）。
-3. <b>反向传播（Backward Pass）</b>：利用梯度下降和链式法则计算误差信号 $\delta$，识别哪些权重导致了误差。
-4. <b>权重更新（Update）</b>：根据学习率 $\eta$ 微调权重。
-    
-### 5. 效率考量
-
-在处理大规模媒体数据时，来源指出标准的梯度下降可能效率较低，因此通常采用<b>随机梯度下降（SGD）</b>。虽然 SGD 的路径较为“抖动”，但它计算速度更快，且有助于跳出局部最小值。
-
 # Outlier/Anomality Analysis
+
+or Novelty Detection/Deviation Detection
 
 ## Outlier Concepts（异常点概念）
 
 ### 定义：Deviating Observations
 
-- 异常点outlier是<b>偏离整体数据分布或行为模式的观测值</b>。
+- 异常点outlier是<b>偏离整体数据分布或行为模式的观测值</b>。<em>An outlier is an observation which deviates so much from the other observations</em>
 - 它们可能是<b>错误 / 噪声</b>（比如传感器坏了）<b>、罕见但真实的事件</b>（比如一次罕见的攻击、一次极端操作）<b>、或新模式 / 新趋势的信号</b>（比如新型欺诈方式、新战术）
 
 ### 特征：Rare and Distinct
@@ -305,7 +304,7 @@ FFNN 的有效性取决于如何优化其参数。它被置于**“通用学习�
 ### 应用场景：
 
 - <b>Fraud Detection</b>：识别欺诈交易或行为。
-- <b>Cybersecurity</b>：检测入侵、恶意流量、账号盗用。
+- <b>Intrusion detection: </b>eg:Cybersecurity 监控系统、网络或应用，识别是否有未经授权的访问、攻击或异常行为。
 - <b>System Health Monitoring</b>：识别设备故障或性能异常。
 - <b>Media/Sports Highlights</b>：自动提取高光片段或关键事件。
 
@@ -315,7 +314,22 @@ FFNN 的有效性取决于如何优化其参数。它被置于**“通用学习�
 
 这是异常检测的技术路径分类，分为四大类：
 
-### Probabilistic / Statistical（概率统计方法）
+<table>
+<colgroup>
+<col width="182"/>
+<col width="144"/>
+<col width="395"/>
+</colgroup>
+<tbody>
+<tr><td><p><b>方法类别</b></p></td><td><p><b>代表算法</b></p></td><td><p><b>核心思想</b></p></td></tr>
+<tr><td><p>Probabilistic/Statistical</p></td><td><p>Z-Score, Gaussian Mixture Models</p></td><td><p><b>假设数据服从分布</b><em>，偏离均值即异常</em><br/><em>Assume data follows a distribution (e.g., Gaussian)</em></p></td></tr>
+<tr><td><p>Proximity/Density Based</p></td><td><p>kNN, LOF</p></td><td><p>异常点远离其他点或周围密度低<br/><em>Assume normal points are close together/ dense</em></p></td></tr>
+<tr><td><p>Classification Based</p></td><td><p>One-Class SVM, Isolation Forests</p></td><td><p>学习正常边界，边界外即异常<br/><em>Learn a boundary around normal data</em></p></td></tr>
+<tr><td><p>Reconstruction-Based</p></td><td><p>AE, AA</p></td><td><p>重建数据，误差大即异常<br/><em>Assume normal data can be compressed, outliers cannot.</em></p></td></tr>
+</tbody>
+</table>
+
+### *Probabilistic / Statistical（概率统计方法）
 
 - <b>代表算法：Z-Score</b>
 - <b>核心思想：</b>  
@@ -335,7 +349,7 @@ $$Z=\frac{x−μ}σ$$
 - <b>优点：</b> 简单、快速、可解释
 - <b>缺点：</b> 对分布假设敏感，无法处理复杂结构或高维数据
 
-### Proximity / Density（邻近与密度方法）
+### *Proximity / Density（邻近与密度方法）
 
 - <b>代表算法：kNN（k-近邻）</b>
 - <b>核心思想：</b>  
@@ -351,7 +365,7 @@ $$Z=\frac{x−μ}σ$$
 - <b>优点：</b> 直观、适应性强
 - <b>缺点：</b> 高维数据中距离不再可靠；计算复杂度高
 
-### Classification（分类方法）
+### *Classification（分类方法）
 
 - <b>代表算法：One-Class SVM</b>
 - <b>核心思想：</b>  
@@ -392,7 +406,16 @@ $$Z=\frac{x−μ}σ$$
 
 ## Reconstruction-Based Detection（重构式检测）
 
-这是异常检测中最具表达力的一类方法，核心思想是：
+这是异常检测中最具表达力的一类方法.
+
+<b>Tuition:</b><em>Train model to learn </em><b>low-dimensional representation</b><em> of data, then model </em><b>attemps to reconstruct</b><em> the original input from compressed code</em>
+
+<b>Hypothesis: </b>
+
+- <em>normal patterns: frequent/learned well → low reconstruction error</em>
+- <em>outlier:rare pattern/noise not captured by latent space→high reconstruction error</em>
+
+核心思想是：
 
 用模型重构输入数据，重构误差大的点可能是异常。
 
@@ -400,27 +423,105 @@ $$Z=\frac{x−μ}σ$$
 
 ### Autoencoders (AE)：神经网络式重构
 
-<b>结构拆解：</b>
+<b>Non-linear compression using Neural Networks. </b>
 
-- <b>Encoder（编码器）：</b>  
-把高维输入压缩成低维潜在表示（latent representation），提取数据的核心特征。
-- <b>Decoder（解码器）：</b>  
-从潜在表示重建原始输入，尝试“还原”数据。
-- <b>Error（误差）：</b>  
-计算原始输入与重建结果之间的差异，作为异常度量。常用指标有 MSE（均方误差）、MAE（平均绝对误差）等。
+Autoencoder 就是：把输入压缩成低维 latent，再从 latent 重建输入，通过最小化重建误差来学习“正常模式”。
 
-<b>异常判定逻辑：</b>
+<img src="/assets/UDJDbnQw0ohxW7xiLTFcOBM2nPg.png" src-width="914" src-height="338" align="center"/>
 
-- 正常数据 → 模型训练充分 → 重建误差小
-- 异常数据 → 模型无法有效重建 → 重建误差大
+#### <b>结构拆解：</b>
+
+1. <b>Encoder（编码器）：</b>  
+把高维输入$x$压缩成低维潜在表示$h$（latent representation），提取数据的核心特征 <em>learns low dimensional data descriptions</em> 。
+    - $p_i^{(1)}=W^{(1)}·x_i+b^{(1)}$   $h=f(p^{(1)})$
+        - $W^{(1)}$：编码器的权重
+        - $b^{(1)}$：偏置
+        - $p^{(1)}$：预激活输入
+        - $f$：激活函数（ReLU、sigmoid 等）
+        - $h$：latent code（低维表示）
+
+2. <b>Decoder（解码器）：</b>  
+从latent $h$重建$\hat x$，尝试“还原”原始输入$x$。
+    - $p_i^{(2)}=W^{(2)}h_i+b^{(2)}$ $\hat x=g(p^{(2)}_i)$
+        - $W^{(2)}$：解码器的权重
+        - $g$：激活函数（ReLU、sigmoid 等）
+        - $\hat x$：重建后的输入
+
+3. <b>Error（误差）：</b>  
+计算原始输入与重建结果之间的差异，作为异常度量。<em>Train by minimizing reconstruction loss </em>常用指标有 MSE（均方误差）、MAE（平均绝对误差）等。
+    - Reconstruction Loss 训练目标 $L=∑_{i=1}^nℓ(x_i,\hat x_i)$
+    - 常用损失MSE：$ℓ=\frac{1}{2}∥x_i−\hat x_i∥^2$让重建的$\hat x$尽可能接近原始输入$x$
+
+4. <b>Matrix factorization interpretation 矩阵分解角度</b>(linear activation function)<b>：</b>
+    - $$xi≈W^{(2)}(W^{(1)}·x_i)$$
+    - $W^{(1)}$ 看成 <b>投影矩阵</b>（把 x 投影到低维 latent）
+    - $W^{(2)}$看成 <b>重建矩阵</b>（从 latent 重建 x）
+    于是：$x_i≈C·p_i$
+    其中：
+    - $$C = W^{(2)}$$
+    - $p_i = W^{(1)}·x_i$ 
+
+#### 分类
+
+One-class classification 单类分类
+
+训练时只给模型看一种类别的数据（正常类），不提供其他类别。
+
+eg：你只有“数字 4”的样本，没有“0、1、2、3、5、6、7、8、9”的样本
+
+Reconstruction-based decision making 意思是：用重建误差来做分类决策。
 
 <b>适用场景：</b>
 
-- 图像、序列、传感器数据等复杂结构
+- Autoencoder 的核心能力是 学习数据的低维结构，因此特别适合：图像、序列、传感器数据等复杂结构
 - 无监督学习（只用正常数据训练）
 - 可扩展到变种：LSTM-AE、Variational AE、Convolutional AE 等
 
-### Archetypal Analysis (AA)：原型式重构
+### Archetypal Analysis（原型分析）
+
+Archetypal Analysis（原型分析）可以理解为： 不是去找“平均玩家/平均行为”，而是去找<b>极端代表性行为模式（原型）</b>，然后用这些原型来解释其他样本。
+
+#### Offline Phase 先学习“正常行为的模式”
+
+<b>目标：从历史数据中学习 archetypes（极端典型行为），并建立正常行为的分布。</b>
+
+- <b>Step 1: Data Collection</b>（数据收集）收集大量历史数据，这些数据通常代表正常行为。
+- <b>Step 2: Feature Engineering</b>（特征工程）把原始数据转成可用于分析的特征，这个步骤的目标是把复杂行为转成可比较的数值向量。
+- <b>Step 3: Archetype Analysis</b>（AA 极点分析）AA 会找到一组 <b>archetypes（极端典型行为）</b>：
+    - 每个 archetype 是数据空间的“极端点”
+    - 所有数据点都可以表示为这些 archetypes 的凸组合
+    - $xi≈Z·h_i$  其中：Z：archetypes（矩阵）；$h_i$：每个数据点的系
+    AA 的作用是：
+    > <b>学习行为的“原型模式”</b>
+
+- <b>Step 4: Distribution of Archetypes</b>（Archetype 分布建模）对所有训练数据的 hi（系数）进行统计：
+    - 哪些 archetypes 常见
+    - 哪些组合代表正常行为
+    - 哪些区域几乎没有数据（潜在异常区域）
+    这一步建立了 <b>正常行为的 latent 分布</b>。
+
+<b>本质：</b>  
+Offline Phase 是在回答——
+
+> “在历史数据中，存在怎样的一些‘典型打法/典型局势原型’（原型）？”
+
+---
+
+#### Online Phase：Anomaly Detection
+
+<b>目标：实时检测新数据是否偏离正常 archetype 结构。</b>
+
+对每个新数据点 $x_i$：
+1. 用 AA 重建它：
+
+$x_i=Z·h_i$ 其中 hi 是通过投影求得的系数。
+1. 计算重建误差：$∥x_i−\hat x_i∥^2$
+2. 用重建误差作为异常评分（outlier measure）
+误差小 → 数据点符合 archetypes → 正常
+误差大 → 无法用 archetypes 重建 → 异常
+
+<b>叙事意义：</b>  
+ 重构误差高的时间段 = 值得被重点讲述的瞬间。
 
 <b>结构拆解：</b>
 
@@ -430,11 +531,6 @@ $$Z=\frac{x−μ}σ$$
 原型点是数据空间中的“极端代表”，类似于边界点或典型行为。
 - <b>Unsupervised approach（无监督方法）：</b>  
 不需要标签，仅依赖数据结构本身。
-
-<b>异常判定逻辑：</b>
-
-- 正常数据 → 能被原型有效表示
-- 异常数据 → 无法用原型组合表示 → 表示误差大或权重异常
 
 <b>适用场景：</b>
 
@@ -527,107 +623,7 @@ $$Z=\frac{x−μ}σ$$
 
 # Predictive Data Mining I
 
-## Media Data Recap
-
-（媒体数据回顾：原型分析 + LoL 叙事）
-
----
-
-### Archetypal Analysis（原型分析）
-
-Archetypal Analysis（原型分析）可以理解为： 不是去找“平均玩家/平均行为”，而是去找<b>极端代表性行为模式（原型）</b>，然后用这些原型来解释其他样本。
-
-#### Offline Phase：Data & Features
-
-<b>目标：构建“原型空间”</b>
-
-- 数据来源： 
-    - 游戏日志（LoL）、事件流、时间序列
-    - 每分钟经济、经验、击杀、建筑物控制等
-
-- 特征设计： 
-    - <b>Gold（经济）</b>：经济差、增长速度
-    - <b>XP（经验）</b>：等级差、经验获取节奏
-    - <b>Kills（击杀）</b>：单杀、团战击杀、连杀
-    - <b>Structures（建筑）</b>：塔、龙、先锋、男爵
-
-- 数据处理： 
-    - 标准化
-    - 降维（如 PCA）
-    - 构建时间片特征向量
-
-<b>本质：</b>  
-Offline Phase 是在回答——
-
-> “在历史数据中，存在怎样的一些‘典型打法/典型局势原型’（原型）？”
-
----
-
-#### Online Phase：Anomaly Detection
-
-<b>目标：在实时或新数据中发现“异常故事点”</b>
-
-有了原型之后，每一局新比赛、每一个时间片，都可以：
-
-- 将新比赛/时间片投影到原型空间
-- 计算与最近原型的距离
-- 偏离越大 → 越“异常”
-- 异常含义： 
-    - 突然经济暴涨
-    - 团战一波翻盘
-    - 奇怪的运营路线
-    - 极端激进/极端佛系打法
-
-这些异常就是解说最爱讲的“故事节点”。
-
----
-
-#### Measure：Reconstruction Loss
-
-原型分析通常会用原型的线性组合来近似重构一个样本：
-
-$$x≈∑_kα_k⋅a_k$$
-
-其中 $ak$ 是原型，$αk$ 是权重。
-
-<b>核心度量：重构误差</b>
-
-$$L=∥x−\hat x∥$$
-
-- <b>L 小</b>：样本“很典型”
-- <b>L 大</b>：样本“不正常”，可能是关键事件
-
-<b>叙事意义：</b>  
- 重构误差高的时间段 = 值得被重点讲述的瞬间。
-
-### Storytelling in LoL：用数据讲比赛故事
-
-#### Dataset：Oceania Region Matches
-
-- 区域数据量适中
-- 包含比赛级、时间级、事件级数据
-
-#### Features：Gold, XP, Kills, Structures
-
-这些特征是“故事的量化语言”：
-
-- Gold：滚雪球、暴富
-- XP：等级压制
-- Kills：战斗主导权
-- Structures：地图控制
-
-#### Archetypes: Laning, Jungling, Team Fights
-
-这里的“Archetypes”可以理解为<b>三类典型局势/阶段原型</b>：
-
-- <b>Laning（对线期）</b>：线权、补刀、抓人
-- <b>Jungling（野区节奏）</b>：资源控制、入侵、反野
-- <b>Team Fights（团战）</b>：开团方式、技能命中、伤害分布
-
-<b>连接回原型分析：</b>  
- 每类阶段都可以学习一组原型 → 用来解释比赛处于哪种“故事模板”。
-
----
+<img src="/assets/HCBvbkOXlooMLIxScAdc7bdRn3z.png" src-width="1202" src-height="808" align="center"/>
 
 ## Decision Trees（决策树：结构、划分、优势）
 

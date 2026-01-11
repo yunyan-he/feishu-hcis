@@ -36,41 +36,41 @@ sidebar_position: 6
 - <b>事件 (Event)</b>：样本空间的子集 ($A \subseteq \Omega$)。
  例：事件 “team wins” 就是 ({W})。
 - <b>概率 (Probability)</b>：
- 对事件 (A)，记为 (P(A))，满足： [$0 \le P(A) \le 1$, $P(\Omega) = 1$ ] 事件不发生的概率： [ $P(A^c)= 1 - P(A)$] 例如：事件 “team does not win” = ({D, T})。
+ 对事件 (A)，记为 (P(A))，满足： $0 \le P(A) \le 1$, $P(\Omega) = 1$ 事件不发生的概率： $P(A^c)= 1 - P(A)$ 例如：事件 “team does not win” = ({D, T})。
 
 ---
 
 ### 随机变量 Random Variables (RVs)
 
 <b>随机变量 (Random Variable, RV)</b>：
- 是一个从样本空间到实数的映射： [ $L : \Omega \to \mathbb{R}$ ]
+ 是一个从样本空间到实数的映射：  $L : \Omega \to \mathbb{R}$ 
 
 #### 离散随机变量 Discrete RV
 
-- 取值集合（支持集 support）为有限或可数集合： [ $S_L = {l_1, \dots, l_n}$ ]
-- <b>概率质量函数 (Probability Mass Function, </b><b>PMF</b><b>)</b>： [ $P_L(l_i) = P(L = l_i)$ ] 满足： [ $0 \le P_L(l_i) \le 1,\quad \sum_{i=1}^n P_L(l_i) = 1$ ]
+- 取值集合（支持集 support）为有限或可数集合： $S_L = {l_1, \dots, l_n}$ 
+- <b>概率质量函数 (Probability Mass Function, </b><b>PMF</b><b>)</b>： $P_L(l_i) = P(L = l_i)$  满足： $0 \le P_L(l_i) \le 1,\quad \sum_{i=1}^n P_L(l_i) = 1$ 
 
 #### 连续随机变量 Continuous RV
 
-- 有<b>概率密度函数 (Probability Density Function, </b><b>PDF</b><b>)</b> ($f_L(x)$)，对任意区间 ([a,b])： [ $P(a \le L \le b) = \int_a^b f_L(x)dx$ ]
-- 性质： [ $f_L(x) \ge 0,\quad \int_{-\infty}^{\infty} f_L(x)dx = 1$ ]
+- 有<b>概率密度函数 (Probability Density Function, </b><b>PDF</b><b>)</b> ($f_L(x)$)，对任意区间 ([a,b])：  $P(a \le L \le b) = \int_a^b f_L(x)dx$ 
+- 性质： $f_L(x) \ge 0,\quad \int_{-\infty}^{\infty} f_L(x)dx = 1$ 
 - 支持集可以是 ($\mathbb{R}$) 或子集如 ($[c,d]$)。
-- 对连续型随机变量： [ $P(L = l) = 0 \quad \forall l$ ]
+- 对连续型随机变量： $P(L = l) = 0 \quad \forall l$ 
 
 ---
 
 ### 分布函数 Distribution Functions
 
-<b>累积分布函数 (Cumulative Distribution Function, CDF)</b>： [ $F_L(l) = P(L \le l),\quad l \in \mathbb{R}$ ]
+<b>累积分布函数 (Cumulative Distribution Function, CDF)</b>：  $F_L(l) = P(L \le l),\quad l \in \mathbb{R}$ 
 
-- <b>离散情形</b>： [ $F_L(l) = \sum_{l_i \le l} P_L(l_i)$ ]
-- <b>连续情形</b>： [ $F_L(l) = \int_{-\infty}^l f_L(t),dt$ ]
+- <b>离散情形</b>：$F_L(l) = \sum_{l_i \le l} P_L(l_i)$ 
+- <b>连续情形</b>：$F_L(l) = \int_{-\infty}^l f_L(t)dt$ 
 
 性质：
 
 - 单调不减 (non-decreasing)
 - 右连续 (right-continuous)
-- ($\lim_{l\to -\infty} F_L(l) = 0)，(\lim_{l\to +\infty} F_L(l) = 1$)
+- $$\lim_{l\to -\infty} F_L(l) = 0)，\lim_{l\to +\infty} F_L(l) = 1$$
 
 ---
 
@@ -93,12 +93,12 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 
 <b>目的</b>：从联合分布得到边缘分布 (marginal distribution)。
 
-- <b>离散情形</b>： [ $p(l) = \sum_m p(l, m)$ ]
-- <b>连续情形</b>： [ $f(x) = \int f(x, y)dy$ ]
+- <b>离散情形</b>：  $p(l) = \sum_m p(l, m)$ 
+- <b>连续情形</b>：  $f(x) = \int f(x, y)dy$ 
 
 例子：
 
- [ $P(\text{Rain}) = P(\text{Rain, Cloudy}) + P(\text{Rain, not Cloudy})$]
+$$P(\text{Rain}) = P(\text{Rain, Cloudy}) + P(\text{Rain, not Cloudy})$$
 
 ---
 
@@ -106,36 +106,36 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 
 <b>目的</b>：把联合分布分解为条件分布与边缘分布。
 
-- <b>离散</b>： [ $p(l, m) = p(l \mid m)p(m)$ ]
-- <b>连续</b>： [ $f(x, y) = f(x \mid y)f(y)$ ]
+- <b>离散</b>： $p(l, m) = p(l \mid m)p(m)$ 
+- <b>连续</b>： $f(x, y) = f(x \mid y)f(y)$ 
 
 <b>独立性 (Independence)</b>：若 ($L \perp M$)，则
 
-- 离散： [$p(l, m) = p(l)p(m)$]
-- 连续： [ $f(x, y) = f(x)f(y)$ ]
+- 离散： $p(l, m) = p(l)p(m)$
+- 连续： $f(x, y) = f(x)f(y)$ 
 
 例子：
- [ $P(\text{Disease, Test+}) = P(\text{Test+} \mid \text{Disease})P(\text{Disease})$ ]
+ $P(\text{Disease, Test+}) = P(\text{Test+} \mid \text{Disease})P(\text{Disease})$ 
 
 ---
 
 ### Bayes’ Rule 贝叶斯公式
 
-核心形式（离散）： [ $p(l \mid m) = \frac{p(m \mid l)p(l)}{p(m)}$ ]
+核心形式（离散）：$p(l \mid m) = \frac{p(m \mid l)p(l)}{p(m)}$  看到数据m之后，我们怎么更新对l的信念
 
-连续类似： [ $f(x \mid y) = \frac{f(y \mid x)f(x)}{f(y)}$ ]
+连续类似：$f(x \mid y) = \frac{f(y \mid x)f(x)}{f(y)}$ 
 
 其中：
 
-- <b>Posterior（后验）</b>：(p(l \mid m)) 或 (f(x \mid y))
-- <b>Likelihood（似然）</b>：(p(m \mid l)) 或 (f(y \mid x))
-- <b>Prior（先验）</b>：(p(l)) 或 (f(x))
-- <b>Evidence（证据/边缘似然）</b>：(p(m)) 或 (f(y))
+- <b>Posterior（后验）</b>：$p(l \mid m)$或 $f(x \mid y)$ 看到数据m之后，对l的更新的信念
+- <b>Likelihood（似然）</b>：$p(m \mid l)$或 $f(y \mid x)$ 如果I为真，那么观察到m的“相容程度是多少”。似然的含义不是概率意义的可能性，而是模型对数据的解释能力，名字来源是它很灵“假设使数据看起来有多像likely”
+- <b>Prior（先验）</b>：$p(l)$ 看到m之前对于I的信念，因此叫做先验
+- <b>Evidence/margianl likelihood（证据/边缘似然）</b>：$p(m))$ 或 $f(y)$数据本书的证据强度
 
 分母的计算：
 
-- 离散： [ $p(m) = \sum_l p(m \mid l)p(l)$ ]
-- 连续： [ $f(y) = \int f(y \mid x)f(x),dx$ ]
+- 离散： $p(m) = \sum_l p(m \mid l)p(l)$ 
+- 连续： $f(y) = \int f(y \mid x)f(x)dx$ 
 
 ---
 
@@ -143,21 +143,21 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 
 ### 期望 Expectation / Mean
 
-<b>离散</b>： [ $E[L] = \sum_i l_ip(l_i)$ ]
+<b>离散</b>：$E[L] = \sum_i l_ip(l_i)$ 
 
-<b>连续</b>： [ $E[L] = \int_{-\infty}^{\infty} xf(x)dx$ ]
+<b>连续</b>：$E[L] = \int_{-\infty}^{\infty} xf(x)dx$ 
 
-<b>线性性 (Linearity)</b>： [ E[aL + b] = a,E[L] + b ]
+<b>线性性 (Linearity)</b>： $E[aL + b] = a·E[L] + b$
 
 ---
 
 ### 方差 Variance 与标准差 Standard Deviation
 
-<b>方差</b>： [ $\operatorname{Var}(L)= E[(L - E[L])^2] = E[L^2] - (E[L])^2$  ]
+<b>方差</b>：$\operatorname{Var}(L)= E[(L - E[L])^2] = E[L^2] - (E[L])^2$  (直接展开平方差公式，利用E(L)是常数和期望的Linearity)
 
-<b>标准差</b>： [ $\sigma_L = \sqrt{\operatorname{Var}(L)}$ ]
+<b>标准差</b>：$\sigma_L = \sqrt{\operatorname{Var}(L)}$ 
 
-<b>平移与缩放性质</b>： [ $\operatorname{Var}(aL + b) = a^2 \operatorname{Var}(L)$ ] 
+<b>平移与缩放性质</b>：$\operatorname{Var}(aL + b) = a^2 \operatorname{Var}(L)$
 
 说明：方差对平移不敏感，对缩放按平方放大。
 
@@ -165,36 +165,42 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 
 ### 协方差 Covariance
 
+它衡量的是：
+
+> X 偏离均值的方向与 Y 偏离均值的方向是否一致。
+
 给定 (X, Y)，记 ($\mu_X = E[X], \mu_Y = E[Y]$)：
 
-[ $\operatorname{Cov}(X, Y)= E[(X - \mu_X)(Y - \mu_Y)]$  ]
+ $\operatorname{Cov}(X, Y)= E[(X - \mu_X)(Y - \mu_Y)]$  
 
 展开推导（PPT 中有详细推导）：
 
-[ $\operatorname{Cov}(X, Y)= E[XY - X\mu_Y - \mu_X Y + \mu_X \mu_Y] \ 
+$$\operatorname{Cov}(X, Y)= E[XY - X\mu_Y - \mu_X Y + \mu_X \mu_Y] \ 
 = E[XY] - \mu_Y E[X] - \mu_X E[Y] + \mu_X \mu_Y \ 
-= E[XY] - \mu_X \mu_Y$  ]
+= E[XY] - \mu_X \mu_Y$$
 
-所以有重要关系： [ $E[XY] = E[X]E[Y] + \operatorname{Cov}(X, Y)$ ]
+所以有重要关系：$E[XY] = E[X]E[Y] + \operatorname{Cov}(X, Y)$ 
 
 性质：
 
-- 对称性：($\operatorname{Cov}(X, Y) = \operatorname{Cov}(Y, X)$)
-- 缩放：($\operatorname{Cov}(aX, bY) = ab,\operatorname{Cov}(X, Y)$)
+- 对称性：$\operatorname{Cov}(X, Y) = \operatorname{Cov}(Y, X)$
+- 缩放：$\operatorname{Cov}(aX, bY) = ab·\operatorname{Cov}(X, Y)$
 
 ---
 
 ### 相关系数 Correlation (Pearson)
 
+它把协方差做了一个“标准化”，让结果不依赖单位、不依赖尺度。
+
 <b>Pearson correlation</b> 定义为：
 
-[ $\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}$ ]
+$$\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}$$
 
 - 取值范围：([-1, 1])
 - 解释： 
-    - (1)：完全正相关
-    - (-1)：完全负相关
-    - (0)：线性无关（不代表完全独立）
+    - 1：完全正相关 完全正线性关系（Y = aX + b，a&gt;0）
+    - -1：完全负相关 完全负线性关系（Y = aX + b，a&lt;0）
+    - 0：线性无关（<b>不代表独立</b>）没有线性关系（但可能有非线性关系）
 
 ---
 
@@ -202,41 +208,47 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 
 ### Bernoulli Distribution 伯努利分布
 
-- 单次二元试验（成功/失败）。
-- 记： [ $K \sim \text{Bernoulli}(\theta),\quad \theta \in [0,1]$ ]
-- PMF： [ $p(k) = \theta^k (1-\theta)^{1-k},\quad k \in {0,1}$ ]
-- 矩 (Moments)： [ $E[K] = \theta,\quad \operatorname{Var}(K) = \theta(1-\theta)$ ]
-- 例子：($P(\text{win}) = \theta)$，$(P(\text{loss}) = 1-\theta)$。
+- <b>单次</b>二元试验（成功/失败）。随机变量 K 只能取 0 或 1，取 1 的概率是 θ，取 0 的概率是 1−θ。
+- 记：$K \sim \text{Bernoulli}(\theta),\quad \theta \in [0,1]$ 
+- PMF：$p(k) = \theta^k (1-\theta)^{1-k},\quad k \in {0,1}$ 
+- 矩 (Moments)：$E[K] = \theta,\quad \operatorname{Var}(K) = \theta(1-\theta)$ 
+    > $Var(K) = E[K^2]-(E[K])^2, k \in {0,1}$  
+> 对于这两个取值 $K^2 = K$ 所以$E(K^2) = E(K) = \theta$
+
+- 例子：$P(\text{win}) = \theta$，$P(\text{loss}) = 1-\theta$。
 - 是 <b>Binomial distribution</b> 的基础（n 次独立 Bernoulli 试验）。
 
 ---
 
 ### Rademacher Distribution
 
-- 表示随机符号 ({-1, 1})。
-- 记： [ $R \sim \text{Rademacher}$ ]
-- PMF： [ $p(r) = \frac{1}{2},\quad r \in {-1, 1}$ ]
-- 矩： [ $E[R] = 0,\quad \operatorname{Var}(R) = 1$ ]
-- 与 Bernoulli 的关系： [ $R = 2B - 1,\quad B \sim \text{Bernoulli}(0.5)$ ]
+- 表示随机符号 {-1, 1}。
+- 记：$R \sim \text{Rademacher}$ 
+- PMF： $p(r) = \frac{1}{2},\quad r \in {-1, 1}$ 
+- 矩：$E[R] = 0,\quad \operatorname{Var}(R) = 1$ 
+- 与 Bernoulli 的关系：$R = 2B - 1,\quad B \sim \text{Bernoulli}(0.5)$ 
 
 ---
 
 ### Binomial Distribution 二项分布
 
 - ($K \sim \text{Bin}(n, \theta)$)：n 次独立 $Bernoulli(\theta)$ 试验中成功次数。
-- PMF： [ $p(k) = P(K = k) = \binom{n}{k} \theta^k (1-\theta)^{n-k},\quad k = 0,\dots,n$ ]
-- 参数：($n \in \mathbb{N},\ \theta \in [0,1]$)
-- 矩： [ $E[K] = n\theta,\quad \operatorname{Var}(K) = n\theta(1-\theta)$ ]
+- PMF：$p(k) = P(K = k) = \binom{n}{k} \theta^k (1-\theta)^{n-k},\quad k = 0,\dots,n$ 
+- 参数：$n \in \mathbb{N},\ \theta \in [0,1]$
+- 矩： $E[K] = n\theta,\quad \operatorname{Var}(K) = n\theta(1-\theta)$
+    - $$E[K]=E[∑_{i=1}^nX_i]=∑_{i=1}^nE[X_i]=n·θ$$
+    - <b>每次事件独立，所以方差可加</b>
+
 - 例子：抛硬币 n 次，($\theta = 0.5)$。
 
 ---
 
 ### Gaussian (Normal) Distribution 高斯分布
 
-- 记： [ $L \sim \mathcal{N}(\mu, \sigma^2)$ ]
-- PDF： [ $f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$ ]
-- 参数：($\mu \in \mathbb{R}$)（均值），($\sigma^2 > 0$)（方差）。
-- 性质： [ $E[L] = \mu,\quad \operatorname{Var}(L) = \sigma^2$ ]
+- 记：$L \sim \mathcal{N}(\mu, \sigma^2)$ 
+- PDF： $f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$
+- 参数：$\mu \in \mathbb{R}$（均值），$\sigma^2 > 0$（方差）。
+- 性质： $E[L] = \mu,\quad \operatorname{Var}(L) = \sigma^2$
 - <b>Three-sigma rule (68-95-99.7 rule)</b>： 
     - ($\mu \pm 1\sigma$)：约 68%
     - ($\mu \pm 2\sigma$)：约 95%
@@ -251,27 +263,32 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 ### 向量 Vector
 
 - 用<b>粗体小写</b>表示向量，如 ($\mathbf{x}$)。
-- 向量可以看作列向量： [ $\mathbf{a} = [a_1, a_2, \dots, a_n]^T$ ]
+- 向量可以看作列向量： $\mathbf{a} = [a_1, a_2, \dots, a_n]^T$ 
 
 #### 向量范数 Norm
 
-- 二范数： [ $|\mathbf{x}| = \sqrt{\mathbf{x}^T \mathbf{x}}$ ]
+- 二范数L2 norm/Euclidean norm/length：$|\mathbf{x}| = \sqrt{\mathbf{x}^T \mathbf{x}}$  它就是欧几里得空间里“向量的长度”。
+
+> 在 n 维：$\sqrt{∑x_i^2}$
 
 #### 点积 Dot Product
 
-- 定义： [ $\mathbf{x}_1 \cdot \mathbf{x}_2 = \mathbf{x}_1^T \mathbf{x}_2$ ]
-- 与夹角 ($\alpha$) 的关系： [ $\mathbf{x}_1 \cdot \mathbf{x}_2 = |\mathbf{x}_1||\mathbf{x}_2| \cos(\alpha) ] 所以： [ \cos(\alpha) = \frac{\mathbf{x}_1 \cdot \mathbf{x}_2}{|\mathbf{x}_1|,|\mathbf{x}_2|}$ ]
+- 定义：$\mathbf{x}_1 \cdot \mathbf{x}_2 = \mathbf{x}_1^T \mathbf{x}_2$
+- 与夹角 $\alpha$的关系：$\mathbf{x}_1 \cdot \mathbf{x}_2 = |\mathbf{x}_1||\mathbf{x}_2| \cos(\alpha) ]$ 所以： $\cos(\alpha) = \frac{\mathbf{x}_1 \cdot \mathbf{x}_2}{|\mathbf{x}_1|·|\mathbf{x}_2|}$
 
 #### 投影 Projection
 
-- ($\mathbf{x}_1$) 在 ($\mathbf{x}_2$) 方向上的投影： [ $\mathbf{x}_p = \frac{\mathbf{x}_1 \cdot \mathbf{x}_2}{|\mathbf{x}_2|^2},\mathbf{x}_2$ ]
+- $\mathbf{x}_1$在 $\mathbf{x}_2$方向上的投影： $\mathbf{x}_p = \frac{\mathbf{x}_1 \cdot \mathbf{x}_2}{|\mathbf{x}_2|^2}\cdot \mathbf{x}_2$ 
+
+> 1. 投影标量的长度 $投影长度=\frac{x_1⋅x_2}{∣x_2∣}$
+> 2. 方向: $x_2$方向的单位向量$\hat x_2=\frac{x_2}{∣x_2∣}$
 
 ---
 
 ### 矩阵 Matrix
 
-- 用<b>粗体大写</b>表示矩阵，如 ($\mathbf{A}$)。
-- ($\mathbf{A} \in \mathbb{R}^{m \times n}$)： [ $\mathbf{A} = \begin{bmatrix} a_{11} & a_{12} & \dots & a_{1n} \ a_{21} & a_{22} & \dots & a_{2n} \ \vdots & \vdots & \ddots & \vdots \ a_{m1} & a_{m2} & \dots & a_{mn} \end{bmatrix}$]
+- 用<b>粗体大写</b>表示矩阵，如$\mathbf{A}$。
+- $\mathbf{A} \in \mathbb{R}^{m \times n}$： $\mathbf{A} = \begin{bmatrix} a_{11} & a_{12} & \dots & a_{1n} \\ a_{21} & a_{22} & \dots & a_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ a_{m1} & a_{m2} & \dots & a_{mn} \end{bmatrix}$
 - 用途： 
     - 线性变换 (linear mappings)
     - 线性方程组 (systems of linear equations)
@@ -279,42 +296,44 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 
 #### 元素与行列
 
-- ($a_{ij})$：第 i 行第 j 列元素。
-- ($\mathbf{a}_i$)：第 i 列向量。
-- ($\mathbf{a}^j$)：第 j 行向量。
+- $a_{ij}$：第 i 行第 j 列元素。
+- $\mathbf{a}_i$：第 i 列向量。
+- $\mathbf{a}^j$：第 j 行向量。
 
-#### (2) 常见运算
+#### 常见运算
 
-给定 (\mathbf{A}, \mathbf{B} \in \mathbb{R}^{m \times n})，(\mathbf{D} \in \mathbb{R}^{n \times q})，(\mathbf{Y} \in \mathbb{R}^{p \times p})：
+给定 $\mathbf{A}, \mathbf{B} \in \mathbb{R}^{m \times n}$，$\mathbf{D} \in \mathbb{R}^{n \times q}，\mathbf{Y} \in \mathbb{R}^{p \times p}$：
 
-- <b>加法 Addition</b>： [ \mathbf{C} = \mathbf{A} + \mathbf{B},\quad \mathbf{C} \in \mathbb{R}^{m \times n} ]
-- <b>矩阵乘法 Matrix Multiplication</b>： [ \mathbf{E} = \mathbf{A}\mathbf{D},\quad \mathbf{E} \in \mathbb{R}^{m \times q} ] 元素： [ e_{ij} = \sum_f a_{if} d_{fj} ]
-- <b>逐元素乘法 Elementwise Multiplication (Hadamard)</b>： [ \mathbf{G} = \mathbf{A} \circ \mathbf{B},\quad g_{ij} = a_{ij} b_{ij} ]
-- <b>转置 Transpose</b>： [ \mathbf{H} = \mathbf{A}^T,\quad h_{ij} = a_{ji} ]
-- <b>逆矩阵 Inverse</b>（若可逆）： [ \mathbf{Y}^{-1} \text{ s.t. } \mathbf{Y}\mathbf{Y}^{-1} = \mathbf{Y}^{-1}\mathbf{Y} = \mathbf{I} ] 其中 (\mathbf{I}) 为单位矩阵，(\operatorname{diag}(\mathbf{I}) = 1)，非对角元素为 0。
-- <b>迹 Trace</b>： [ \operatorname{tr}[\mathbf{Y}] = \sum_{i=1}^n y_{ii} ]
-- <b>矩阵范数 Matrix Norm</b>（Frobenius norm）： [ |\mathbf{A}| = \sqrt{\operatorname{tr}[\mathbf{A}^T \mathbf{A}]} = \sqrt{\sum_{i=1}^m \sum_{j=1}^n a_{ij}^2} ]
+- <b>加法 Addition</b>： $\mathbf{C} = \mathbf{A} + \mathbf{B},\quad \mathbf{C} \in \mathbb{R}^{m \times n}$
+- <b>矩阵乘法 Matrix Multiplication</b>： $\mathbf{E} = \mathbf{A}\mathbf{D},\quad \mathbf{E} \in \mathbb{R}^{m \times q}$元素： $e_{ij} = \sum_f a_{if} d_{fj}$
+- <b>逐元素乘法 Elementwise Multiplication (Hadamard)</b>：$\mathbf{G} = \mathbf{A} \circ \mathbf{B},\quad g_{ij} = a_{ij} b_{ij}$
+- <b>转置 Transpose</b>：$\mathbf{H} = \mathbf{A}^T,\quad h_{ij} = a_{ji}$
+- <b>逆矩阵 Inverse</b>（若可逆）：$\mathbf{Y}^{-1} \text{ s.t. } \mathbf{Y}\mathbf{Y}^{-1} = \mathbf{Y}^{-1}\mathbf{Y} = \mathbf{I}$ 其中$\mathbf{I}$ 为单位矩阵，$\operatorname{diag}(\mathbf{I}) = 1$，非对角元素为 0。
+- <b>迹 Trace</b>：$\operatorname{tr}[\mathbf{Y}] = \sum_{i=1}^n y_{ii}$
+- <b>矩阵范数 Matrix Norm</b>（Frobenius norm）：$|\mathbf{A}| = \sqrt{\operatorname{tr}[\mathbf{A}^T \mathbf{A}]} = \sqrt{\sum_{i=1}^m \sum_{j=1}^n a_{ij}^2}$
+
+> 是的，trace 就是对角线求和；而 ATA 的对角线元素正好是每一行的平方和；所以 trace 就是所有元素平方的总和。
 
 ---
 
 ### 向量/矩阵上的函数与梯度 Gradients
 
 - 函数：
-    - (f: \mathbb{R}^m \to \mathbb{R})
-    - (h: \mathbb{R}^{m \times n} \to \mathbb{R})
+    - $$f: \mathbb{R}^m \to \mathbb{R}$$
+    - $$h: \mathbb{R}^{m \times n} \to \mathbb{R}$$
 
-- 对向量的梯度 (\mathbf{g} \in \mathbb{R}^m)： [ g_i = \frac{\partial f(\mathbf{x})}{\partial x_i} ]
-- 对矩阵的梯度 (\mathbf{H} \in \mathbb{R}^{m \times n})： [ h_{ij} = \frac{\partial f(\mathbf{X})}{\partial x_{ij}} ]
+- 对向量的梯度 $\mathbf{g} \in \mathbb{R}^m)： g_i = \frac{\partial f(\mathbf{x})}{\partial x_i}$ 
+- 对矩阵的梯度 $\mathbf{H} \in \mathbb{R}^{m \times n})：  h_{ij} = \frac{\partial f(\mathbf{X})}{\partial x_{ij}}$ 
 
 ---
 
-## 七、矩阵分解与特征分解 Matrix Decomposition & Eigendecomposition
+## 矩阵分解与特征分解 Matrix Decomposition & Eigendecomposition
 
 ### 二因子分解 Two-Factor Decomposition
 
-# 目标：将矩阵 (\mathbf{U}) 分解为两个因子矩阵： [ \mathbf{U} = \mathbf{J}\mathbf{O}^T ]
+目标：将矩阵 $\mathbf{U}$ 分解为两个因子矩阵：$\mathbf{U} = \mathbf{J}\mathbf{O}^T$
 
-- (\mathbf{J}, \mathbf{O}) 称为 <b>factor matrices</b>。
+- $\mathbf{J}, \mathbf{O}$称为 <b>factor matrices</b>。
 - 在学习系统与数据科学中用途极广： 
     - 简化方程
     - 挖掘隐藏模式 (hidden patterns)
@@ -324,24 +343,24 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 
 ### 特征分解 Eigendecomposition
 
-# 考虑方阵 (\mathbf{A} \in \mathbb{R}^{n \times n})。
+考虑方阵 $\mathbf{A} \in \mathbb{R}^{n \times n}$。
 
-- <b>特征值 Eigenvalues</b> (\lambda_i)：满足 [ \det(\mathbf{A} - \lambda_i \mathbf{I}) = 0 ]
-- <b>特征向量 Eigenvectors</b> (\mathbf{v}_i \ne 0)：满足 [ \mathbf{A}\mathbf{v}_i = \lambda_i \mathbf{v}_i ]
+- <b>特征值 Eigenvalues</b> $\lambda_i$：满足 $\det(\mathbf{A} - \lambda_i \mathbf{I}) = 0$
+- <b>特征向量 Eigenvectors</b> $\mathbf{v}_i \ne 0$：满足 $\mathbf{A}\mathbf{v}_i = \lambda_i \mathbf{v}_i$
 
-# 若 (\mathbf{A}) 可对角化（有 n 个线性无关特征向量）：
+若 $\mathbf{A}$可对角化（有 n 个线性无关特征向量）：
 
-# [ \mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^{-1} ]
+$$\mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^{-1}$$
 
-- (\mathbf{V} = [\mathbf{v}_1, \dots, \mathbf{v}_n])
-- (\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n))
+- $$\mathbf{V} = [\mathbf{v}_1, \dots, \mathbf{v}_n]$$
+- $$\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$$
 
-# <b>重要性质</b>：
+<b>重要性质</b>：
 
-- 迹： [ \operatorname{tr}[\mathbf{A}] = \sum_{i=1}^n \lambda_i ]
-- 行列式： [ \det(\mathbf{A}) = \prod_{i=1}^n \lambda_i ]
-- 矩阵幂： [ \mathbf{A}^k = \mathbf{V}\Lambda^k \mathbf{V}^{-1} ]
-- 矩阵指数： [ e^{\mathbf{A}} = \mathbf{V} e^{\Lambda} \mathbf{V}^{-1},\quad e^{\Lambda} = \operatorname{diag}(e^{\lambda_1}, \dots, e^{\lambda_n}) ]
+- 迹：$\operatorname{tr}[\mathbf{A}] = \sum_{i=1}^n \lambda_i$
+- 行列式：$\det(\mathbf{A}) = \prod_{i=1}^n \lambda_i$
+- 矩阵幂：$\mathbf{A}^k = \mathbf{V}\Lambda^k \mathbf{V}^{-1}$
+- 矩阵指数：$e^{\mathbf{A}} = \mathbf{V} e^{\Lambda} \mathbf{V}^{-1},\quad e^{\Lambda} = \operatorname{diag}(e^{\lambda_1}, \dots, e^{\lambda_n})$
 
 ---
 

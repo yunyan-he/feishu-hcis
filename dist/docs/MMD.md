@@ -707,13 +707,45 @@ Procedure BuildTree(Data, Depth):
     return CreateNode(best_split, Nodeleft, Noderight)
 ```
 
-### Todo 典型应用案例：流失预测（Churn Prediction）
+### 典型应用案例：流失预测（Churn Prediction）
 
 来源重点利用<b>用户流失预测</b>展示了决策树的实际应用：
 
 - <b>目标：</b> 识别哪些用户会离开（Churn prediction:），哪些会留下（Retention prediction），以便进行预防性干预Preventive actions。
-- <b>特征使用：</b> 树结构展示了如何通过 `activeDuration`（活跃时长）和 `playCount`（播放次数）等媒体指标进行分支。例如，某个分支显示如果活跃时长 $\le 1904.03$，用户流失的概率高达 <b>0.93</b>。
-- Problem: split a and split b tie.
+- 首先明确task，what we want to predict 
+
+1. Task: predict Churn/stay
+2. Have 2 candidate splits {A, B}
+
+<b>Step 1</b>: calculate parent gini
+
+Using the task paremeter to compute
+
+$$Parent: Churn=6, Stay=4 ⇒ p_1 = 6/10 , p_0 = 4/10$$
+
+$$gini(parent) = 1−  (6/10)^2 −  (4 /10)^2 = 1−0.36−0.16 = 0.48$$
+
+<b>Option 1 split A</b>
+
+A split nodes into 2 class
+- A yes: 4 nodes, 1 churn, 3 stay
+    - $$gini(Yes) = 1−  (1/4)^ 2 −  (3/4)^ 2 = 0.375$$
+- B No: 6 nodes, 5 churn, 1 stay
+    - $$gini(Yes) = 1−  (5/6)^ 2 −  (1/6)^ 2 ≈ 0.278$$
+- Weighted impurity: $gini(split A) = 4/10 · 0.375+ 6/10 · 0.278 ≈ 0.150+0.167 = 0.317$
+- Impurity reduction/gain : $∆A = 0.48−0.317 ≈ 0.163$
+
+<b>Option 2 split B</b> 
+
+B split nodes into 2 class
+- A yes: 4 nodes, 1 churn, 3 stay
+    - $$gini(Yes) = 1−  (1/4)^ 2 −  (3/4)^ 2 = 0.375$$
+- B No: 6 nodes, 5 churn, 1 stay
+    - $$gini(Yes) = 1−  (5/6)^ 2 −  (1/6)^ 2 ≈ 0.278$$
+- Weighted impurity: $gini(split A) = 4/10 · 0.375+ 6/10 · 0.278 ≈ 0.150+0.167 = 0.317$
+- Impurity reduction/gain : $∆A = 0.48−0.317 ≈ 0.163$
+
+- <b>Problem</b>: split A and split B tie.
     Typical tie-breakers: 
     - first feature encountered  遍历特征时遇到的第一个 gain 最大的 split 就被选中
     - smallest threshold 对于数值型特征（例如 Sessions），决策树会尝试不同的切分点，如果同一个特征有多个阈值 gain 相同，会选最小的阈值。
@@ -731,49 +763,231 @@ Procedure BuildTree(Data, Depth):
 
 ---
 
-### Example：Tutorial Completion vs Sessions
-
-这是一个非常典型的<b>行为特征与留存之间的关系分析</b>：
-
-<b>假设：</b>完成新手教程的用户更可能长期留存
-
-<b>分析方式：</b>
-
-- 分组对比：完成 vs 未完成教程的用户，平均会话数/活跃天数
-- 可视化：箱线图、分布图、留存曲线
-- 建模：将“是否完成教程”作为一个重要特征输入到流失预测模型中
-
 ## Class Imbalance & SMOTE（类别不平衡与 SMOTE）
 
 ### Problem: Sparsity and Rarity
 
-<b>典型场景：</b>
+Minority class too small ⇒ biased classification   少数类样本太少 ⇒ 分类器偏向多数类
 
-- 客户流失预测：流失用户占比可能只有 5%
-- 欺诈检测：欺诈交易占比 &lt;1%
-- 医疗诊断：罕见病样本极少
+<b>Typical case：</b>
 
-### SMOTE Algorithm（合成少数类样本）
+- <b>sparse arrival / usage patterns </b>用户使用产品的频率很低、很不规律。
+- <b>predicting long-term retainers vs. churners  </b>预测哪些用户会长期留下（retainers），哪些会流失（churners）。长期留存用户少/流失少
+- <b>detecting fraudulent or premium users </b>欺诈用户、付费用户都属于 极少数群体。
 
-SMOTE（Synthetic Minority Over-sampling Technique）是一种<b>数据级别的解决方案</b>，通过合成新样本来平衡类别分布。
+<b>Why this is hard</b>
 
-#### Synthetic Interpolation
+1. Most models optimize the majority class unless we counteract it
 
-在少数类样本之间插值生成新样本，而不是简单复制。
+大多数机器学习模型会自动偏向“多数类”。
 
-#### k-Nearest Neighbors
+例如：
 
-对每个少数类样本，找出其 k 个邻居作为插值参考。
+- 10000 个正常用户
+- 10 个欺诈用户
 
-#### Mixed Feature Distances
+如果模型什么都不做，预测“所有人都是正常用户”，
 
-对混合型特征（数值+类别）需使用特殊距离度量（如 Gower 距离）。
+准确率仍然是 99.9%。
 
-公式简化：
+→ 但模型完全没学到如何识别欺诈用户。
 
-$$x_{new}=x_i+δ⋅(x_j−x_i),δ∈[0,1]$$
+这就是 class imbalance（类别不平衡） 的典型问题。
 
-其中 xi 是原始少数类样本，xj 是其邻居。
+1. Evaluation must match the goal (precision/recall trade-offs)
+
+评估指标必须根据目标来选。
+
+例如：
+
+- 欺诈检测：宁愿多抓错，也不能漏掉（高 recall）
+- 高价值用户预测：宁愿少推荐，也不能推荐错（高 precision）
+
+所以不能只看 accuracy（准确率），
+
+必须根据任务选择：precision、recall、F1、ROC-AUC、PR-AUC等等。
+
+### SMOTE 
+
+SMOTE（Synthetic Minority Over-sampling Technique）是一种<b>数据级别的解决方案</b>，通过合成新样本来解决Minority class too small ⇒ biased classification的问题
+
+#### SMOTE Idea
+
+- Do not duplicate minority points (can overfit) 在少数类样本之间插值生成新样本，而不是简单复制。
+- Synthetic minority points by interpolating between nearby minority neighbors SMOTE 的做法是：找到某个少数类样本的邻近少数类样本,在它们之间 插值（interpolation）,生成新的、合成的少数类样本
+    - 例如: 如果少数类样本 A 和 B 是邻居，SMOTE 会生成：$x_new=A+λ(B−A),λ∈[0,1]$ 这样得到的新点：
+        - 不会重复
+        - 更自然
+        - 更能扩展少数类的分布形状
+
+#### Feature types
+
+1. <b>numeric attributes indexed by V</b>
+
+- 数值型特征
+- 用索引集合 V 表示
+
+1. <b>nominal/categorical attributes indexed by B</b>
+
+- 类别型特征
+- 用索引集合 B 表示
+- 例如：国家、性别、设备类型
+
+#### Data point
+
+数据点与数据集的数学定义：
+
+一个数据点 x 由：
+
+- $∣V∣$ 个数值特征（属于 R）
+- $∣B∣$ 个类别特征（属于有限集合 N）
+
+组成：
+
+$$x∈R∣V∣×N∣B∣$$
+
+整个数据集：$X={x_1,…,x_n}$
+
+<b>Minority set</b>
+
+少数类样本的索引与集合
+
+- $J$：少数类样本的<b>索引集合 </b>
+- $\hat n=∣J∣$：少数类样本<b>数量</b>
+- $X_p={x_{J[1]},…,x_{J[\hat n]}}$：所有少数类样本的集合
+
+SMOTE 只在这些少数类样本之间生成新样本。
+
+#### SMOTE Algorithm
+
+<b>Step 1: </b>Choose oversampling amount $\tilde{n}$ and neighbor count $k$
+
+选择要生成的样本数量 $\tilde{n}$ 和邻居数量 k。
+
+<b>Step 2</b>: Repeat $\tilde{n}$times
+- Sample a minority point<b> </b>$x_i∈X_p$随机选取一个少数类样本。
+- Pick a random minority neighbor<b> </b>$x_{nn}$从它的 k 个最近少数类邻居中随机选一个。
+- Generate a synthetic point (numeric part) 生成新的合成样本（数值特征部分）:$x_{synth}[V]=x_i[V]+λ(x_{nn}[V]−x_i[V]),λ∈[0,1]$
+
+<b>Step 3</b> : Train on $X ∪ {x_{synth}}$
+
+#### SMOTE with Mixed Features
+
+##### Distance for kNN
+
+> 下面给你一个<b>完整、无遗漏、结构清晰、基于你页面内容的解释</b>，把“SMOTE with mixed features”这一段拆开讲得非常明白。内容保持技术准确，但语言尽量直观。
+> > ---
+> > # <b>SMOTE with Mixed Features（混合特征的 SMOTE）</b>
+> > 当数据同时包含 <b>数值特征（numeric）</b> 和 <b>类别特征（nominal/categorical）</b> 时，SMOTE 需要：
+> > 1. 定义一种能同时处理两种特征的距离（用于 kNN）
+> 2. 定义如何生成新的合成样本（numeric + nominal）
+    > 下面分两部分解释。
+> > ---
+> > # <b>Part 1 — Distance for kNN（混合特征的距离定义）</b>
+> > SMOTE 需要用 kNN 找“少数类邻居”。  
+> 但如果数据包含 <b>数值 + 类别</b> 特征，欧氏距离不够用。  
+> 因此需要一个 <b>mixed-type distance（混合型距离）</b>。
+> > ---
+> > ## <b>1. Numeric difference（数值特征差异）</b>
+> > 对两个样本 \(x_i, x_j\)，数值特征集合为 \(V\)：
+> > \[
+> u_{ij} = x_i[V] - x_j[V]
+> \]
+> > 这是一个向量，表示所有数值特征的差。
+> > ---
+> > ## <b>2. Nominal mismatch（类别特征差异）</b>
+> > 对每个类别特征 \(l\in B\)：
+> > \[
+> q(b_{il}, b_{jl}) =
+> \begin{cases}
+> 0 & \text{if } b_{il} = b_{jl} \\
+> 1 & \text{otherwise}
+> \end{cases}
+> \]
+> > 意思是：
+> > - 类别相同 → 差异 0  
+> - 类别不同 → 差异 1  
+    > 这是最常用的“0/1 mismatch”方式。
+> > ---
+> > ## <b>3. Mixed-type distance（混合距离）</b>
+> > 将数值差异与类别差异结合：
+> > \[
+> d_{ij} = \sqrt{
+> u_{ij}^T u_{ij}
+> +
+> c^2 \sum_{l=1}^{|B|} q(b_{il}, b_{jl})
+> }
+> \]
+> > 解释：
+> > - 第一项：数值特征的欧氏距离  
+> - 第二项：类别特征 mismatch 的加权距离  
+> - \(c\)：缩放因子，让类别特征的影响与数值特征处于同一量级  
+    > ---
+> > ## <b>4. Scale factor \(c\)（缩放因子）</b>
+> > 页面给出的合理选择：
+> > \[
+> c \leftarrow \text{median}_{l\in V} \, g(x_p^l)
+> \]
+> > 其中：
+> > - \(g = std\)：标准差  
+> - \(x_p^l\)：少数类在第 \(l\) 个数值特征上的取值  
+    > 意思是：
+> > &gt; <b>用少数类数值特征的中位标准差作为类别特征的权重。</b>
+> > 这样类别特征不会被低估或高估。
+> > ---
+> > # <b>Part 2 — Generating Synthetic Points（生成合成样本）</b>
+> > 找到邻居后，SMOTE 要生成新的样本。
+> > ---
+> > ## <b>1. Feature-wise mixing vector（特征级混合向量）</b>
+> > 定义一个 mixing vector：
+> > \[
+> h_i = \{h_{ij}\}_{j=1}^{|V|}, \quad h_{ij} \in [0,1]
+> \]
+> > 每个数值特征都有一个独立的 mixing 系数。
+> > ---
+> > ## <b>2. Numeric attributes（数值特征生成）</b>
+> > \[
+> x_{\text{synth}}[V] \leftarrow h_i \odot x_i[V] + (1 - h_i) \odot x_{\text{nn}}[V]
+> \]
+> > 解释：
+> > - 对每个数值特征做线性插值  
+> - \(\odot\) 是逐元素乘法  
+    > 这比“统一 λ”更灵活。
+> > ---
+> > ## <b>3. Nominal attributes（类别特征生成）</b>
+> > 默认简单策略：
+> > \[
+> x_{\text{synth}}[B] \leftarrow x_i[B]
+> \]
+> > 也就是：
+> > &gt; <b>类别特征直接继承原样本的类别值。</b>
+> > （更高级方法会用多数投票或概率采样，但页面只讲默认方法。）
+> > ---
+> > # <b>Practical Notes（实践注意事项）</b>
+> > ### <b>1. Apply SMOTE only on training data</b>
+> SMOTE 只能用于训练集，不能对测试集 oversample。
+> > 否则会造成数据泄漏（data leakage）。
+> > ---
+> > ### <b>2. Noisy minority points can create synthetic noise</b>
+> 如果少数类本身有噪声点，SMOTE 会把噪声扩散成更多噪声。
+> > 因此：
+> > - 需要先清洗少数类  
+> - 或结合 Tomek links / ENN 去噪  
+    > ---
+> > # <b>Final Summary（总结）</b>
+> > 这段内容讲的是：
+> > &gt; <b>当数据包含数值 + 类别特征时，SMOTE 如何定义混合距离、如何生成合成样本，以及实践中的注意事项。</b>
+> > 核心要点：
+> > - 混合距离 = 数值欧氏距离 + 类别 mismatch × 缩放因子  
+> - 数值特征用插值生成  
+> - 类别特征默认继承  
+> - SMOTE 只用于训练集  
+> - 噪声点会被放大  
+    > ---
+> > 如果你愿意，我还能帮你：
+> > - 把这段内容压缩成 slide 版本  
+> - 画一个示意图（文字描述）  
+> - 对比 SMOTE vs SMOTE-NC（专门处理类别特征的版本）
 
 ---
 

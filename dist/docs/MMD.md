@@ -285,7 +285,7 @@ $\frac{∂p_b}{∂w_{bi}}=a_i$(展开$p_b$,只有一项与$w_{bi}$有关)
 3. <b>反向传播</b>：射手在大脑中回溯刚才的动作，分析是手指松早了还是重心偏了（识别导致误差的参数）。
 4. <b>更新</b>：稍微调整站姿或拉弓的力度（利用学习率微调参数），准备下一次射击。
 
-# Outlier/Anomality Analysis
+# √Outlier/Anomality Analysis
 
 or Novelty Detection/Deviation Detection
 
@@ -621,13 +621,15 @@ $x_i=Z·h_i$ 其中 hi 是通过投影求得的系数。
   - 生成比赛叙事结构
 ```
 
-# Predictive Data Mining I
+# √Predictive Data Mining I
 
 <img src="/assets/HCBvbkOXlooMLIxScAdc7bdRn3z.png" src-width="1202" src-height="808" align="center"/>
 
 ## Decision Trees（决策树：结构、划分、优势）
 
-在“Predictive Data Mining I”的教学语境下，来源将**决策树（Decision Trees, DTs）**视为一种基础且强大的“分而治之”（Divide and Conquer）方法，用于通过递归划分特征空间来近似函数关系。
+在“Predictive Data Mining I”的教学语境下，来源将<b>决策树（Decision Trees, DTs）</b> 视为一种基础且强大的“分而治之”（Divide and Conquer）方法，用于通过递归划分特征空间来近似函数关系。
+
+<b>Decision trees are transparent, interpretable predictive models</b>
 
 以下是来源对决策树复习要点的详细看法：
 
@@ -763,7 +765,7 @@ B split nodes into 2 class
 
 ---
 
-## Class Imbalance & SMOTE（类别不平衡与 SMOTE）
+## Class Imbalance & SMOTE
 
 ### Problem: Sparsity and Rarity
 
@@ -990,21 +992,84 @@ $$x_{\text{synth}}[B] \leftarrow x_i[B]$$
 
 ##### <b>Practical Notes（实践注意事项）</b>
 
-1. Apply SMOTE <b>only on training data</b>
-
-SMOTE 只能用于训练集，不能对测试集 oversample。
-
-否则会造成数据泄漏（data leakage）。
-
-1. Noisy minority points can <b>create synthetic noise</b>
-
-如果少数类本身有噪声点，SMOTE 会把噪声扩散成更多噪声。
-
-因此：
-
-- 需要先清洗少数类  
-- 或结合 Tomek links / ENN 去噪  
+1. Data leakage: apply SMOTE only on training folds (never on test data). 如果你对测试集做 SMOTE，模型就提前“看到了”测试集的分布，结果会让模型表现看起来很好，但完全不真实
+2. Scaling: use standardized features before kNN (otherwise one feature dominates distance). SMOTE 需要用 kNN 找邻居，而 kNN 的距离对特征尺度非常敏感。如果一个特征范围很大（如收入 0–100000），一个特征范围很小（如年龄 0–100），距离会完全被大范围特征主导，kNN找的邻居会很偏
+3. Noise amplification: if minority contains outliers, SMOTE may create synthetic noise. 所以 SMOTE 前最好清洗噪声。
+4. Mixed features: for categorical variables use variants like SMOTE-NC (do not interpolate categories). 
     
+### Example
+
+二维玩具示例：数据集
+
+假设我们只有两个数值特征：
+
+- $x_1$  最近 7 天的播放次数  
+- $x_2$ 最近 7 天的活跃分钟数  
+
+少数类（Churn = 1）有三个点：
+
+|   |   |   |
+|---|---|---|
+|点|$$x_1$$|$$x_2$$|
+|A|2|2|
+|B|3|4|
+|C|4|3|
+
+多数类（Stay = 0）有很多点，但为了演示省略。
+
+SMOTE 参数：
+
+- $k = 2$：只在少数类内部找 2 个最近邻  
+- 生成 1 个合成点（只是为了演示）
+
+提示：用欧氏距离计算 A、B、C 之间的距离。
+
+SMOTE 步骤:
+
+<b>Step 1: </b>Find minority neighbors of A
+
+计算 A = (2,2) 到 B、C 的距离：
+
+$$d(A,B) = \sqrt{(3-2)^2 + (4-2)^2} = \sqrt{5} \approx 2.24$$
+
+$$d(A,C) = \sqrt{(4-2)^2 + (3-2)^2} = \sqrt{5} \approx 2.24$$
+
+因为 $k=2$，所以 A 的邻居就是：$\{B, C\}$
+
+（距离一样没关系，tie 可以接受）
+
+<b>Step 2: </b>Pick one neighbor
+
+SMOTE 会从邻居中随机选一个。假设选到 B = (3,4)。
+
+<b>Step 3: </b>插值生成新点 Interpolate with random λ
+
+SMOTE 的公式：
+
+$$x_{\text{synth}} = A + \lambda (B - A), \quad \lambda \sim U(0,1)$$
+
+取一个随机的$\lambda = 0.6$。
+
+计算：$B - A = (1,2)$
+
+$$x_{\text{synth}} = (2,2) + 0.6 \cdot (1,2) = (2.6, 3.2)$$
+
+这就是新生成的少数类样本。
+
+<b>Step 4</b>: What SMOTE changes
+
+$$\{(2,2), (3,4), (4,3)\}$$
+
+SMOTE 后：
+
+$$\{(2,2), (3,4), (4,3), (2.6,3.2)\}$$
+
+效果：
+
+> <b>the classifier sees a denser minority region and is less likely to ignore it.少数类区域变得更“密集”，分类器更不容易忽略它。</b>
+
+这就是 SMOTE 的核心作用。
+
 ## Evaluation Metrics（评估指标：混淆矩阵、精确率、召回率、F1、AUC）
 
 ### Confusion Matrix
@@ -1060,109 +1125,10 @@ $F1 = 2 \cdot \frac{PR}{P + R}$
 
 ### AUC / Balanced Accuracy
 
-#### AUC
-
-- ROC 曲线下的面积，衡量模型在不同阈值下的区分能力
-- 越接近 1 越好，0.5 表示随机猜测
-
-#### Balanced Accuracy
-
-$$Balanced Accuracy=\frac{1}{2} (\frac{TP}{TP+FN}+\frac{TN}{TN+FP})$$
-
-- 对类别不平衡更友好，避免多数类主导评估结果
+For imbalance, AUC / balanced accuracy are often more informative than accuracy  
+在类别不平衡的数据中，AUC 和 balanced accuracy 往往比 accuracy 更有意义。
 
 # Predictive Data Mining II
-
-## RECAP: Impurity and Split Selection
-
-在“Predictive Data Mining I”的背景下，来源将**不纯度（Impurity）与分裂选择（Split Selection）<b>视为决策树构建过程中的核心数学机制。决策树通过这些机制实现其“分而治之”的策略，以将复杂的特征空间递归地划分为</b>同质（Homogeneous）**的区域。
-
-以下是来源对这一过程的具体看法和定义：
-
-### 1. 不纯度的度量：基尼指数（Gini Impurity）
-
-不纯度衡量的是一个节点中样本类别的“混乱”程度。来源重点介绍了<b>基尼指数</b>作为衡量标准：
-
-- <b>多分类通用公式</b>：对于一个节点 $q$，其基尼不纯度计算为 $1 - \sum_{c \in C} p(c | q)^2$，其中 $p(c | q)$ 是该类别的概率。
-- <b>二元分类简化</b>：在二元情况下，公式简化为 $1 - p^2 - (1-p)^2$。
-- <b>物理意义</b>：基尼值越小，节点越“纯”（即样本倾向于属于同一类别）。例如，在流失预测案例中，一些叶子节点的基尼值低至 0.08，代表预测为“Churn”的概率极高（0.96），分类非常明确。
-    
-### 2. 分裂选择：增益最大化（Maximum Gain）
-
-决策树的训练过程被描述为<b>贪婪的（Greedy）</b>，即它在每一个节点都会寻找当前最优的选择。
-
-- <b>不纯度减少（</b>$\Delta(s)$<b>）</b>：分裂选择的目标是找到一个分裂 $s$，使其能够最大限度地减少不纯度。
-- <b>增益计算公式</b>：增益是通过父节点的不纯度减去左右子节点（$q_L, q_R$）不纯度的加权总和得出的：
-    $\Delta(s) = \text{gini}(q) - \frac{|q_L|}{|q|}\text{gini}(q_L) - \frac{|q_R|}{|q|}\text{gini}(q_R)$。
-
-- <b>选择准则</b>：算法会评估所有可能的候选特征及其分裂阈值，并<b>选择使 </b>$\Delta(s)$<b> 最大的分裂点</b>。
-    
-### 3. 分裂的停止准则
-
-为了防止过度划分，来源列举了停止分裂的几种情况：
-
-- <b>达到最大深度</b>（Max depth）。
-- <b>样本数过少</b>（Min samples）。
-- <b>没有进一步增益</b>（No gain）：即任何分裂都不能有效降低不纯度。
-- <b>纯净节点</b>（Pure node）：节点内的所有样本已属于同一类别，基尼值为 0。
-    
-### 4. 实践中的挑战：数据稀疏性与罕见性
-
-在处理预测性挖掘任务（如流失预测）时，分裂选择可能会受到**少数类样本（Minority class）**过少的影响，导致分类偏倚。来源建议通过 <b>SMOTE 算法</b> 生成合成样本来平衡数据，从而帮助决策树在分裂选择时能够更公平地划分出代表少数类的决策边界。
-
----
-
-<b>比喻理解：</b>
-
-你可以把<b>不纯度</b>想象成一篮子混杂在一起的红色和绿色毛线球。<b>分裂选择</b>就像是你在寻找一个简单的规则（比如“大小”或“质地”），试图把它们分到两个新篮子里。如果你找到一个规则，分完后一个篮子全是红色，另一个全是绿色，那么这个规则的“<b>增益</b>”就是最大的，因为它完美地消除了混乱。
-
-## RECAP: Sparsity and SMOTE
-
-在“Predictive Data Mining I”的背景下，来源材料将**稀疏性（Sparsity）<b>与</b>SMOTE（合成少数类过采样技术）**视为处理大规模媒体数据和不平衡数据集时必须解决的两大核心挑战。
-
-以下是来源对这两个概念及其解决路径的详细讨论：
-
-### 1. 稀疏性 (Sparsity)：高维数据的挑战
-
-在处理如 Facebook“点赞”等数字足迹数据时，稀疏性是一个极其严重的问题。
-
-- <b>定义的维度</b>：来源以“myPersonality”项目为例，其数据矩阵包含约 58,000 名用户和约 55,000 个独特的点赞页面。
-- <b>问题的本质</b>：在用户-点赞矩阵中，绝大多数条目为 0，因为每个用户只点赞了极小比例的页面。
-- <b>后果：过度拟合（Overfitting）</b>：来源明确指出，如果直接对这 55,000 个特征运行原始回归模型，模型会立即产生过度拟合，失去预测价值。
-- <b>解决方案：降维（SVD）</b>：为了应对稀疏性，来源采用了<b>奇异值分解（SVD）</b>，将极其稀疏的高维空间压缩为稠密的低维潜在因子（如 100 个组件），从而提取出有意义的模式（如“技术宅”或“主流流行”）进行后续预测。
-    
-### 2. SMOTE：解决类别不平衡与罕见性
-
-当预测任务涉及**少数类样本（Minority Class）**过少（即罕见性）时，简单的分类算法往往会产生偏倚。
-
-- <b>核心挑战</b>：少数类太小会导致分类器偏向于多数类，导致预测失效。
-- <b>SMOTE 的基本思路</b>：与其简单地通过复制少数类点（这会导致过度拟合），SMOTE 通过在相邻的少数类样本之间进行**插值（Interpolating）<b>来创建</b>合成（Synthetic）**的样本点。
-- <b>应用限制</b>：来源强调，SMOTE 只能应用于<b>训练数据</b>；此外，如果原始少数类点中包含噪声，SMOTE 可能会产生“合成噪声”。
-    
-### 3. 混合特征下的 SMOTE 实现
-
-在现实的媒体数据挖掘中，特征往往是混合的（数值型 + 类别型），来源详细说明了如何在这种情况下生成合成点：
-
-- <b>距离度量</b>：为了寻找 $k$ 个最近邻，需要定义一种结合了数值差异（欧几里得距离）和类别不匹配（0/1 匹配）的混合距离公式。
-- <b>合成逻辑</b>：
-    - <b>数值属性</b>：通过特征维度的混合向量 $h$ 在原始点与其邻居之间进行加权线性组合。
-    - <b>类别属性</b>：通常采用简单的默认策略，保留原始点的类别特征。
-        
-### 4. 总结：从数据预处理到预测
-
-这些来源共同描绘了一个预测性数据挖掘的完整流程：
-
-- 面对<b>高维稀疏数据</b>，通过 <b>SVD</b> 提取稠密特征。
-- 面对<b>类别分布不均</b>，通过 <b>SMOTE</b> 生成合成样本平衡数据。
-- 最后，利用这些经过处理的数据进行<b>逻辑回归</b>或<b>线性回归</b>，以实现对年龄、性别、人格特质等潜在属性的准确预测。
-
----
-
-<b>比喻理解：</b>
-
-<b>稀疏性</b>就像是在一个巨大的图书馆里，只有几本书被翻阅过，你很难通过这些零散的信息看出读者的品味；而 <b>SVD</b> 就像是将这些书归类到少数几个大主题下，让品味变得清晰。<b>SMOTE</b> 则像是你在研究一种罕见的蝴蝶，样本太少让你无法总结规律，于是你通过观察几只已知蝴蝶的相似之处，“画”出了几只具有相同特征的新蝴蝶，从而让你的研究数据更加充实和平衡。
-
----
 
 ## The myPersonality Project
 

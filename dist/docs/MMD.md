@@ -844,7 +844,10 @@ SMOTE（Synthetic Minority Over-sampling Technique）是一种<b>数据级别的
 
 组成：
 
-$$x∈R∣V∣×N∣B∣$$
+$$x∈R^{∣V∣}×N^{∣B∣}$$
+
+- 在“数值方向”上有 $∣V∣$ 个维度
+- 在“类别方向”上有 $∣B∣$ 个维度
 
 整个数据集：$X={x_1,…,x_n}$
 
@@ -873,132 +876,135 @@ SMOTE 只在这些少数类样本之间生成新样本。
 
 #### SMOTE with Mixed Features
 
-##### Distance for kNN
+当数据同时包含 <b>数值特征（numeric）</b> 和 <b>类别特征（nominal/categorical）</b> 时，SMOTE 需要 a distance accounting for numeric + nominal attributes:
 
-> 下面给你一个<b>完整、无遗漏、结构清晰、基于你页面内容的解释</b>，把“SMOTE with mixed features”这一段拆开讲得非常明白。内容保持技术准确，但语言尽量直观。
-> > ---
-> > # <b>SMOTE with Mixed Features（混合特征的 SMOTE）</b>
-> > 当数据同时包含 <b>数值特征（numeric）</b> 和 <b>类别特征（nominal/categorical）</b> 时，SMOTE 需要：
-> > 1. 定义一种能同时处理两种特征的距离（用于 kNN）
-> 2. 定义如何生成新的合成样本（numeric + nominal）
-    > 下面分两部分解释。
-> > ---
-> > # <b>Part 1 — Distance for kNN（混合特征的距离定义）</b>
-> > SMOTE 需要用 kNN 找“少数类邻居”。  
-> 但如果数据包含 <b>数值 + 类别</b> 特征，欧氏距离不够用。  
-> 因此需要一个 <b>mixed-type distance（混合型距离）</b>。
-> > ---
-> > ## <b>1. Numeric difference（数值特征差异）</b>
-> > 对两个样本 \(x_i, x_j\)，数值特征集合为 \(V\)：
-> > \[
-> u_{ij} = x_i[V] - x_j[V]
-> \]
-> > 这是一个向量，表示所有数值特征的差。
-> > ---
-> > ## <b>2. Nominal mismatch（类别特征差异）</b>
-> > 对每个类别特征 \(l\in B\)：
-> > \[
-> q(b_{il}, b_{jl}) =
-> \begin{cases}
-> 0 & \text{if } b_{il} = b_{jl} \\
-> 1 & \text{otherwise}
-> \end{cases}
-> \]
-> > 意思是：
-> > - 类别相同 → 差异 0  
-> - 类别不同 → 差异 1  
-    > 这是最常用的“0/1 mismatch”方式。
-> > ---
-> > ## <b>3. Mixed-type distance（混合距离）</b>
-> > 将数值差异与类别差异结合：
-> > \[
-> d_{ij} = \sqrt{
-> u_{ij}^T u_{ij}
-> +
-> c^2 \sum_{l=1}^{|B|} q(b_{il}, b_{jl})
-> }
-> \]
-> > 解释：
-> > - 第一项：数值特征的欧氏距离  
-> - 第二项：类别特征 mismatch 的加权距离  
-> - \(c\)：缩放因子，让类别特征的影响与数值特征处于同一量级  
-    > ---
-> > ## <b>4. Scale factor \(c\)（缩放因子）</b>
-> > 页面给出的合理选择：
-> > \[
-> c \leftarrow \text{median}_{l\in V} \, g(x_p^l)
-> \]
-> > 其中：
-> > - \(g = std\)：标准差  
-> - \(x_p^l\)：少数类在第 \(l\) 个数值特征上的取值  
-    > 意思是：
-> > &gt; <b>用少数类数值特征的中位标准差作为类别特征的权重。</b>
-> > 这样类别特征不会被低估或高估。
-> > ---
-> > # <b>Part 2 — Generating Synthetic Points（生成合成样本）</b>
-> > 找到邻居后，SMOTE 要生成新的样本。
-> > ---
-> > ## <b>1. Feature-wise mixing vector（特征级混合向量）</b>
-> > 定义一个 mixing vector：
-> > \[
-> h_i = \{h_{ij}\}_{j=1}^{|V|}, \quad h_{ij} \in [0,1]
-> \]
-> > 每个数值特征都有一个独立的 mixing 系数。
-> > ---
-> > ## <b>2. Numeric attributes（数值特征生成）</b>
-> > \[
-> x_{\text{synth}}[V] \leftarrow h_i \odot x_i[V] + (1 - h_i) \odot x_{\text{nn}}[V]
-> \]
-> > 解释：
-> > - 对每个数值特征做线性插值  
-> - \(\odot\) 是逐元素乘法  
-    > 这比“统一 λ”更灵活。
-> > ---
-> > ## <b>3. Nominal attributes（类别特征生成）</b>
-> > 默认简单策略：
-> > \[
-> x_{\text{synth}}[B] \leftarrow x_i[B]
-> \]
-> > 也就是：
-> > &gt; <b>类别特征直接继承原样本的类别值。</b>
-> > （更高级方法会用多数投票或概率采样，但页面只讲默认方法。）
-> > ---
-> > # <b>Practical Notes（实践注意事项）</b>
-> > ### <b>1. Apply SMOTE only on training data</b>
-> SMOTE 只能用于训练集，不能对测试集 oversample。
-> > 否则会造成数据泄漏（data leakage）。
-> > ---
-> > ### <b>2. Noisy minority points can create synthetic noise</b>
-> 如果少数类本身有噪声点，SMOTE 会把噪声扩散成更多噪声。
-> > 因此：
-> > - 需要先清洗少数类  
-> - 或结合 Tomek links / ENN 去噪  
-    > ---
-> > # <b>Final Summary（总结）</b>
-> > 这段内容讲的是：
-> > &gt; <b>当数据包含数值 + 类别特征时，SMOTE 如何定义混合距离、如何生成合成样本，以及实践中的注意事项。</b>
-> > 核心要点：
-> > - 混合距离 = 数值欧氏距离 + 类别 mismatch × 缩放因子  
-> - 数值特征用插值生成  
-> - 类别特征默认继承  
-> - SMOTE 只用于训练集  
-> - 噪声点会被放大  
-    > ---
-> > 如果你愿意，我还能帮你：
-> > - 把这段内容压缩成 slide 版本  
-> - 画一个示意图（文字描述）  
-> - 对比 SMOTE vs SMOTE-NC（专门处理类别特征的版本）
+1. 定义一种能同时处理两种特征的距离（用于 kNN）
+2. 定义如何生成新的合成样本（numeric + nominal）
 
----
+要点 ：
 
-### Pitfalls（陷阱）
+- 混合距离 = 数值欧氏距离 + 类别 mismatch × 缩放因子  
+- 数值特征用插值生成  
+- 类别特征默认继承  
 
-<b>建议：</b>
+##### Distance for kNN（混合特征的距离定义）
 
-- <b>采样顺序：</b>先划分训练/测试集，再对训练集做 SMOTE
-- <b>标准化顺序：</b>先标准化，再做 SMOTE（或用 pipeline 保证顺序）
-- <b>边界控制：</b>使用 `Borderline-SMOTE` 或 `SMOTE-Tomek` 等变体减少噪声
+SMOTE 需要用 kNN 找“少数类邻居”。  
 
+但如果数据包含 <b>数值 + 类别</b> 特征，欧氏距离不够用。  
+
+因此需要一个 <b>mixed-type distance（混合型距离）</b>。
+
+1. Numeric difference（数值特征差异）
+
+对两个样本 $x_i, x_j$，数值特征集合为 $V$：
+
+$$u_{ij} = x_i[V] - x_j[V]$$
+
+这是一个向量，表示所有数值特征的差。
+
+1. Nominal mismatch（类别特征差异）
+
+对每个类别特征 $l\in B$：
+
+$$q(b_{il}, b_{jl}) =
+\begin{cases}
+0 & \text{if } b_{il} = b_{jl} \\
+1 & \text{otherwise}
+\end{cases}$$
+
+意思是：
+
+- 类别相同 → 差异 0  
+- 类别不同 → 差异 1  
+
+这是最常用的“0/1 mismatch”方式。
+
+1. Mixed-type distance（混合距离）
+
+将数值差异与类别差异结合：
+
+$$d_{ij} = \sqrt{
+u_{ij}^T u_{ij}
++
+c^2 \sum_{l=1}^{|B|} q(b_{il}, b_{jl})
+}$$
+
+解释：
+
+- 第一项：数值特征的欧氏距离  
+- 第二项：类别特征 mismatch 的加权距离  
+- $c$：缩放因子，让类别特征的影响与数值特征处于同一量级  
+    
+1. Scale factor $c$（缩放因子）
+
+页面给出的合理选择：
+
+$$c \leftarrow \text{median}_{l\in V} \, g(x_p^l)$$
+
+其中：
+
+- $g = std$：标准差  
+- $x_p^l$：少数类在第 $l$ 个数值特征上的取值  
+
+意思是：
+
+&gt; <b>对每一个数值特征 </b>l<b>，计算它在少数类样本中的标准差，然后把所有标准差的中位数作为类别特征的缩放因子 </b>c<b>。</b>
+
+这样类别特征不会被低估或高估。
+
+##### Generating Synthetic Points（生成合成样本）
+
+找到邻居后，SMOTE 要生成新的样本。
+
+1. Feature-wise mixing vector（特征级混合向量）
+
+定义一个 mixing vector：
+
+$$h_i = \{h_{ij}\}_{j=1}^{|V|}, \quad h_{ij} \in [0,1]$$
+
+<b>每个数值特征都有一个独立的 mixing 系数</b>。
+
+1. Numeric attributes（数值特征生成）
+
+$$x_{\text{synth}}[V] \leftarrow h_i \odot x_i[V] + (1 - h_i) \odot x_{\text{nn}}[V]$$
+
+解释：
+
+- 对每个数值特征做线性插值  
+- $\odot$是逐元素乘法  
+
+这比“统一 λ”更灵活。
+
+1. Nominal attributes（类别特征生成）
+
+默认简单策略：
+
+$$x_{\text{synth}}[B] \leftarrow x_i[B]$$
+
+也就是：
+
+&gt; <b>类别特征直接继承原样本的类别值。</b>
+
+（更高级方法会用多数投票或概率采样，但页面只讲默认方法。）
+
+##### <b>Practical Notes（实践注意事项）</b>
+
+1. Apply SMOTE <b>only on training data</b>
+
+SMOTE 只能用于训练集，不能对测试集 oversample。
+
+否则会造成数据泄漏（data leakage）。
+
+1. Noisy minority points can <b>create synthetic noise</b>
+
+如果少数类本身有噪声点，SMOTE 会把噪声扩散成更多噪声。
+
+因此：
+
+- 需要先清洗少数类  
+- 或结合 Tomek links / ENN 去噪  
+    
 ## Evaluation Metrics（评估指标：混淆矩阵、精确率、召回率、F1、AUC）
 
 ### Confusion Matrix

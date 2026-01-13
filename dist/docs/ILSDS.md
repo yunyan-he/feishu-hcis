@@ -345,20 +345,42 @@ $$\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}
 
 考虑方阵 $\mathbf{A} \in \mathbb{R}^{n \times n}$。
 
-- <b>特征值 Eigenvalues</b> $\lambda_i$：满足 $\det(\mathbf{A} - \lambda_i \mathbf{I}) = 0$
-- <b>特征向量 Eigenvectors</b> $\mathbf{v}_i \ne 0$：满足 $\mathbf{A}\mathbf{v}_i = \lambda_i \mathbf{v}_i$
+- <b>特征值 Eigenvalues</b> $\lambda_i$：满足 $\det(\mathbf{A} - \lambda_i \mathbf{I}) = 0$ 找到那些让 $A−λ_iI$ <b>不可逆</b> 的 λ 这些 λ 就是特征值。
 
-若 $\mathbf{A}$可对角化（有 n 个线性无关特征向量）：
+> <b>det = determinant = 行列式</b>
+> 行列式是一个把矩阵压缩成一个数字的函数。
+> - 如果 det = 0，说明体积被压扁了 → <b>矩阵不可逆</b>
+> - 如果 det ≠ 0，说明体积没有被压扁 → <b>矩阵可逆</b>
+> $$\det\begin{vmatrix}
+a & b \\
+c & d
+\end{vmatrix}
+= ad - bc$$
+
+- <b>特征向量 Eigenvectors</b> $\mathbf{v}_i \ne 0$：满足 $\mathbf{A}\mathbf{v}_i = \lambda_i \mathbf{v}_i$ 特征向量 $v_i$ 是一个<b>被矩阵 A 作用后， 方向不变</b>、只被拉伸或压缩了的向量。
+
+若 $\mathbf{A}$可对角化（有 n 个<b>线性无关</b>特征向量）[充要条件]：
 
 $$\mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^{-1}$$
 
-- $$\mathbf{V} = [\mathbf{v}_1, \dots, \mathbf{v}_n]$$
-- $$\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$$
+- $\mathbf{V} = [\mathbf{v}_1, \dots, \mathbf{v}_n]$ A的n行的特征向量
+- $\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$[特征值可以重复]
+
+> $diag(λ₁, λ₂, …, λₙ)$ 表示一个对角矩阵：
+> # $$\operatorname{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)
+=
+\begin{bmatrix}
+\lambda_1 & 0 & \cdots & 0 \\
+0 & \lambda_2 & \cdots & 0 \\\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \lambda_n
+\end{bmatrix}
+= \Lambda$$
+> 这就是特征分解里的 Λ。
 
 <b>重要性质</b>：
 
-- 迹：$\operatorname{tr}[\mathbf{A}] = \sum_{i=1}^n \lambda_i$
-- 行列式：$\det(\mathbf{A}) = \prod_{i=1}^n \lambda_i$
+- 迹：$\operatorname{tr}[\mathbf{A}] = \sum_{i=1}^n \lambda_i$ [tr⁡(XYZ)=tr⁡(ZXY)]
+- 行列式：$\det(\mathbf{A}) = \prod_{i=1}^n \lambda_i$   [det⁡(XYZ)=det⁡(X)det⁡(Y)det⁡(Z)]
 - 矩阵幂：$\mathbf{A}^k = \mathbf{V}\Lambda^k \mathbf{V}^{-1}$
 - 矩阵指数：$e^{\mathbf{A}} = \mathbf{V} e^{\Lambda} \mathbf{V}^{-1},\quad e^{\Lambda} = \operatorname{diag}(e^{\lambda_1}, \dots, e^{\lambda_n})$
 
@@ -366,262 +388,282 @@ $$\mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^{-1}$$
 
 ### 特殊情形：对称矩阵与正半定矩阵
 
-#### (1) 对称矩阵 Symmetric
+#### 对称矩阵 Symmetric
 
-# 若 (\mathbf{A}) 对称：
+对称矩阵是线性代数里的“完美矩阵”。 它们永远可以对角化，而且特征向量永远正交，特征值永远是实数。
 
-# [ \mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^T ]
+若 $\mathbf{A}$ 对称：
 
-- (\mathbf{V} \in \mathbb{R}^{n \times n})，列向量为正交归一 (orthonormal)：(\mathbf{V}^T \mathbf{V} = \mathbf{I})
-- (\lambda_i \in \mathbb{R})
+$$\mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^T$$
 
-#### (2) 对称正半定 Symmetric Positive Semi-Definite
+- $\mathbf{V} \in \mathbb{R}^{n \times n}$，列向量为正交归一 (orthonormal)：$\mathbf{V}^T \mathbf{V} = \mathbf{I}$
+- $$\lambda_i \in \mathbb{R}$$
 
-# 若 (\mathbf{A}) 满足： [ \mathbf{x}^T \mathbf{A} \mathbf{x} \ge 0,\quad \forall \mathbf{x} \in \mathbb{R}^n ]
+#### 对称正半定 Symmetric Positive Semi-Definite
 
-# 则：
+对称正半定 = 更完美：特征值 ≥ 0，还能开平方。
 
-- (\mathbf{A} = \mathbf{V} \Lambda \mathbf{V}^T)
-- (\lambda_i \ge 0)
-- 可以定义<b>矩阵平方根 (matrix square root)</b>： [ \mathbf{A}^{1/2} = \mathbf{V} \Lambda^{1/2} \mathbf{V}^T ]
+若 $\mathbf{A}$满足： $\mathbf{x}^T \mathbf{A} \mathbf{x} \ge 0,\quad \forall \mathbf{x} \in \mathbb{R}^n$ A 对任何向量都不会把它“翻转方向”，只会让它变长或保持不变。
+
+则：
+
+- $$\mathbf{A} = \mathbf{V} \Lambda \mathbf{V}^T$$
+- $$\lambda_i \ge 0$$
+- 可以定义<b>矩阵平方根 (matrix square root)</b>： $\mathbf{A}^{1/2} = \mathbf{V} \Lambda^{1/2} \mathbf{V}^T$
 
 ---
 
-## 八、相似度推理与检索 Similarity-based Inference and Retrieval
+## 相似度推理与检索 Similarity-based Inference and Retrieval
 
-# 这一部分是从<b>文本示例</b>出发，展示如何用向量空间和线性代数做检索。
+这一部分是从<b>文本示例</b>出发，展示如何用向量空间和线性代数做检索。
 
 ### 文本示例与 Query
 
-# 有 7 条短信 (m_1, \dots, m_7)，内容包括：
+有 7 条短信 (m_1, \dots, m_7)，内容包括：
 
 - “money award”“cash prize” 类 spam
 - “free ringtone” 类 spam
 
-# 查询：
+查询：
 
 - Query #1: `"free ringtone"`
 - Query #2: `"cash prize"`
 
-# 目标：
+目标：
  给定 query，找到最相似的短信。
 
 ---
 
 ### Bag-of-Words 表示与向量空间模型
 
-# <b>Bag-of-Words (BoW)</b>：
+<b>Bag-of-Words (BoW)</b>：
 
 - 把每条短信看作一组词（不考虑顺序）。
 - 统计每个词在短信中的出现次数（或其他权重）。
 
-# <b>Dictionary（词典）</b>：
+<b>Dictionary（词典）</b>：
 
-- 从所有短信中抽取所有不同的词，构成词典： [ {\text{1st}, 3100, 3161, 4523, are, as, award, best, call, cash, \dots, you, your} ]
+- 从所有短信中抽取所有不同的词，构成词典：${\text{1st}, 3100, 3161, 4523, are, as, award, best, call, cash, \dots, you, your}$
 - 这里词典大小为 68。
 
-# <b>向量表示</b>：
+<b>向量表示</b>：
 
-- 每条短信 (m_i) 表示为一个 68 维向量 (\mathbf{m}_i \in \mathbb{R}^{68})，每一维对应一个词的计数。
-- 所有短信组成矩阵： [ \mathbf{M} = [\mathbf{m}_1, \dots, \mathbf{m}_7] ]
+- 每条短信 $m_i$ 表示为一个 68 维向量 $\mathbf{m}_i \in \mathbb{R}^{68}$，每一维对应一个词的计数。
+- 所有短信组成矩阵: $\mathbf{M} = [\mathbf{m}_1, \dots, \mathbf{m}_7]$
 
-# <b>Query 向量化</b>：
+怎么感觉会考这个题目
 
-- `"free ringtone"` → ([(\text{free}, 1), (\text{ringtone}, 1)]) → 向量 (\mathbf{q}_1 \in \mathbb{R}^{68})
-- `"cash prize"` → ([(\text{cash}, 1), (\text{prize}, 1)]) → 向量 (\mathbf{q}_2 \in \mathbb{R}^{68})
+<b>Query 向量化</b>：
+
+- `"free ringtone"` → $[(\text{free}, 1), (\text{ringtone}, 1)]$→ 向量 $\mathbf{q}_1 \in \mathbb{R}^{68}$
+- `"cash prize"` → $[(\text{cash}, 1), (\text{prize}, 1)]) → 向量 \mathbf{q}_2 \in \mathbb{R}^{68}$
 
 ---
 
 ### 相似度度量 Similarity Measures
 
-# 两种常用度量：
+两种常用度量：
 
-1. <b>Dot Product (点积)</b>： [ \mathbf{v}_1^T \mathbf{v}_2 ]
-2. <b>Cosine Similarity (余弦相似度)</b>： [ g_{\cos}(\mathbf{v}_1, \mathbf{v}_2) = \frac{\mathbf{v}_1^T \mathbf{v}_2}{|\mathbf{v}_1|,|\mathbf{v}_2|} ]
+1. <b>Dot Product (点积)</b>：$\mathbf{v}_1^T \mathbf{v}_2$ 
+    - 就是在数“两个文本有多少词重叠”
+    - 重叠越多 → 点积越大
 
-# PPT 中给出了表格，展示：
+2. <b>Cosine Similarity (余弦相似度)</b>：$g_{\cos}(\mathbf{v}_1, \mathbf{v}_2) = \frac{\mathbf{v}_1^T \mathbf{v}_2}{|\mathbf{v}_1|\cdot|\mathbf{v}_2|}$ 
+    - 点积只看重叠词
+    - 余弦相似度还会考虑“向量长度”（文本长短）会影响，所以归一化长度 不考虑它 只关注方向
+    - 余弦相似度更公平，不会因为 message 太长而被误判为相似
 
-- 对 query `"free ringtone"`，与 (m_5, m_6, m_7) 的相似度最高。
-- 对 `"cash prize"`，与 (m_4) 的相似度最高（因为包含 “cash”“prize”）。
+PPT 中给出了表格，展示：
+
+- 对 query `"free ringtone"`，与$m_5, m_6, m_7$ 的相似度最高。
+- 对 `"cash prize"`，与 $m_4$ 的相似度最高（因为包含 “cash”“prize”）。
 
 ---
 
-## 九、Latent Semantic Indexing (LSI) 与矩阵分解
+## Latent Semantic Indexing (LSI) 与矩阵分解
 
 ### Distributional Hypothesis 分布假设
 
-# <b>Distributional Hypothesis</b>：
+<b>Distributional Hypothesis</b>：
 
-> # A word’s meaning is decided by its context.
+> A word’s meaning is decided by its context.
 
-# 例子：
+例子：
  “In 2000 Mustermann founded The Mustermann Foundation.”
 
 - “Mustermann” 在不同上下文中可以是 Person 或 Company。
 
-# LSI 的目标：
+LSI 的目标：
  在<b>概念空间 (concept space)</b> 中挖掘文本的潜在语义结构。
 
 ---
 
 ### Word-Document Matrix 与低秩分解
 
-# 构造 <b>word-document matrix</b> (\mathbf{Y} \in \mathbb{R}^{m \times n})：
+构造 <b>word-document matrix</b> $\mathbf{Y} \in \mathbb{R}^{m \times n}$：
 
-- 行：词 (words)
-- 列：文档/短信 (documents)
+- 行：词 (words) m个词
+- 列：文档/短信 (documents) n个文档
 - 元素：词在文档中的计数或权重
 
-# LSI 的核心思想：
- [ \mathbf{Y} \approx \mathbf{C}\mathbf{P}^T ]
+LSI 的核心思想：
+$\mathbf{Y} \approx \mathbf{C}\mathbf{P}^T$
 
-- (\mathbf{C} \in \mathbb{R}^{m \times k})：basis matrix（词在概念空间中的表示）
-- (\mathbf{P} \in \mathbb{R}^{n \times k})：coefficient matrix（文档在概念空间中的表示）
-- (k) 是低秩（(k \ll \min(m,n))）
+- $\mathbf{C} \in \mathbb{R}^{m \times k}$：basis matrix（词在概念空间中的表示）
+- $\mathbf{P} \in \mathbb{R}^{n \times k}$：coefficient matrix（文档在概念空间中的表示）
+- $k$ 是低秩$k \ll \min(m,n)$
 
 ---
 
 ### 低秩分析 Low Rank Analysis via Matrix Factorization
 
-# 设数据矩阵： [ \mathbf{X} = [\mathbf{x}_1, \dots, \mathbf{x}_n] \in \mathbb{R}^{m \times n} ]
+设数据矩阵：$\mathbf{X} = [\mathbf{x}_1, \dots, \mathbf{x}_n] \in \mathbb{R}^{m \times n}$ 每一列 $x_i∈R^m$ 是一个样本（m 维特征，n 个样本）。
 
-- (\mathbf{C} \in \mathbb{R}^{m \times k})：basis matrix
-- (\mathbf{P} \in \mathbb{R}^{n \times k})：coefficient matrix
+- $\mathbf{C} \in \mathbb{R}^{m \times k}$：basis matrix
+- $\mathbf{P} \in \mathbb{R}^{n \times k}$：coefficient matrix
 
-# 重构： [ \mathbf{x}<em>i \approx \mathbf{C}\mathbf{p}i ] 元素级： [ x{ji} \approx \sum</em>{l=1}^k C_{jl} P_{il} ]
+重构：$\mathbf{x}_i \approx \mathbf{C}\cdot \mathbf{p}_i^T ; x_{ji} \approx \sum_{l=1}^k C_{jl} P_{il}$  $x_i$是$X$的第 i 个样本。$p_i$是P的第i列，$x_{ji}$是特征维度为j 第i个样本的分量
 
-# 整体： [ \mathbf{X} \approx \mathbf{C}\mathbf{P}^T ]
+整体：$\mathbf{X} \approx \mathbf{C}\mathbf{P}^T$
 
-# <b>Outer product representation</b>： [ \mathbf{X} \approx \sum_{i=1}^k \mathbf{c}_i \mathbf{p}_i^T ]
+<b>Outer product representation</b>：$\mathbf{X} \approx \sum_{i=1}^k \mathbf{c}_i \mathbf{p}_i^T$ c的一列*p的一行 还是m*n矩阵 k个矩阵加起来
 
-# <b>降维 (Dimensionality Reduction)</b>：
+<b>降维 (Dimensionality Reduction)</b>：
 
-- 原始 (\mathbf{x}_i \in \mathbb{R}^m)
-- 在低维空间中用 (\mathbf{p}_i \in \mathbb{R}^k) 表示
+- 原始 $\mathbf{x}_i \in \mathbb{R}^m$
+- 在低维空间中用 $\mathbf{p}_i \in \mathbb{R}^k$表示
 
 ---
 
 ### 残差与 RSS Residual Sum of Squares
 
-# 分解误差： [ \mathbf{X} = \mathbf{C}\mathbf{P}^T + \mathbf{E} ]
+分解误差：$\mathbf{X} = \mathbf{C}\mathbf{P}^T + \mathbf{E}$
 
-# <b>Residual Sum of Squares (RSS)</b>： [ \text{RSS} = |\mathbf{E}|^2 = \operatorname{tr}[\mathbf{E}^T \mathbf{E}] = \operatorname{tr}[\mathbf{E}\mathbf{E}^T] ]
+<b>Residual Sum of Squares (RSS)</b>：$\text{RSS} = |\mathbf{E}|^2 = \operatorname{tr}[\mathbf{E}^T \mathbf{E}] = \operatorname{tr}[\mathbf{E}\mathbf{E}^T]$
 
-# 展开： [ \text{RSS} = \sum_{i=1}^n |\mathbf{x}_i - \mathbf{C}\mathbf{p}_i|^2 ]
+展开：$\text{RSS} = \sum_{i=1}^n |\mathbf{x}_i - \mathbf{C}\mathbf{p}_i^T|^2$
 
-# PPT 强调：trace 的性质可以把矩阵误差转化为所有样本误差的平方和。
+PPT 强调：trace 的性质可以把矩阵误差转化为所有样本误差的平方和。
 
 ---
 
-## 十、奇异值分解 SVD 与 LSI 的核心
+## 奇异值分解 SVD 与 LSI 的核心
 
 ### SVD 定义 Singular Value Decomposition
 
-# 对任意 (\mathbf{X} \in \mathbb{R}^{m \times n})，存在唯一分解： [ \mathbf{X} = \mathbf{U}\mathbf{S}\mathbf{V}^T ]
+对任意 $\mathbf{X} \in \mathbb{R}^{m \times n}$，存在唯一分解：$\mathbf{X} = \mathbf{U}\mathbf{S}\mathbf{V}^T$ 
 
-- (\mathbf{U} \in \mathbb{R}^{m \times m})：左奇异向量 (left singular vectors)，(\mathbf{U}^T \mathbf{U} = \mathbf{I}_m)
-- (\mathbf{V} \in \mathbb{R}^{n \times n})：右奇异向量 (right singular vectors)，(\mathbf{V}^T \mathbf{V} = \mathbf{I}_n)
-- (\mathbf{S} \in \mathbb{R}^{m \times n})：对角矩阵（主对角线为奇异值 singular values）： [ \mathbf{S} = \operatorname{diag}(s_1, s_2, \dots, s_m),\quad s_1 \ge s_2 \ge \dots \ge s_m \ge 0 ]
+- $\mathbf{U} \in \mathbb{R}^{m \times m}$：左奇异向量 (left singular vectors)，$\mathbf{U}^T \mathbf{U} = \mathbf{I}_m$正交矩阵
+- $\mathbf{V} \in \mathbb{R}^{n \times n}$：右奇异向量 (right singular vectors)，$\mathbf{V}^T \mathbf{V} = \mathbf{I}_n$正交矩阵
+- $\mathbf{S} \in \mathbb{R}^{m \times n}$：对角矩阵（主对角线为奇异值 singular values）： $\mathbf{S} = \operatorname{diag}(s_1, s_2, \dots, s_m),\quad s_1 \ge s_2 \ge \dots \ge s_m \ge 0$
 
-# <b>Truncated SVD</b>（截断到秩 k）： [ \mathbf{X} \approx \hat{\mathbf{U}}\hat{\mathbf{S}}\hat{\mathbf{V}}^T ]
+> 把单位圆输入矩阵 X，输出会变成一个椭圆。奇异值表示某个方向的拉伸长度
+> - 椭圆的长轴长度 = s1
+> - 次长轴长度 = s2
 
-- (\hat{\mathbf{U}} \in \mathbb{R}^{m \times k})
-- (\hat{\mathbf{V}} \in \mathbb{R}^{n \times k})
-- (\hat{\mathbf{S}} = \operatorname{diag}(s_1, \dots, s_k) \in \mathbb{R}^{k \times k})
+<b>Truncated SVD</b>（截断到秩 k）：$\mathbf{X} \approx \hat{\mathbf{U}}\hat{\mathbf{S}}\hat{\mathbf{V}}^T$
 
-# 与之前的二因子分解对应：
+- $$\hat{\mathbf{U}} \in \mathbb{R}^{m \times k}$$
+- $$\hat{\mathbf{V}} \in \mathbb{R}^{n \times k}$$
+- $$\hat{\mathbf{S}} = \operatorname{diag}(s_1, \dots, s_k) \in \mathbb{R}^{k \times k}$$
 
-- (\mathbf{C} = \hat{\mathbf{U}}\hat{\mathbf{S}})
-- (\mathbf{P} = \hat{\mathbf{V}})
+与之前的二因子分解对应：
+
+- $$\mathbf{C} = \hat{\mathbf{U}}\hat{\mathbf{S}}$$
+- $$\mathbf{P} = \hat{\mathbf{V}}$$
 
 ---
 
 ### 与特征分解的关系 Connection to Eigendecomposition
 
-# 对 (\mathbf{X} \in \mathbb{R}^{m \times n})：
+对$\mathbf{X} \in \mathbb{R}^{m \times n}$：
 
-- 列 Gram 矩阵：(\mathbf{X}^T \mathbf{X})
-- 行 Gram 矩阵：(\mathbf{X}\mathbf{X}^T)
+- 列 Gram 矩阵：$\mathbf{X}^T \mathbf{X}$ 它衡量“列与列之间的相似度”。
+- 行 Gram 矩阵：$\mathbf{X}\mathbf{X}^T$它衡量“行与行之间的相似度”。
 
-# 做特征分解：
+做特征分解：
 
-- (\mathbf{X}^T \mathbf{X} = \mathbf{V}\Lambda \mathbf{V}^T) → (\mathbf{V}) 是右奇异向量
-- (\mathbf{X}\mathbf{X}^T = \mathbf{U}\Lambda \mathbf{U}^T) → (\mathbf{U}) 是左奇异向量
+- $\mathbf{X}^T \mathbf{X} = \mathbf{V}\Lambda \mathbf{V}^T → \mathbf{V}$ 是右奇异向量
+- $\mathbf{X}\mathbf{X}^T = \mathbf{U}\Lambda \mathbf{U}^T → \mathbf{U}$是左奇异向量
 
-# 奇异值与特征值关系： [ s_i = \sqrt{\lambda_i} ]
+奇异值与特征值关系：$s_i = \sqrt{\lambda_i}$
 
-# 注意：(\mathbf{X}^T \mathbf{X}) 和 (\mathbf{X}\mathbf{X}^T) 都是对称正半定矩阵。
+注意：$\mathbf{X}^T \mathbf{X}$和$\mathbf{X}\mathbf{X}^T$都是对称正半定矩阵。
 
----
+> $$(X^TX)^T=X^T(X^T)^T=X^TX$$
+> $$(XX^T)^T=X(X^T)^T=XX^T$$
+> 还有正半定性 不想整了 搞不懂这些
 
 ### SVD 的误差界：RRSS
 
-# PPT 给出一个重要指标：<b>Relative Residual Sum of Squares (RRSS)</b>：
+PPT 给出一个重要指标：<b>Relative Residual Sum of Squares (RRSS)</b>：
 
-# [ \text{RRSS} = \frac{\sum_{i=k+1}^m s_i^2}{\sum_{i=1}^m s_i^2} ]
+$$\text{RRSS} = \frac{\sum_{i=k+1}^m s_i^2}{\sum_{i=1}^m s_i^2}$$
 
 - 分子：截断后丢弃的奇异值平方和 → 残差能量
 - 分母：全部奇异值平方和 → 总能量
 
-# 解释：
+解释：
  RRSS 越小，说明用前 k 个奇异值/奇异向量就能很好地近似原矩阵。
 
 ---
 
 ### 外积展开 Outer Product Expansion
 
-# SVD 也可以写成外积形式：
+SVD 也可以写成外积形式：
 
-# [ \mathbf{X} \approx \sum_{i=1}^k s_i \mathbf{u}_i \mathbf{v}_i^T ]
+$$\mathbf{X} \approx \sum_{i=1}^k s_i \mathbf{u}_i \mathbf{v}_i^T$$
 
-- 每一项 (s_i \mathbf{u}_i \mathbf{v}_i^T) 是一个 rank-1 矩阵。
-- 这与之前的 (\sum \mathbf{c}_i \mathbf{p}_i^T) 完全对应。
+> $s_i$<b> 是一个标量（scalar），标量在矩阵乘法里可以放在任何位置。</b>
+
+- 每一项 $s_i \mathbf{u}_i \mathbf{v}_i^T$ 是一个 rank-1 矩阵。
+- 这与之前的 $\sum \mathbf{c}_i \mathbf{p}_i^T$完全对应。
 
 ---
 
 ### 新数据点的 SVD 表示
 
-# 已知 SVD 因子 (\hat{\mathbf{U}}, \hat{\mathbf{S}}, \hat{\mathbf{V}})，对一个新数据点 (\mathbf{x}_q \in \mathbb{R}^m)，希望得到其在低维空间中的系数向量 (\mathbf{v}_q \in \mathbb{R}^k)。
+已知 SVD 因子 $\hat{\mathbf{U}}, \hat{\mathbf{S}}, \hat{\mathbf{V}}$，对一个新数据点 $\mathbf{x}_q \in \mathbb{R}^m$，希望得到其在低维空间中的系数向量 $\mathbf{v}_q \in \mathbb{R}^k$。
 
-# 从： [ \mathbf{x}_q \approx \hat{\mathbf{U}}\hat{\mathbf{S}}\mathbf{v}_q ]
+从：$\mathbf{x}_q \approx \hat{\mathbf{U}}\hat{\mathbf{S}}\mathbf{v}_q$
 
-# 左乘 (\hat{\mathbf{U}}^T)： [ \hat{\mathbf{U}}^T \mathbf{x}_q = \hat{\mathbf{U}}^T \hat{\mathbf{U}} \hat{\mathbf{S}} \mathbf{v}_q = \hat{\mathbf{S}} \mathbf{v}_q ]
+左乘 $\hat{\mathbf{U}}^T$：$\hat{\mathbf{U}}^T \mathbf{x}_q = \hat{\mathbf{U}}^T \hat{\mathbf{U}} \hat{\mathbf{S}} \mathbf{v}_q = \hat{\mathbf{S}} \mathbf{v}_q$
 
-# 所以： [ \mathbf{v}_q = \hat{\mathbf{S}}^{-1} \hat{\mathbf{U}}^T \mathbf{x}_q ]
+所以：$\mathbf{v}_q = \hat{\mathbf{S}}^{-1} \hat{\mathbf{U}}^T \mathbf{x}_q$
 
-# 这就是<b>固定因子下对新样本进行嵌入 (embedding)</b> 的公式。
+这就是<b>固定因子下对新样本进行嵌入 (embedding)</b> 的公式。
 
 ---
 
 ### SVD 在文本中的应用：Document & Word Embeddings
 
-# PPT 中展示了：
+PPT 中展示了：
 
-- <b>Document embeddings</b>：每个文档在低维空间中的坐标（(\mathbf{v}_i)）。
-- <b>Word embeddings</b>：每个词在低维空间中的坐标（(\mathbf{u}_j) 或通过 (\mathbf{C})）。
+- <b>Document embeddings</b>：每个文档在低维空间中的坐标（$\mathbf{v}_i$）。
+- <b>Word embeddings</b>：每个词在低维空间中的坐标（$\mathbf{u}_j$ 或通过 $\mathbf{C}$）。
 
-# 通过可视化（2D 投影）可以看到：
+通过可视化（2D 投影）可以看到：
 
 - 语义相近的词（如 “free”“ringtone”“tone”“weekly”“ur”）聚在一起。
 - 语义相近的文档（如 ringtone spam vs money award spam）在空间中形成簇。
 
 ---
 
-## 十一、基于 SVD 的相似度检索：LSI 的效果
+## 基于 SVD 的相似度检索：LSI 的效果
 
-# 在前面的 BoW 检索中：
+在前面的 BoW 检索中：
 
-- Query `"cash prize"` 只与包含 “cash”“prize” 的短信（如 (m_4)）有非零相似度。
+- Query `"cash prize"` 只与包含 “cash”“prize” 的短信（如 $m_4$）有非零相似度。
 - 其他短信虽然语义上也与“中奖”“award”相关，但因为没有 exact match，BoW 相似度为 0。
 
-# 在 LSI / SVD 空间中：
+在 LSI (Latent Semantic Indexing)/ SVD 空间中：
 
-- Query `"cash prize"` 被映射为低维向量 (\mathbf{v}_{q2})。
-- 计算 (\cos(\mathbf{v}_{q2}, \mathbf{v}_i)) 后，PPT 中表格显示： 
-    - 对所有 (m_1, m_2, m_3, m_4)，(\cos(\mathbf{v}_{q2}, \mathbf{v}_i) \approx 1.00)
-    - 而在原始 BoW 空间中，只有 (m_4) 有非零相似度。
+- Query `"cash prize"` 被映射为低维向量 $\mathbf{v}_{q2}$。
+- 计算 $\cos(\mathbf{v}_{q2}, \mathbf{v}_i)$ 后，PPT 中表格显示： 
+    - 对所有 ($m_1$, $m_2$,$m_3$, $m_4$)，$\cos(\mathbf{v}_{q2}, \mathbf{v}_i) \approx 1.00$
+    - 而在原始 BoW 空间中，只有 $m_4$ 有非零相似度。
 
-# 这说明：
+这说明：
 
 - LSI 通过 SVD 把“cash prize”“money award”“winner”“selected”“receive”等词和文档映射到同一“概念空间”。
 - 即使 query 中的词没有直接出现在某些文档中，只要它们在语义上相关（通过共现模式），在低维空间中也会靠近，从而被检索出来。
@@ -656,36 +698,19 @@ $$\mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^{-1}$$
     - 示例：短信 spam + queries `"free ringtone"` & `"cash prize"`。
 
 7. <b>LSI 与 SVD</b>
-    - Word-document matrix (\mathbf{Y})，低秩分解 (\mathbf{Y} \approx \mathbf{C}\mathbf{P}^T)。
-    - SVD：(\mathbf{X} = \mathbf{U}\mathbf{S}\mathbf{V}^T)，truncated SVD，RRSS。
-    - 新样本嵌入：(\mathbf{v}_q = \hat{\mathbf{S}}^{-1}\hat{\mathbf{U}}^T \mathbf{x}_q)。
+    - Word-document matrix $\mathbf{Y}$，低秩分解 $\mathbf{Y} \approx \mathbf{C}\mathbf{P}^T$。
+    - SVD：$\mathbf{X} = \mathbf{U}\mathbf{S}\mathbf{V}^T$，truncated SVD，RRSS。
+    - 新样本嵌入：$\mathbf{v}_q = \hat{\mathbf{S}}^{-1}\hat{\mathbf{U}}^T \mathbf{x}_q$。
     - Document/word embeddings 的可视化与语义聚类。
     - LSI 在 query–document 相似度上的优势：捕捉 latent concepts，而不仅仅是 exact word match。
 
 ---
 
-# 如果你愿意，下一步我可以帮你把这些内容<b>按考试题型</b>拆成：
-
-- 必背公式（英文写法）
-- 概念解释（英文关键词 + 中文说明）
-- 典型问答/推导题（比如 Cov 推导、SVD–eigendecomposition 关系、RRSS 含义）
-
-# 你更想先针对哪一块练习？
-
 # Optimization
-
-# 下面我给你做一份<b>系统的、逐页对应的知识梳理</b>，内容和这份 Part-3 Optimization 的 PDF 一一对应，<b>不遗漏任何知识点</b>，并且对老师重点讲的地方做重点展开。
- 说明：
-
-- 讲解用中文；
-- 专业术语（如 optimization, gradient descent, convex, stochastic 等）保留英文；
-- 数学符号用 LaTeX 形式，方便你之后自己整理或记忆。
-
----
 
 ### 一、整体结构与大图景
 
-# 这份 PPT 的核心主题是：<b>Optimization（优化）</b>，它是现代 learning systems（学习系统）和 data-driven models（数据驱动模型）的核心工具。
+这份 PPT 的核心主题是：<b>Optimization（优化）</b>，它是现代 learning systems（学习系统）和 data-driven models（数据驱动模型）的核心工具。
  本节内容主要包括：
 
 1. <b>Optimization 基本概念</b>：目标函数、可行域、解、最优解（最大化/最小化）、有无约束；
@@ -694,9 +719,9 @@ $$\mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^{-1}$$
 4. <b>Stochastic Gradient Descent（SGD，随机梯度下降）</b>：用样本近似梯度；
 5. <b>Simultaneous Perturbation Stochastic Approximation（SPSA）</b>：在目标函数不可导或未知时的黑盒优化方法及其超参数。
 
-# 你可以把这节课理解为：
+你可以把这节课理解为：
 
-> # 从“可导、好说话的目标函数”上的经典梯度方法，一步步走向“黑盒、不可导、甚至只给你 noisy 评价”的更通用优化方法。
+> 从“可导、好说话的目标函数”上的经典梯度方法，一步步走向“黑盒、不可导、甚至只给你 noisy 评价”的更通用优化方法。
 
 ---
 

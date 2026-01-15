@@ -7,7 +7,7 @@ sidebar_position: 3
 
 # DIS
 
-# Lecture 1
+# Introduction, The CMN Model, Fitts' Law
 
 ## 什么是人机交互？ (What is HCI?)
 
@@ -22,12 +22,12 @@ sidebar_position: 3
 
 ## 人类处理器模型：CMN 模型 (Model Human Processor: CMN Model)
 
-> <b>考试重点 (Exam Focus)</b>: 理解并记住三个处理器的时间常数及其存储特性。
+> <b>考试重点 (Exam Focus)</b>: 理解并记住CMN模型的主要component和关键时间常数及其存储特性。
 
 ### 感知系统 (Perceptual System)
 
-- <b>感知处理器 (Perceptual Processor)</b>: 将感官信号存储在视觉（Visual）或听觉（Auditory）存储器中 。iconic / echoic memory
-- <b>感知时间 (</b>$\tau_P$<b>)</b>: 均值约 <b>100 ms</b> (范围 50–200 ms) 。
+- <b>感知处理器 (Perceptual Processor)</b>: 将感官信号(sensor signals)存储在视觉（Visual）或听觉（Auditory）存储器中 。iconic / echoic memory
+- <b>感知时间(Perception time) (</b>$\tau_P$<b>)</b>: 均值约 <b>100 ms</b> (范围 50–200 ms) 。
 - <b>眼跳 (Eye saccades)</b>: 约 <b>230 ms</b> 。
 - <b>布洛赫定律 (Bloch’s Law)</b>: $R = I \times t$ 。
     - 解释：反应强度 $R$ 是刺激强度 $I$ 与曝光时间 $t$ 的乘积 。
@@ -46,6 +46,7 @@ sidebar_position: 3
 - <b>长期记忆 (Long-term Memory, LTM)</b>:
     - 容量与半衰期被视为<b>无限</b>。
     - 采用 <b>语义编码 (Semantic encoding)</b>，通过联想记忆Associative Memory。
+    - Fast read, slow writ
 
 ### 运动系统 (Motor System)
 
@@ -58,7 +59,7 @@ sidebar_position: 3
 
 ## 菲茨定律 (Fitts’ Law)
 
-> <b>计算重点</b>: 预测移动到目标位置（如按钮）的时间。
+> <b>计算重点</b>: 预测移动到目标位置（如按钮）的时间。 Predict time to press buttons (physical or on-screen) as function of  distance and size
 
 ### 核心公式
 
@@ -70,6 +71,16 @@ $$T_{pos} = I_M \cdot \log_2\left(\frac{2D}{W}\right)$$
 - $I_M$<b> (Index of Movement)</b>: 动作指数常数，约 <b>100 ms/bit</b> 。
 - $I_D = \log_2(2D/W)$: 困难指数 (Index of Difficulty)，单位为 <b>bits</b> 。
 
+> 1️⃣ 距离递减模型（Slide 1）
+> - 假设每次手的移动都能把剩余距离缩小到原来的 7%（即 e=0.07）。
+> - 所以第 i 次移动后的剩余距离是 Di=ei⋅D，直到这个距离小于目标宽度的一半 W/2，表示手已经到达目标。
+> - 推导出所需移动次数 n≥log⁡e(W/2D)，再换成以 2 为底的对数。
+> 2️⃣ 时间公式（Slide 2）
+> - 每次移动包含三个阶段：视觉定位（WP）、键盘准备（KP）、肌肉动作（MP），总共约 240 毫秒。
+> - 所以总时间是：
+> Tpos=n⋅(tWP+tKP+tMP)≈100 ms⋅log⁡2(2DW)
+> - 这就是 Fitts 定律的形式：<b>动作时间与目标距离和宽度的对数成正比</b>。
+
 ### 数学推导与公式变体
 
 - <b>CMN 推导常数</b>: 运动精度比例 $\epsilon \approx 0.07$。
@@ -78,6 +89,8 @@ $$T_{pos} = I_M \cdot \log_2\left(\frac{2D}{W}\right)$$
 
 ### 实例：手机按钮优化 (Mobile Exercise) 
 
+<img src="/assets/B5ddbgmamoTY6mxWFHdcL1v3nef.png" src-width="690" src-height="444" align="center"/>
+
 - <b>任务</b>: 将“拨号”按钮距离从 $30 \text{ mm}$ 移至 $14 \text{ mm}$，按钮宽度为 $2 \text{ mm}$。
 - <b>计算</b>:
     - $T_{pos1} = 100 \cdot \log_2(30/2 + 1) = 100 \cdot \log_2(16) = 400 \text{ ms}$ 。
@@ -85,7 +98,7 @@ $$T_{pos} = I_M \cdot \log_2\left(\frac{2D}{W}\right)$$
 
 - <b>结果</b>: 每次拨号可缩短平均 <b>100 ms</b> 的运动时间 。
 
-# Lecture 2
+# Gestalt Laws, Information Content, Visibility, Affordances and Signifiers
 
 https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 
@@ -109,15 +122,13 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 
 ---
 
-## 📚 <b>Detailed Comprehensive Review</b>
-
-### Core Principle: User Errors are Design Errors
+## Core Principle: User Errors are Design Errors
 
 - The main message of the course is that we tend to blame users for mistakes, but usually, the product or UI design is to blame.
 
 <b>User errors are design errors.</b>   用户错误往往是设计问题，而不是用户的问题。
 
-### Gestalt Laws (Perceptual Organization)
+## Gestalt Laws (Perceptual Organization)
 
 - <b>Definition:</b> Rules developed by the "Berliner Schule" (Köhler, Koffka, Wertheimer) that describe how humans spatially or temporally perceive items as a group 解释人类如何将视觉元素组织成整体. They are simple rules for good UI design.
 
@@ -131,16 +142,23 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
     - UI 应用：窗口（window）隐喻的基础
 
 4. <b>Law 4: Common Region:</b> Objects within a bounded area (region) appear to belong together. (Note: The slides warn "Don't overdo it" .过度使用边框会导致界面杂乱
+    - basic element of window metaphor
+
 5. <b>Law 5: Similarity:</b> Similar shapes (or colors, sizes) appear as belonging together.
+    - 不同的对象 更高的信息量 higher information content (i.e., cognitive effort)
+    - 好处：降低认知负荷
+    - 坏处：降低可区分性
+    - Similar is not necessarily constant 相似性不是绝对的，而是相对的。
+
 6. <b>Law 6: Continuity:</b> Also known as the "Law of the Good Curve". Continuous shapes appear as belonging together.
     - UI 中用于引导视线
 
 7. <b>Law 7 (Experience):</b> We tend to file new things into categories we already know. 
-    - This saves learning effort and is the foundation for metaphors (like the desktop metaphor).
+    - 利用已有知识 This saves learning effort and is the foundation for metaphors (like the desktop metaphor).
     - UI 应用：桌面隐喻（desktop metaphor）
 
-8. <b>Law 8 (Common Fate):</b> Also "Law of Common Movement". Animated objects moving together (synchronously) within a static environment appear as a group.
-    - 动画（animation）是强大的 UI 引导工具
+8. <b>Law 8 (Common Fate):</b> Also "Law of Common Movement". Animated objects moving together (synchronously) within a static environment appear as a group.在静止背景中一起移动的对象，会被自动看成一组。
+    - 动画（animation）是强大的 UI 引导工具Synchronous animation groups the item 同步动画会把元素自动分组。
 
 > Closure（闭合原则）：
 👉 <em>大脑会自动把“未闭合的形状”补成完整的形状。</em>  
@@ -149,7 +167,7 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 👉 <em>只要元素被同一个边界框包住，就会被视为一组。</em>  
 重点：是否被“同一个区域/框”包含。
 
-### Information Content in UIs 信息量
+## Information Content in UIs 信息量
 
 - <b>Unit:</b> The basic unit of information is the <b>bit</b>.
 - <b>Calculation:</b> The information content is $ log_2(N)$, where N is the number of states.
@@ -164,7 +182,7 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
         - Good for precise reading (reading time is constant up to 3-4 digits). 读 3–4 位数字时间几乎恒定
         - Bad for estimates and trends.
     
-### Visibility, Affordances, & Signifiers (Don Norman)
+## Visibility, Affordances, & Signifiers (Don Norman)
 
 #### <b>Visibility:</b>
 
@@ -213,7 +231,7 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 - 好的设计不需要额外文字
 - 可感知的affordance本身就是最好的signifier
 
-### Conceptual Models
+## Conceptual Models
 
 理解系统难用的根本原因
 
@@ -1160,3 +1178,5 @@ Reversible actions（可撤销）更好（如垃圾桶）
 在试验开始前，医生必须告诉患者“我们要测试的是这种药，而不是你的身体素质”，并确保患者知道自己随时可以退出；在试验中，医生要时刻关注患者是否有不良反应，如果痛苦太大就必须停止；试验结束后，医生会感谢患者对医学进步的贡献，并对患者的身份严格保密。在 HCI 评估中，用户就是这位贡献者，而系统就是那张受审视的“处方”。
 
 # 
+# Math
+

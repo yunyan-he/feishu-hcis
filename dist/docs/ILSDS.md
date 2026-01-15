@@ -1984,5 +1984,8 @@ PPT 中展示了：
     - 用 logistic regression 权重解释词的重要性；
     - 对新 query 计算概率，完成推理。
 
-# 如果你愿意，我们可以下一步把这些内容<b>压缩成适合考试背诵的英文要点版</b>，或者针对 logistic regression 的数学推导单独做一份“公式+直觉”的强化笔记。你更想先巩固哪一块？
+# 
+## Deep Learning
+
+Logistics regression
 

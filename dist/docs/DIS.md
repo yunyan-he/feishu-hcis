@@ -186,7 +186,7 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 
 #### <b>Visibility:</b>
 
-- One of the most important aspects of design.
+- One of the <b>most important </b>aspects of design.
 - <b>Core Idea:</b> Much everyday knowledge is "in the world, not in the head".
 - <b>Natural Design:</b> Aims to make natural clues visible, requiring no conscious thought.
 - <b>Balance:</b> "Just the right things have to be visible." Too many clues are as bad as too few.
@@ -207,13 +207,15 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 1. <b>Affordances</b>
     1. Definition
     - The actions that an object <em>allows</em> a user to do with it. 物体允许用户执行的动作
-    - It's a relationship between an object's properties and an agent's capabilities (e.g., a chair affords sitting).是 <b>物体属性 + 用户能力</b> 的关系
+    - It's a relationship between an object's properties and an agent's capabilities (e.g., a chair affords sitting).是 <b>物体属性 + 用户能力</b> 的关系 depand on both the object and the user
     - Affordances can be visible or hidden.
     - 例：玻璃可被打破；木板可被涂写
+    - Intentional设计师有意安排的 vs unintentional 不是设计师放置的 但是用户<b>依旧会把它当做强烈的线索</b>
         
 2. <b>Signifiers:</b>
-    - <b>Definition:</b> The <em>signaling component</em> of an affordance.
+    - <b>Definition:</b> The <em>signaling </em><b>component</b><b> of an affordance</b>.
     - <b>Function:</b> Signifiers tell you <em>where</em> the action can take place. They are crucial if the affordance is not perceivable. 告诉用户 <b>在哪里 / 如何操作</b>
+    - 比affordance重要 可感知的affordance本身就是最强的signifier，好的设计不用额外的文字
     - <b>Types:</b> Can be intentional (a "PUSH" sign) or unintentional (footprints in snow) .
 
 3. <b>核心区别</b>
@@ -274,7 +276,7 @@ Good mappings rely on <b>natural analogies</b>
 1. Types of natural mappings
 
 - <b>空间类比 (Spatial Analogies)</b>：最突出的例子 
-    - <b>规则</b>：Controls arranged like real-world layout 按照控制对象在现实世界中的排列方式来排列控制装置。
+    - <b>规则</b>：按照控制对象在现实世界中的排列方式来排列控制装置。<b>Arrange controls in the same way that their real-world counterparts are arranged</b>
     - <b>例子</b>：房间灯光开关的排列应与灯的位置对应 。
 
 - <b>感知类比 (Perceptual Analogies)</b>：又称“巫术原则”(Voodoo Principle)。
@@ -289,36 +291,16 @@ Good mappings rely on <b>natural analogies</b>
     - <b>例子</b>：Top → bottom = more → less；Left → right depends on reading direction
     - Cultural differences matter (Hebrew, Arabic, Chinese）
 
-1. Stove problem
+1. Advantage: 快速理解，容易记忆，更方便使用easy of use
+2. Result — Some Design Principles
 
-田字格 四个炉灶 2*2
+- Discoverability: current states, available states, and actions easy to determine
+- Good conceptual model 
+    - System image presents operations and results consistently（系统形象必须一致地呈现操作与结果）
+    - User gets a coherent conceptual model（用户获得连贯的心理模型）allows users to predict the effects of their actions
 
-1. <b>Inline controls → 4! = 24 possible mappings</b>
-
-四个旋钮排成一条线
-四个炉头排成一个方阵
-→ 旋钮与炉头之间有 <b>24 种可能的对应方式</b>  
-→ 用户完全不知道哪个旋钮控制哪个炉头
-
-<b>这是糟糕的 mapping。</b>
-
-1. <b>即使左右分组，也还有 4 种可能</b>
-
-比如左两个旋钮控制左两个炉头
-右两个控制右两个炉头
-但上下还是不确定
-→ 仍然有 4 种可能
-
-1. <b>需要贴标签（labels）说明</b>
-
-如果一个界面必须贴标签才能理解
-→ 说明 mapping 本身是失败的
-
-Better solutions：<b>好的 mapping 应该让用户一眼就知道怎么用。</b>
-
-Arrange controls in same shape as burners
-
-Use spatial grouping
+- Good (i.e., natural) mappings: actions ↔ results/controls ↔ effects/system state ↔ visualization
+- Good feedback about results
 
 ---
 
@@ -331,14 +313,16 @@ Use spatial grouping
 
 1. <b>物理约束 (Physical Constraints)</b>：依靠物理属性（形状、大小等）来限制行动  Based on shape, size, physical properties。Visible constraints are best. 如果约束提前可见则更有效。
     - <b>例子</b>：传统钥匙只能插入匹配的锁芯 。
+    - 物理约束必须 可见、可感知、可预测 才是好设计。
 
 2. <b>语义约束 (Semantic Constraints)</b>：Based on meaning & real-world knowledge 依靠我们对当前情境和现实世界的知识来限制行动。
     - <b>例子</b>：拼装模型飞机时，飞行员小人只能面向前方坐在挡风玻璃后面 。
     - Must match user’s cultural background
 
-3. <b>逻辑约束 (Logical Constraints)</b>：Based on reasoning. 依靠逻辑推断来限制行动 。
+3. <b>逻辑约束 (Logical Constraints)</b>：Based on reasoning. 依靠逻辑推断来限制行动 。不依赖文化或物理结构
     - <b>例子</b>：All parts must be used (completeness) 拼装结束时不应剩下任何零件（完整性）；
     - Steps must follow sequence (1 → 2 → 3) 按照 1, 2, 3 的顺序执行任务 。
+    - 自然映射（natural mapping）通常依赖逻辑约束。
 
 4. <b>文化约束 (Cultural Constraints)</b>：Based on cultural conventions 依靠普遍接受的文化标准（如红灯停） 
     - Examples: Red = stop
@@ -359,7 +343,7 @@ Use spatial grouping
 
 > 这是理解用户如何与系统交互的工程模型。
 
-Two phases:
+一个action的Two phases:
 
 - <b>Execution（执行）</b>
 - <b>Evaluation（评估）</b>
@@ -367,8 +351,8 @@ Two phases:
 ### Execution（执行阶段）
 
 1. <b>形成目标 (Form the goal)</b>：通常是模糊的、基于问题的（例如“我需要更多光”）。
-2. <b>规划 (Plan)</b>：将模糊目标转化为导向性计划（例如“操作灯开关”）。
-3. <b>细化 (Specify)</b>：制定具体的行动序列（例如“转身，伸出手臂，手指按开关”）。
+2. <b>规划 (Plan)</b>：将模糊目标转化为导向性计划goal-oriented plan（例如“操作灯开关”）。
+3. <b>细化 (Specify)</b>：制定具体的行动序列action sequence（例如“转身，伸出手臂，手指按开关”）。
 4. <b>执行 (Perform)</b>：物理上执行行动序列 。
 
 ### Evaluation（评估阶段）
@@ -376,6 +360,8 @@ Two phases:
 1. <b>感知 (Perceive)</b>：感知外部世界的状态 。
 2. <b>解释 (Interpret)</b>：解释所感知的现象。
 3. <b>比较 (Compare)</b>：将结果与原始目标进行对比 。
+
+<img src="/assets/WDbtbVclPomCQYxceMpcYr5CnJc.png" src-width="518" src-height="444" align="center"/>
 
 ### 行动鸿沟 (The Gulfs)
 

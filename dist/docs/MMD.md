@@ -9,7 +9,455 @@ sidebar_position: 7
 
 # Introduction
 
+### 范围与内容
+
+课程强调：
+
+- Mathematical optimization（数学优化）
+- Representation learning（表示学习）
+- Model interpretability（模型可解释性）
+- Applications（应用）
+
+#### 核心模块分类：
+
+1. <b>Affinity mining</b>（关联挖掘）：分析观察对象间的关系，提取有趣模式。核心任务包括 <b>Frequent itemset mining</b>（频繁项集挖掘）和 <b>Association rule mining</b>（关联规则挖掘）。
+2. <b>Latent pattern mining</b>（潜在模式挖掘）：发现隐藏模式。使用 <b>Matrix and Tensor Factorization</b>（矩阵与张量分解）和 <b>Interpretable models</b>（可解释模型） 。
+3. <b>Text mining</b>（文本挖掘）：处理离散且具序列性的文本数据。涉及 <b>Textual representation learning</b>（文本表示学习）和 <b>Sentiment analysis</b>（情感分析）。
+4. <b>Neural Networks</b>（神经网络）：从标注数据中提取模式进行预测。涵盖 <b>Feed forward neural networks</b>（前馈神经网络）、<b>Autoencoders</b>（自编码器）、<b>CNN</b>（卷积神经网络）和 <b>RNN</b>（循环神经网络） 。
+
+### 数据挖掘分类学Taxonomy与任务
+
+根据应用目的，数据挖掘可分为四类，其业务价值 (Business Value) 和 优化程度 (Optimization) 依次递增 ：
+
+1. <b>Descriptive</b>（描述性）：发生了<b>什么</b>？eg：用户分群、统计报表
+2. <b>Diagnostic</b>（诊断性）：<b>为什么</b>发生？eg：用户流失<b>原因</b>分析
+3. <b>Predictive</b>（预测性）：<b>将要</b>发生什么？ eg：churn prediction、CTR 预测
+4. <b>Prescriptive</b>（规范性/指导性）：该如何<b>应对</b>？ eg：推荐最优行动策略、资源分配
+
+### ！Workflow（数据挖掘流程）
+
+1. Data Acquisition（数据获取）
+2. Data Processing（数据处理）
+3. Modeling（建模）
+4. Output Utilization（结果利用）
+
+### ！Main Challenges（主要挑战）
+
+- 多通道输入Multichannel input： text image audio video
+- 少数类问题：patterns vs outliers
+- 可扩展性Scalability
+- 可解释性Interpretability for interoperability
+- 数据依赖性
+
+### Data Mining Tasks
+
+- Affinity mining
+    - 分析数据元素之间的关系
+    - 自动提取局部模式
+    - 应用于描述性<b>Descriptive</b>、诊断性<b>Diagnostic</b>、处方性<b>Prescriptive</b>数据挖掘
+
+- Outlier detection
+    - 识别<b>异常</b> observation
+    - 常见应用：fraud detection（欺诈检测）
+
+- Clustering
+    - 识别<b>相似</b> observation
+    - <b>无预定义No predefined classes</b>类别
+    - 示例：行为画像（behavioral profiling）
+
+- Classification
+    - <b>预测</b>预定义标签<b>predefined label </b>
+    - 示例：churn prediction（流失预测）
+
+- Regression
+    - 预测<b>数值型</b>变量numerical values
+    - 示例：customer lifetime value prediction（客户生命周期价值预测）
+
 # Affinity Mining I
+
+## Recap：数据挖掘基础回顾
+
+### <b>Data Mining Workflow（数据挖掘流程）</b>
+
+数据挖掘通常包含四个步骤：
+
+1. <b>Data Acquisition（数据获取）</b>
+
+收集原始数据，如用户行为日志、购买记录、点击流等。
+
+1. <b>Data Processing（数据处理）</b>
+
+清洗、转换、编码、构建特征。
+
+1. <b>Modeling（建模）</b>
+
+使用算法挖掘模式，如 frequent itemset mining、classification、clustering 等。
+
+1. <b>Output Utilization（结果利用）</b>
+
+用于推荐系统、营销策略、内容设计、异常检测等。
+
+---
+
+### <b>Main Challenges（主要挑战）</b>
+
+- <b>Multichannel input（多通道输入）</b>：数据来源多样，如文本、行为、交易记录。
+- <b>Patterns vs Outliers（模式 vs 异常）</b>：少数类问题难处理。
+- <b>Scalability（可扩展性）</b>：数据规模大，算法需高效。
+- <b>Interpretability（可解释性）</b>：模型需能解释以便业务使用。
+- <b>Data dependency（数据依赖性）</b>：数据分布变化会影响模型表现。
+
+---
+
+### <b>Affinity Mining 回顾</b>
+
+Affinity mining 的核心是：
+
+> <b>分析数据元素之间的关系，找出“哪些东西经常一起出现”。</b>
+
+典型例子：  
+
+“Customers who bought X also bought Y.”
+
+---
+
+## Affinity Mining（关联挖掘）
+
+### Affinity Mining 的定位
+
+Affinity mining 超越简单的二元关系（bivariate analysis），关注：
+
+- <b>大规模数据中的关联关系</b>
+- <b>可用于描述性、诊断性、处方性数据挖掘</b>
+    
+---
+
+### Practical Applications（实际应用）
+
+- <b>Interest analysis（兴趣分析）</b>
+    - 圣诞节期间哪些 cosmetic items 会一起被购买？
+    - 社交媒体上哪些 topics 同时 trending？
+        
+- <b>Diagnostics for content design（内容设计诊断）</b>
+    - 玩家在退出游戏前通常玩哪些 dungeons？
+        
+- <b>Digital marketing（数字营销）</b>
+    - 哪些商品可以组合销售以提高销量？
+        
+- <b>Recommendation systems（推荐系统）</b>
+    - “Customers who bought this also bought…”
+
+典型的 Amazon / Steam / App Store 推荐逻辑。
+
+---
+
+### Affinity Mining 的核心思想
+
+Affinity mining 的目标是：
+
+> <b>从一组实体中自动提取“有趣的局部模式”（interesting local patterns）。</b>
+
+“Interestingness” 可以基于：
+
+- Frequency（频率）
+- Likelihood（概率）
+- Statistical significance（统计显著性）
+- High utility（高效用）
+
+---
+
+## <b>2.4 Transactional Dataset（事务型数据集）</b>
+
+Affinity mining 通常基于 transactional dataset：
+
+- 每条记录 = 一个 transaction（如一次购买）
+- 每个 transaction 包含若干 items
+- 可能还包含额外信息（数量、价格、效用等）
+    
+本课程重点：
+
+- <b>Frequent itemset mining（频繁项集挖掘）</b>
+- <b>Association rule mining（关联规则挖掘）</b>
+    
+---
+
+# 3. Frequent Itemset & Association Rule Mining
+
+## <b>3.1 基本定义</b>
+
+### <b>Itemset</b>
+
+给定 m 个 items：
+
+\[
+
+A = \{a_1, a_2, ..., a_m\}
+
+\]
+
+### <b>Transaction</b>
+
+每条记录 Ti 是 items 的子集：
+
+\[
+
+T_i \subseteq A
+
+\]
+
+### <b>Transactional Database</b>
+
+\[
+
+T = [T_1, T_2, ..., T_n]
+
+\]
+
+---
+
+## <b>3.2 Support（支持度）</b>
+
+支持度 = itemset 在数据库中出现的频率：
+
+\[
+
+\text{support}(B) = \frac{\#\text{transactions containing } B}{n}
+
+\]
+
+### Frequent itemset（频繁项集）
+
+若：
+
+\[
+
+\text{support}(B) \ge S_{\min}
+
+\]
+
+则 B 为频繁项集。
+
+目标：
+
+> 找到所有满足支持度阈值的 itemsets。
+
+---
+
+## <b>3.3 Association Rules（关联规则）</b>
+
+给定两个 itemsets：
+
+- \( B_i \subset A \)
+- \( B_j \subset A \)
+- 且 \( B_i \cap B_j = \emptyset \)
+    
+规则：
+
+\[
+
+B_i \rightarrow B_j
+
+\]
+
+表示：若出现 \(B_i\)，则倾向于出现 \(B_j\)。
+
+---
+
+## <b>3.4 Confidence（置信度）</b>
+
+\[
+
+\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)}
+
+\]
+
+### Strong rule（强规则）
+
+若：
+
+- support ≥ Smin  
+- confidence ≥ Cmin  
+    
+则为 strong rule。
+
+---
+
+# 4. Didactic Example（教学示例）
+
+## <b>4.1 Example Database</b>
+
+8 个玩家的购买记录（Elixir、Shield、Wand、Sword、Gem、Giant Wand）。
+
+计算支持度后得到 frequent itemsets（Smin = 0.25）。
+
+---
+
+## <b>4.2 Frequent Itemsets（频繁项集）</b>
+
+例如：
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>Itemset</p></td><td><p>Support</p></td></tr>
+<tr><td><p>Elixir</p></td><td><p>0.75</p></td></tr>
+<tr><td><p>Shield</p></td><td><p>0.625</p></td></tr>
+<tr><td><p>Wand, Shield</p></td><td><p>0.375</p></td></tr>
+<tr><td><p>Elixir, Sword</p></td><td><p>0.375</p></td></tr>
+<tr><td><p>Elixir, Wand, Shield</p></td><td><p>0.25</p></td></tr>
+</tbody>
+</table>
+
+---
+
+## <b>4.3 Strong Rules（Cmin = 0.50）</b>
+
+例如：
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>Rule</p></td><td><p>Confidence</p></td></tr>
+<tr><td><p>Elixir, Wand → Shield</p></td><td><p>1.000</p></td></tr>
+<tr><td><p>Wand → Shield</p></td><td><p>1.000</p></td></tr>
+<tr><td><p>Sword → Elixir</p></td><td><p>1.000</p></td></tr>
+<tr><td><p>Shield → Elixir</p></td><td><p>0.600</p></td></tr>
+<tr><td><p>Elixir → Shield</p></td><td><p>0.500</p></td></tr>
+</tbody>
+</table>
+
+这些规则可用于：
+
+- 推荐系统
+- 促销策略
+- 组合销售设计
+    
+---
+
+# 5. Apriori Algorithm（Apriori 算法）
+
+## <b>5.1 Motivation（动机）</b>
+
+问题：
+
+- itemset 数量随 m 指数级增长  
+- 需要有效剪枝
+    
+---
+
+## <b>5.2 Apriori Rule（关键性质）</b>
+
+> <b>若一个 itemset 是频繁的，则它的所有非空子集也必须是频繁的。</b>
+
+反之：
+
+> <b>若一个 itemset 的某个子集不频繁，则该 itemset 不可能频繁。</b>
+
+这就是 Apriori 的剪枝基础。
+
+---
+
+## <b>5.3 Apriori Algorithm（核心流程）</b>
+
+1. 找到所有 frequent 1-itemsets（F1）
+2. 用 F1 生成 candidate 2-itemsets（C2）
+3. 扫描数据库，得到 frequent 2-itemsets（F2）
+4. 用 F2 生成 C3
+5. 重复直到没有新的频繁项集
+    
+算法使用：
+
+- <b>Breadth-First Search（广度优先搜索）</b>
+- <b>Generate-and-test（生成并测试）</b>
+    
+---
+
+## <b>5.4 Example：Apriori 运行过程</b>
+
+- F1 = frequent 1-itemsets  
+- C2 = 所有两两组合  
+- F2 = 满足支持度的 2-itemsets  
+- C3 = 由 F2 生成的 3-itemsets  
+- 只有 {a1, a2, a3} 满足 Apriori 条件  
+- F3 = { {a1, a2, a3} }
+    
+最终 frequent itemsets：
+
+- 所有 1-itemsets（支持度 ≥ 0.25）
+- 所有 2-itemsets（支持度 ≥ 0.25）
+- {a1, a2, a3}
+    
+---
+
+# 6. Search Space（搜索空间）
+
+随着 k 增大，itemset 数量呈指数增长。  
+
+Apriori 通过剪枝显著减少搜索空间。
+
+---
+
+# 7. Alternative Approach：FP-Growth（替代方法）
+
+当：
+
+- m 很大  
+- n 很大  
+- Smin 很低  
+    
+Apriori 会产生大量候选项集。
+
+FP-Growth 通过：
+
+- 构建 FP-tree（压缩数据库）
+- 按条件数据库分段挖掘
+    
+实现更高效率。
+
+---
+
+# 8. Next Steps（课程安排）
+
+- Assignment 1 截止：18.11.25  
+- 下节课：Mining Association Rules & High Utility Itemset Mining  
+- 推荐阅读：
+
+<em>A Fast High Utility Itemsets Mining Algorithm</em> by Liu et al.
+
+---
+
+# 🎯 <b>Lecture 02 的重点与难点总结</b>
+
+## ⭐ 必考重点（你必须掌握）
+
+1. <b>Support / Confidence 的定义与公式</b>
+2. <b>Frequent itemset 的定义</b>
+3. <b>Strong rule 的条件（Smin + Cmin）</b>
+4. <b>Apriori rule（剪枝原理）</b>
+5. <b>Apriori 算法流程（F1 → C2 → F2 → C3 → …）</b>
+    
+---
+
+## ⚠️ 难点（学生最容易卡住）
+
+1. <b>为什么 Apriori 可以剪枝？</b>
+
+——因为频繁项集的所有子集必须频繁。
+
+1. <b>如何从 Fk 生成 Ck+1？</b>
+
+——需要 lexicographical ordering + join + prune。
+
+1. <b>支持度与置信度的计算</b>
+
+——尤其是 union 的支持度。
+[预测试卷](/QQqNwziPmiYyFBknLftcE8vWnLb/LoWWwmgXLiLtHgk1uHlcXEz3nwb)
 
 # Affinity Mining II
 

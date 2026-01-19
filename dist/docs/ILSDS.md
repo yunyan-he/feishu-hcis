@@ -708,7 +708,7 @@ PPT 中展示了：
 
 # Optimization
 
-### 一、整体结构与大图景
+## 整体结构与大图景
 
 这份 PPT 的核心主题是：<b>Optimization（优化）</b>，它是现代 learning systems（学习系统）和 data-driven models（数据驱动模型）的核心工具。
  本节内容主要包括：
@@ -725,16 +725,16 @@ PPT 中展示了：
 
 ---
 
-## 二、Optimization：优化的基本概念
+## Optimization：优化的基本概念
 
-### 2.1 Optimization 在学习系统中的地位
+### Optimization 在学习系统中的地位
 
-# PPT 原话：
+PPT 原话：
 
-> # Optimization is currently the core of learning systems to efficiently build data driven complex models
+> Optimization is currently the core of learning systems to efficiently build data driven complex models
  A.k.a. programming
 
-# 解释：
+解释：
 
 - <b>Optimization（优化）</b>现在是构建复杂 data-driven models（数据驱动模型）的核心工具。
 - 在很多机器学习/深度学习场景中，“写程序”的本质就是： 
@@ -745,89 +745,84 @@ PPT 中展示了：
 
 > - 在现代 ML 里，编程很多时候就是在做 optimization。
 
-### 2.2 优化问题的形式化定义
+### 优化问题的形式化定义
 
-# PPT 中给出的形式：
+PPT 中给出的形式：
 
 - 有一个函数
- [ f(s): D \to \mathbb{R} ] 
-    - <b>(f)</b>：objective function（目标函数）
-    - <b>(D)</b>：feasible set（可行域/可行集合）
-    - <b>(s)</b>：solution（解），也可以理解为参数向量、模型参数等
+ $f(s): D \to \mathbb{R}$
+    - $f$：objective function（目标函数）
+    - $D$：feasible set（可行域/可行集合）
+    - $s$：solution（解），也可以理解为参数向量、模型参数等
 
-# <b>Optimization 的任务</b>：在可行域 (D) 中找到一个最优解 (s^*)，使得：
+<b>Optimization 的任务</b>：在可行域 $D$ 中找到一个最优解 $s^*$，使得：
 
-- <b>最大化（maximize）</b>： [ f(s^*) \ge f(s_i), \quad \forall s_i \in D ]
-- <b>最小化（minimize）</b>： [ f(s^*) \le f(s_i), \quad \forall s_i \in D ]
+- <b>最大化（maximize）</b>： $f(s^*) \ge f(s_i), \quad \forall s_i \in D$
+- <b>最小化（minimize）</b>： $f(s^*) \le f(s_i), \quad \forall s_i \in D$
 
-# 这里 PPT 用了类似的描述：
-
-> # maximize (f): (f(s^*) &gt; f(s_i)) ∀(s_i \in D)
- minimize (f): (f(s^*) \le f(s_i)) ∀(s_i \in D)
-
-# 注意：
+注意：
 
 - 在机器学习中，<b>更常见的是最小化问题</b>，比如最小化 loss function（损失函数）。
 - 但最大化和最小化可以互相转化，比如最大化 (f) 等价于最小化 (-f)。
 
-### 2.3 我们关心什么：最优解 vs 最优值
+### 我们关心什么：最优解 vs 最优值
 
-# PPT 提到：
+PPT 提到：
 
-> # Depending on the setting we might be interested either in (s^*) (the optimal solution) or the minimum error value (f(s^*)) depending on our application
+> Depending on the setting we might be interested either in $s^*$ (the optimal solution) or the minimum error value $f(s^*)$depending on our application
 
-# 解释：
+解释：
 
-- 有时我们关心的是<b>最优解本身</b> (s^*)，比如： 
+- 有时我们关心的是<b>最优解本身</b> $s^*$，比如： 
     - 最优的模型参数；
     - 最优的决策策略；
 
-- 有时我们更关心的是<b>最优值</b> (f(s^*))，比如： 
+- 有时我们更关心的是<b>最优值</b> $f(s^*)$，比如： 
     - 最小误差是多少；
     - 最大收益是多少。
 
-# 在机器学习中，两者都重要：
+在机器学习中，两者都重要：
 
-- 训练时我们要找到参数 (s^*)；
-- 评估时我们看 (f(s^*))（比如最小 loss 或最大 accuracy）。
+- 训练时我们要找到参数 $s^*$；
+- 评估时我们看 $f(s^*)$（比如最小 loss 或最大 accuracy）。
 
 ---
 
-## 三、Optimization (2)：约束（constraints）
+## Optimization ：约束（constraints）
 
-### 3.1 约束的概念
+### 约束的概念
 
-# PPT：
+PPT：
 
-> # Sometimes the optimization setting requires ancillary conditions (a.k.a. constraints)
+> Sometimes the optimization setting requires ancillary conditions (a.k.a. constraints)
  Examples include nonnegativity or stochasticity constraints
 
-# 解释：
+解释：
 
-- 在很多实际问题中，解 (s) 不能随便取，而是要满足一些<b>约束条件（constraints）</b>。
+- 在很多实际问题中，解 $s$不能随便取，而是要满足一些<b>约束条件（constraints）</b>。
 - 常见约束： 
     - <b>nonnegativity constraint（非负约束）</b>：
- [ s \ge 0 ] 即每个分量 (s_i \ge 0)
+ $s \ge 0$ 即每个分量 $s_i \ge 0$
     - <b>stochasticity constraint（随机性约束）</b>：
- 比如 (s) 表示一个概率分布，则需要： [ s_i \ge 0,\quad \sum_i s_i = 1 ]
+ 比如 $s$ 表示一个概率分布，则需要： $s_i \ge 0,\quad \sum_i s_i = 1$
 
-### 3.2 有约束优化的形式
+### 有约束优化的形式
 
-# PPT 示例：
+PPT 示例：
 
-> # For a given (f: \mathbb{R}^m \to \mathbb{R})
- (s^* = \min f(s)) subject to (shortly s.t.) some constraint on (s) such as (s \ge 0)
+> For a given $f: \mathbb{R}^m \to \mathbb{R}$
+ $s^* = \min f(s)$ subject to (shortly s.t.) some constraint on $s$ such as $s \ge 0$
 
-# 形式化写法：
+形式化写法：
 
-# [ \begin{aligned} \min_{s \in \mathbb{R}^m} \quad & f(s) \ \text{s.t.} \quad & s \ge 0 \end{aligned} ]
+$$\begin{aligned} \min_{s \in \mathbb{R}^m} \quad & f(s) \ \text{s.t.} \quad & s \ge 0 \end{aligned}$$
 
-# 解释：
+解释：
 
 - “s.t.” 是 “subject to” 的缩写，表示“在满足……约束的条件下”。
 - 这就是典型的 <b>constrained optimization（有约束优化）</b>。
 
-# 在机器学习中，约束常见于：
+在机器学习中，约束常见于：
 
 - 参数非负（如某些概率模型）；
 - 参数和为 1（概率分布）；
@@ -835,23 +830,23 @@ PPT 中展示了：
 
 ---
 
-## 四、Optimization (3)：全局/局部、直接/迭代、可导/不可导
+## Optimization：全局/局部、直接/迭代、可导/不可导
 
-# 这一页 PPT 是一个概念分类页，配了一张函数图像（有多个局部极小值）。主要强调几组对立概念：
+这一页 PPT 是一个概念分类页，配了一张函数图像（有多个局部极小值）。主要强调几组对立概念：
 
-### 4.1 Global optimum vs Local optimum
+### Global optimum vs Local optimum
 
 - <b>Global optimum（全局最优）</b>： 
-    - 对所有可行解 (s \in D)，(s^*) 的目标值最好： [ f(s^*) \le f(s), \quad \forall s \in D ]
+    - 对所有可行解 $s \in D$，$s^*$ 的目标值最好： $f(s^*) \le f(s), \quad \forall s \in D$
 
 - <b>Local optimum（局部最优）</b>： 
-    - 在某个邻域内最优，但不一定是全局最优： [ \exists \text{邻域 } U(s^*), \text{ s.t. } f(s^*) \le f(s), \forall s \in U(s^*) ]
+    - 在某个邻域内最优，但不一定是全局最优：  $\exists \text{邻域 } U(s^*), \text{ s.t. } f(s^*) \le f(s), \forall s \in U(s^*)$ 
 
-# 图中那条曲线有多个“谷底”，其中最深的是 global minimum，其余是 local minima。
+图中那条曲线有多个“谷底”，其中最深的是 global minimum，其余是 local minima。
 
-# 在非凸优化（non-convex optimization）中，gradient descent 可能卡在 local minima 或 saddle points。
+在非凸优化（non-convex optimization）中，gradient descent 可能卡在 local minima 或 saddle points。
 
-### 4.2 Direct vs Iterative optimization
+### Direct vs Iterative optimization
 
 - <b>Direct optimization（直接优化）</b>： 
     - 有解析解（closed-form solution），可以一次性算出最优解；
@@ -859,30 +854,30 @@ PPT 中展示了：
 
 - <b>Iterative optimization（迭代优化）</b>： 
     - 通过迭代更新解：
- [ s_{t+1} = \text{Update}(s_t) ]
+ $s_{t+1} = \text{Update}(s_t)$
     - 典型代表：gradient descent, SGD, SPSA 等。
 
-# 在大规模机器学习中，<b>迭代方法是主流</b>，因为解析解往往不存在或计算代价太大。
+在大规模机器学习中，<b>迭代方法是主流</b>，因为解析解往往不存在或计算代价太大。
 
-### 4.3 Differentiable vs Nondifferentiable objectives
+### Differentiable vs Nondifferentiable objectives
 
 - <b>Differentiable objective（可导目标函数）</b>： 
     - 可以计算 gradient（梯度），适合 gradient-based methods（基于梯度的方法）。
 
 - <b>Nondifferentiable objective（不可导目标函数）</b>： 
     - 比如： 
-        - (L_1)-norm（(|x|_1) 在 0 点不可导）；
+        - $L_1-norm$（$|x|_1$ 在 0 点不可导）；
         - ranking correlations（排序相关性指标）如 Kendall’s tau；
     - 这类目标函数不适合直接用标准 gradient descent，需要其他方法（如 SPSA）。
 
-### 4.4 Constraints 的重要性
+### Constraints 的重要性
 
-# PPT 提到：
+PPT 提到：
 
-> # Constraints play a crucial role
+> Constraints play a crucial role
  Iterative optimization techniques
 
-# 意思是：
+意思是：
 
 - 约束会极大影响优化问题的性质和可解性；
 - 很多时候需要专门的 constrained optimization methods（如 projected gradient descent, Lagrange multipliers 等）；
@@ -890,91 +885,91 @@ PPT 中展示了：
 
 ---
 
-## 五、Gradient Descent（梯度下降）
+## Gradient Descent（梯度下降）
 
-# 这一页是非常核心的内容之一。
+这一页是非常核心的内容之一。
 
-### 5.1 目标：最小化一个可导的 objective function
+### 目标：最小化一个可导的 objective function
 
-# PPT 标题：Gradient Descent (for minimizing an objective (f(s)))
+Gradient Descent (for minimizing an objective $f(s)$)
 
-# 我们考虑：
+我们考虑：
 
-# [ \min_{s \in \mathbb{R}^m} f(s) ]
+$$\min_{s \in \mathbb{R}^m} f(s)$$
 
-# 假设 (f) 是 differentiable（可微），可以计算 gradient。
+假设 $f$ 是 differentiable（可微），可以计算 gradient。
 
-### 5.2 算法步骤（标准 Gradient Descent）
+### 算法步骤（标准 Gradient Descent）
 
-# PPT 步骤：
+PPT 步骤：
 
 1. <b>Step 1: initialize a solution</b>  
- [ s_0 \in \mathbb{R}^m ]
+ $s_0 \in \mathbb{R}^m$
     - 随机初始化或用某种启发式初始化。
 
 2. <b>Step 2: evaluate the gradient</b>  
- [ g_t \in \mathbb{R}^m \quad \text{s.t.} \quad g_t = \frac{\partial f(s_t)}{\partial s_t} ]
-    - 也就是在当前点 (s_t) 计算梯度 (g_t = \nabla f(s_t))。
+ $g_t \in \mathbb{R}^m \quad \text{s.t.} \quad g_t = \frac{\partial f(s_t)}{\partial s_t}$
+    - 也就是在当前点 $s_t$ 计算梯度 $g_t = \nabla f(s_t)$。
 
 3. <b>Step 3: update rule</b>  
- [ s_{t+1} \leftarrow s_t - \eta g_t ]
+ $s_{t+1} \leftarrow s_t - \eta g_t$
     - PPT 中写的是： 
-    > - (s_{t+1} \leftarrow s_t - \lambda g_t)
- 这里 (\lambda) 就是 learning rate（学习率），有时记作 (\eta) 或 (\alpha)。
+    > - $s_{t+1} \leftarrow s_t - \lambda g_t$
+ 这里 $\lambda$就是 learning rate（学习率），有时记作 $\eta$ 或 $\alpha$。
     - 含义：沿着负梯度方向（下降方向）走一步。
 
 4. <b>Step 4: stopping condition</b>
     - 如果停止条件不满足（比如迭代次数未到、梯度还不够小、函数值还在明显下降），回到 Step 2；
-    - 否则停止，输出当前 (s_t) 作为近似最优解。
+    - 否则停止，输出当前 $s_t$ 作为近似最优解。
 
-### 5.3 优点与缺点
+### 优点与缺点
 
-# PPT：
+PPT：
 
-> # Main advantage: very easy to implement and theoretical benefits for well-behaving objective function (f) and/or feasible set (D)
+> Main advantage: very easy to implement and theoretical benefits for well-behaving objective function $f$ and/or feasible set $D$
 
-# 解释：
+解释：
 
 - <b>优点</b>： 
     - 实现简单；
     - 对于“well-behaving”的目标函数（比如 convex, smooth）和可行域，有很好的理论保证（如收敛到 global minimum）。
 
-> # Main disadvantage: only possible for differentiable (f)
+> Main disadvantage: only possible for differentiable $f$)
 
 - <b>缺点</b>： 
     - 需要目标函数可导；
     - 对于不可导或黑盒函数（只给你 function value，不给 gradient），就不能直接用。
 
-# 这为后面引出 SPSA 做铺垫。
+这为后面引出 SPSA 做铺垫。
 
 ---
 
-## 六、Convexity：凸性与全局最优
+## Convexity：凸性与全局最优
 
-# 这一页是关于 convex functions（凸函数）的性质，以及它们与 gradient descent 收敛的关系。
+这一页是关于 convex functions（凸函数）的性质，以及它们与 gradient descent 收敛的关系。
 
-### 6.1 凸函数的定义
+### 凸函数的定义
 
-# PPT：
+PPT：
 
-> # (f(\cdot)) is convex if
- [ f(\theta s + (1-\theta) q) \le \theta f(s) + (1-\theta) f(q), \quad \forall \theta \in [0,1] ]
+> $f(\cdot)$ is convex if
+$f(\theta s + (1-\theta) q) \le \theta f(s) + (1-\theta) f(q), \quad \forall \theta \in [0,1]$
 
-# 解释：
+解释：
 
-- 对任意两点 (s, q) 以及任意 (\theta \in [0,1])， 
-    - (\theta s + (1-\theta) q) 是它们之间线段上的点；
+- 对任意两点 (s, q) 以及任意 $\theta \in [0,1]$， 
+    - $\theta s + (1-\theta) q$ 是它们之间线段上的点；
     - 凸性要求：
- [ f(\text{线段上的点}) \le \text{两端点函数值的线性插值} ]
+ $f(\text{线段上的点}) \le \text{两端点函数值的线性插值}$
 
 - 几何直观： 
     - 函数图像“在连线之下或重合”，没有“凹下去”的地方。
 
-### 6.2 凸性在机器学习中的重要性
+### 凸性在机器学习中的重要性
 
-# PPT：
+PPT：
 
-> # Convexity is important in machine learning due to having global minima (for strict convexity there is a unique global minimum)
+> Convexity is important in machine learning due to having global minima (for strict convexity there is a unique global minimum)
 
 # 解释：
 
@@ -988,44 +983,44 @@ PPT 中展示了：
     - 如果我们用 gradient descent 优化一个 convex objective，就不会被“坏的局部极小值”困住；
     - 只要算法收敛，就收敛到 global minimum。
 
-# 这就是为什么很多经典 ML 模型（如 logistic regression）设计成 convex optimization problem——理论上更好分析、更稳定。
+这就是为什么很多经典 ML 模型（如 logistic regression）设计成 convex optimization problem——理论上更好分析、更稳定。
 
-### 6.3 Gradient Descent 在凸函数上的收敛性质
+### Gradient Descent 在凸函数上的收敛性质
 
-# PPT：
+PPT：
 
-> # Gradient descent converges to a global minimum when applied to convex functions
+> Gradient descent converges to a global minimum when applied to convex functions
 
-# 解释：
+解释：
 
 - 在 convex objective 上，gradient descent 在合适的 learning rate 下可以保证收敛到 global minimum。
 
-# PPT 还提到：
+PPT 还提到：
 
-> # Learning rate (\lambda) impacts the evolution of the movement, which can be selected to be a constant or annealing as a function of (t) (e.g. (\lambda_t = \frac{1}{t}))
+> Learning rate $\lambda$ impacts the evolution of the movement, which can be selected to be a constant or annealing as a function of (t) (e.g. $\lambda_t = \frac{1}{t}$)
 
-# 解释：
+解释：
 
-- <b>Learning rate（学习率）</b> (\lambda) 决定每一步走多大： 
+- <b>Learning rate（学习率）</b> $\lambda$ 决定每一步走多大： 
     - 太大：可能震荡甚至发散；
     - 太小：收敛很慢。
 
 - 可以： 
     - 用常数 learning rate；
-    - 或者用随时间衰减的 learning rate（annealing），例如： [ \lambda_t = \frac{1}{t} ]
+    - 或者用随时间衰减的 learning rate（annealing），例如： $\lambda_t = \frac{1}{t}$
 
-# PPT 还提到：
+PPT 还提到：
 
-> # Small enough ensures monotonic decreases s.t. (f(x_t) &gt; f(x_{t+1}))
+> Small enough ensures monotonic decreases s.t. $f(x_t) > f(x_{t+1})$
 
-- 如果 learning rate 足够小，可以保证每一步函数值单调下降： [ f(x_{t+1}) &lt; f(x_t) ]
+- 如果 learning rate 足够小，可以保证每一步函数值单调下降：$f(x_{t+1}) < f(x_t)$
 
-### 6.4 Strict convexity（严格凸）
+### Strict convexity（严格凸）
 
-# PPT：
+PPT：
 
-> # Strict convexity assured for with
- [ f(\theta s + (1-\theta) q) &lt; \theta f(s) + (1-\theta) f(q), \quad \forall \theta \in (0,1) ]
+> Strict convexity assured for with
+ $f(\theta s + (1-\theta) q) < \theta f(s) + (1-\theta) f(q), \quad \forall \theta \in (0,1)$
 
 # 解释：
 
@@ -1035,47 +1030,47 @@ PPT 中展示了：
 
 ---
 
-## 七、Stochastic Gradient Descent（SGD）
+## Stochastic Gradient Descent（SGD）
 
-# 这一页是从 deterministic gradient descent 过渡到 stochastic 版本。
+这一页是从 deterministic gradient descent 过渡到 stochastic 版本。
 
-### 7.1 为什么需要 SGD
+### 为什么需要 SGD
 
-# PPT：
+PPT：
 
-> # SGD considers an approximation of the gradient for more resilient solutions through gradient calculation based on a data sample only
+> SGD considers an approximation of the gradient for more resilient solutions through gradient calculation based on a data sample only
 
-# 解释：
+解释：
 
-- 在机器学习中，目标函数通常是 empirical risk（经验风险）： [ f(s) = \frac{1}{N} \sum_{i=1}^N \ell(s; z_i) ] 其中 (z_i) 是数据样本。
-- 直接计算 full gradient： [ \nabla f(s) = \frac{1}{N} \sum_{i=1}^N \nabla \ell(s; z_i) ] 对大数据集来说非常昂贵。
+- 在机器学习中，目标函数通常是 empirical risk（经验风险）： $f(s) = \frac{1}{N} \sum_{i=1}^N \ell(s; z_i)$ 其中 $z_i$是数据样本。
+- 直接计算 full gradient： $\nabla f(s) = \frac{1}{N} \sum_{i=1}^N \nabla \ell(s; z_i)$ 对大数据集来说非常昂贵。
 - <b>SGD（Stochastic Gradient Descent）</b> 用一个或少量样本近似梯度： 
     - 每次只用一个 observation (z) 或一个 mini-batch；
     - 得到一个 noisy 的梯度估计，但计算成本大幅降低；
     - 在实践中反而有更好的泛化性能（某种“噪声正则化”效果）。
 
-### 7.2 SGD 算法步骤（PPT 版本）
+### SGD 算法步骤（PPT 版本）
 
-# PPT：
+PPT：
 
 1. <b>Step 1: Initialize a solution</b>  
- [ s \in \mathbb{R}^m ]
-2. <b>Step 2: For a selected observation (z \in Z) evaluate the gradient</b>  
- [ g \in \mathbb{R}^m \quad \text{s.t.} \quad g = \frac{\partial f(s)}{\partial s} ] 这里更准确地说是：
-    - 用单个样本 (z) 计算对应的 loss 的梯度，作为对整体梯度的估计。
+ $s \in \mathbb{R}^m$
+2. <b>Step 2: For a selected observation </b>$z \in Z$<b>evaluate the gradient</b>  
+ $g \in \mathbb{R}^m \quad \text{s.t.} \quad g = \frac{\partial f(s)}{\partial s}$ 这里更准确地说是：
+    - 用单个样本 $z$ 计算对应的 loss 的梯度，作为对整体梯度的估计。
 
 3. <b>Step 3: Update</b>  
- [ s \leftarrow s - \lambda g ] PPT 写的是：
+ $s \leftarrow s - \lambda g$ PPT 写的是：
 
-> 1. (s_i \leftarrow s_i - \lambda g_i)
+> 1. $s_i \leftarrow s_i - \lambda g_i$
  即对每个分量做同样的更新。
 
 1. <b>Step 4: Stopping condition</b>
     - 如果停止条件不满足（迭代次数、收敛标准等），回到 Step 2。
 
-# PPT 还说：
+PPT 还说：
 
-> # We will get back to SGD when we go through training neural networks
+> We will get back to SGD when we go through training neural networks
 
 - 说明这只是一个预告，后面在 neural networks training 时会详细展开： 
     - mini-batch SGD；
@@ -1083,46 +1078,46 @@ PPT 中展示了：
 
 ---
 
-## 八、Simultaneous Perturbation Stochastic Approximation（SPSA）
+## Simultaneous Perturbation Stochastic Approximation（SPSA）
 
-# 这是本节的另一个重点：<b>当目标函数不可导或未知时的优化方法</b>。
+这是本节的另一个重点：<b>当目标函数不可导或未知时的优化方法</b>。
 
-### 8.1 为什么需要 SPSA
+### 为什么需要 SPSA
 
-# PPT：
+PPT：
 
-> # Gradient descent based approaches assume the objective function to be differentiable and actually exist!
+> Gradient descent based approaches assume the objective function to be differentiable and actually exist!
 
-# 解释：
+解释：
 
 - Gradient-based methods（如 GD, SGD）要求： 
     - 目标函数 (f) 可导；
     - 并且我们能计算或近似其梯度。
 
-# 但现实中有很多情况不满足：
+但现实中有很多情况不满足：
 
-> # Numerous real world applications concerning training learning systems yet have settings where either the objective function is not differentiable (e.g. (L_1)-norm, ranking correlations like Kendall's tau ...) or the function is unknown but there exist a noiseless or noisy measure of quality for given solution
+> Numerous real world applications concerning training learning systems yet have settings where either the objective function is not differentiable (e.g. (L_1)-norm, ranking correlations like Kendall's tau ...) or the function is unknown but there exist a noiseless or noisy measure of quality for given solution
 
-# 两类典型场景：
+两类典型场景：
 
 1. <b>Nondifferentiable objective（不可导目标）</b>： 
-    - (L_1)-norm：在 0 点不可导；
+    - $L_1-norm$：在 0 点不可导；
     - ranking correlations（排序相关性指标）如 Kendall’s tau：本身是基于排序的离散函数，很难求导。
 
 2. <b>Black-box objective（黑盒目标）</b>： 
     - 函数形式未知；
-    - 但你可以给一个解 (s)，系统返回一个“质量评价”（可能有噪声）。
+    - 但你可以给一个解 $s$，系统返回一个“质量评价”（可能有噪声）。
 
-# 在这些场景下，<b>SPSA</b> 就派上用场。
+在这些场景下，<b>SPSA</b> 就派上用场。
 
-### 8.2 SPSA 的核心思想
+### SPSA 的核心思想
 
-# PPT：
+PPT：
 
-> # SPSA is a very robust method to perform optimization under these settings by only considering the evaluations of the objective functions
+> SPSA is a very robust method to perform optimization under these settings by only considering the evaluations of the objective functions
  Ideal for black-box optimization
 
-# 核心思想：
+核心思想：
 
 - 不需要显式 gradient；
 - 只需要能在不同点上 evaluate objective function（即给你 (f(s)) 或 noisy version）；
@@ -1131,144 +1126,141 @@ PPT 中展示了：
 
 ---
 
-## 九、SPSA (2)：算法步骤与梯度近似
+## SPSA ：算法步骤与梯度近似
 
-# 这一页给出了 SPSA 的算法框架和梯度近似公式。
+这一页给出了 SPSA 的算法框架和梯度近似公式。
 
-### 9.1 超参数（hyperparameters）
+### 超参数（hyperparameters）
 
-# PPT：
+PPT：
 
-> # Given five hyperparameters (a, c, A, \gamma, \alpha) the sketch of SPSA algorithm for minimizing an objective (f(s)) is in the following:
+> Given five hyperparameters ($a, c, A, \gamma, \alpha$) the sketch of SPSA algorithm for minimizing an objective (f(s)) is in the following:
 
-# 这里的五个超参数：
+这里的五个超参数：
 
-- (a)：learning rate 的缩放因子；
-- (c)：perturbation scaling factor 的缩放因子；
-- (A)：控制学习率衰减的平移参数；
-- (\gamma)：控制 perturbation 衰减速度；
-- (\alpha)：控制 learning rate 衰减速度。
+- $a$：learning rate 的缩放因子；
+- $c$：perturbation scaling factor 的缩放因子；
+- $A$：控制学习率衰减的平移参数；
+- $\gamma$：控制 perturbation 衰减速度；
+- $\alpha$：控制 learning rate 衰减速度。
 
-# （下一页会详细解释这些参数的作用。）
+### SPSA 算法步骤
 
-### 9.2 SPSA 算法步骤
-
-# PPT 步骤：
+PPT 步骤：
 
 1. <b>Step 1: Initialize a solution</b>  
- [ s_1 \in \mathbb{R}^m ]
+ $s_1 \in \mathbb{R}^m$
 2. <b>Step 2: Evaluate the gradient approximation for each time step (t)</b>  
- [ g_t \in \mathbb{R}^m \quad \text{s.t.} \quad g_t = \frac{f(s_t + \beta_t \Delta_t) - f(s_t - \beta_t \Delta_t)}{2 \beta_t \Delta_t} ] 这里要注意几点：
-    - (\Delta_t) 是一个随机向量（perturbation vector）： 
+ $g_t \in \mathbb{R}^m \quad \text{s.t.} \quad g_t = \frac{f(s_t + \beta_t \Delta_t) - f(s_t - \beta_t \Delta_t)}{2 \beta_t \Delta_t}$
+    这里要注意几点：
+    - $\Delta_t$是一个随机向量（perturbation vector）： 
         - PPT： 
-        > - randomly drawing the perturbation vector (\Delta_t) with each entry (\delta_i \sim \text{Rademacher} \ \forall i) - <b>Rademacher distribution</b>：
- [ \delta_i = \begin{cases} +1 & \text{with prob } 0.5 \ -1 & \text{with prob } 0.5 \end{cases} ]
-    - (\beta_t) 是 perturbation scaling factor： 
+        > - randomly drawing the perturbation vector $\Delta_t$ with each entry $\delta_i \sim \text{Rademacher} \ \forall i$- <b>Rademacher distribution</b>：
+ $\delta_i = \begin{cases} +1 & \text{with prob } 0.5 \ -1 & \text{with prob } 0.5 \end{cases}$
+    - $\beta_t$ 是 perturbation scaling factor： 
         - PPT： 
         > - set the perturbation scaling factor (\beta_t = \frac{c}{(t+1)^\gamma})
     - 分子：
- [ f(s_t + \beta_t \Delta_t) - f(s_t - \beta_t \Delta_t) ] 是在两个对称扰动点上的函数值差；
+ $f(s_t + \beta_t \Delta_t) - f(s_t - \beta_t \Delta_t)$ 是在两个对称扰动点上的函数值差；
     - 分母：
- [ 2 \beta_t \Delta_t ] 是向量，<b>注意 PPT 特别强调</b>： 
-    > - Note the vector division in the calculation of the approximate gradient in Step 2 is pairwise. 即： - 对每个维度 (i)： [ g_{t,i} = \frac{f(s_t + \beta_t \Delta_t) - f(s_t - \beta_t \Delta_t)}{2 \beta_t \delta_{t,i}} ] - 这是一个<b>同时扰动所有维度</b>但只用两次函数评估就估计出所有维度梯度的技巧。
+ $2 \beta_t \Delta_t$ 是向量，<b>注意 PPT 特别强调</b>： 
+    > - Note the vector division in the calculation of the approximate gradient in Step 2 is pairwise. 即： - 对每个维度 (i)： $g_{t,i} = \frac{f(s_t + \beta_t \Delta_t) - f(s_t - \beta_t \Delta_t)}{2 \beta_t \delta_{t,i}}$ - 这是一个<b>同时扰动所有维度</b>但只用两次函数评估就估计出所有维度梯度的技巧。
 
 3. <b>Step 3: Update rule</b>
-4. PPT：
+    1. PPT：
+    > 1. $s_t \leftarrow s_t - \alpha_t g_t) (i.e. (s_{t,i} \leftarrow s_{t,i} - \alpha_t g_{t,i}))$considering
+ the learning rate for $t$ as $\alpha_t = \frac{a}{(t+1 + A)^\alpha}$
+    1. 解释：
+        - 学习率随时间衰减： $\alpha_t = \frac{a}{(t+1 + A)^\alpha}$
+        - 更新公式： $s_{t+1} = s_t - \alpha_t g_t$
 
-> 1. (s_t \leftarrow s_t - \alpha_t g_t) (i.e. (s_{t,i} \leftarrow s_{t,i} - \alpha_t g_{t,i})) considering
- the learning rate for (t) as (\alpha_t = \frac{a}{(t+1 + A)^\alpha})
-
-1. 解释：
-    - 学习率随时间衰减： [ \alpha_t = \frac{a}{(t+1 + A)^\alpha} ]
-    - 更新公式： [ s_{t+1} = s_t - \alpha_t g_t ]
-
-2. <b>Step 4: Stopping condition</b>
+4. <b>Step 4: Stopping condition</b>
     - 与前面类似：如果停止条件不满足，回到 Step 2。
 
-### 9.3 SPSA 的关键点总结
+### SPSA 的关键点总结
 
 - 每次迭代： 
-    - 生成一个随机向量 (\Delta_t)，每个分量为 ±1；
-    - 在 (s_t + \beta_t \Delta_t) 和 (s_t - \beta_t \Delta_t) 两个点上评估 (f)；
-    - 用这两个函数值构造一个近似梯度 (g_t)；
-    - 用学习率 (\alpha_t) 更新 (s_t)。
+    - 生成一个随机向量 $\Delta_t$，每个分量为 ±1；
+    - 在 $s_t + \beta_t \Delta_t$ 和 $s_t - \beta_t \Delta_t$ 两个点上评估 (f)；
+    - 用这两个函数值构造一个近似梯度 $g_t$；
+    - 用学习率 $\alpha_t$ 更新 $s_t$。
 
 - 优势： 
-    - <b>只需要两次函数评估</b>，与维度 (m) 无关；
+    - <b>只需要两次函数评估</b>，与维度 $m$ 无关；
     - 适合高维、黑盒、不可导、甚至 noisy 的目标函数。
 
 ---
 
-## 十、SPSA (3)：超参数与其作用
+## SPSA (3)：超参数与其作用
 
-# 这一页专门解释前面提到的 gain sequences（增益序列）和超参数的含义。
+这一页专门解释前面提到的 gain sequences（增益序列）和超参数的含义。
 
-### 10.1 Gain sequences 定义
+### Gain sequences 定义
 
-# PPT：
+PPT：
 
-> # Given the gain values:
- [ \beta_t = \frac{c}{(t+1)^\gamma}, \quad \alpha_t = \frac{a}{(t+1 + A)^\alpha} ]
+> Given the gain values:
+ $\beta_t = \frac{c}{(t+1)^\gamma}, \quad \alpha_t = \frac{a}{(t+1 + A)^\alpha}$
 
 # 解释：
 
-- (\beta_t)：perturbation scaling factor（扰动尺度）；
-- (\alpha_t)：learning rate（学习率）；
+- $\beta_t$：perturbation scaling factor（扰动尺度）；
+- $\alpha_t$：learning rate（学习率）；
 - 都是随时间 (t) 衰减的序列。
 
-### 10.2 各个超参数的含义与典型取值
+### 各个超参数的含义与典型取值
 
-# PPT 对每个参数给了直观解释和常见范围：
+PPT 对每个参数给了直观解释和常见范围：
 
-1. <b>(c)</b>：
+1. $c$：
 
-> 1. (c): Weights the impact of the perturbation with 0.1 or 0.005 being common choices
+> 1. $c$: Weights the impact of the perturbation with 0.1 or 0.005 being common choices
     - 控制扰动的初始尺度；
     - 值越大，扰动越大；
     - 常见取值：0.1 或 0.005。
 
-1. <b>(\gamma)</b>：
+1. $\gamma$：
 
-> 1. (\gamma): Affects the rate of decay for the perturbation scaling factor and usually selected to be (\gamma \in [0.101, 0.166])
-    - 控制 (\beta_t) 的衰减速度；
-    - (\gamma) 越大，(\beta_t) 衰减越快；
-    - 常见范围：([0.101, 0.166])。
+> 1. $\gamma$: Affects the rate of decay for the perturbation scaling factor and usually selected to be $\gamma \in [0.101, 0.166]$
+    - 控制 $\beta_t$ 的衰减速度；
+    - $\gamma$ 越大，$\beta_t$ 衰减越快；
+    - 常见范围：[0.101, 0.166]。
 
-1. <b>(a)</b>：
+1. $a$：
 
-> 1. (a): Scales the learning rate and ideally selected to be (a \in [0.01, 0.2])
+> 1. $a$: Scales the learning rate and ideally selected to be (a \in [0.01, 0.2])
     - 控制学习率的整体尺度；
-    - 常见范围：([0.01, 0.2])。
+    - 常见范围：[0.01, 0.2]。
 
-1. <b>(A)</b>：
+1. $A$：
 
-> 1. (A): A nonnegative constant that plays a role in preventing large jumps in the function space with common approaches setting the value to 10% to the maximum number of iterations
+> 1. $A$: A nonnegative constant that plays a role in preventing large jumps in the function space with common approaches setting the value to 10% to the maximum number of iterations
     - 非负常数；
     - 作用：在初期避免 learning rate 过大导致的“跳太远”；
     - 常见做法：设为最大迭代次数的 10%。
 
-1. <b>(\alpha)</b>：
+1. $\alpha$：
 
-> 1. (\alpha): Affects the rate of decay for the learning rate and usually selected to be (\alpha \in [0.602, 1])
-    - 控制 (\alpha_t) 的衰减速度；
-    - 常见范围：([0.602, 1])。
+> 1. $\alpha$: Affects the rate of decay for the learning rate and usually selected to be $\alpha \in [0.602, 1]$
+    - 控制 $\alpha_t$的衰减速度；
+    - 常见范围：[0.602, 1]。
 
-### 10.3 直观理解这些超参数
+### 直观理解这些超参数
 
-- (\beta_t)（由 (c, \gamma) 决定）： 
+- $\beta_t$（由 $c, \gamma$ 决定）： 
     - 决定你在当前点附近“探测”的范围；
     - 初期可以大一点，后期逐渐变小，类似“粗搜→细搜”。
 
-- (\alpha_t)（由 (a, A, \alpha) 决定）： 
+- $\alpha_t$（由 $a, A, \alpha$ 决定）： 
     - 决定你每次更新的步长；
     - 初期可以大一点，帮助快速接近较优区域；
     - 后期逐渐减小，帮助稳定收敛。
 
 ---
 
-## 十一、整体知识结构小结（按考试视角）
+## 整体知识结构小结（按考试视角）
 
-# 最后我给你把这份 PPT 的知识点按“考试/理解重点”再压缩成一个结构化清单，方便你回顾：
+最后我给你把这份 PPT 的知识点按“考试/理解重点”再压缩成一个结构化清单，方便你回顾：
 
 1. <b>Optimization 基本概念</b>
     - objective function (f: D \to \mathbb{R})；
@@ -1329,7 +1321,7 @@ PPT 中展示了：
 
 ---
 
-# 如果你愿意，下一步我可以帮你把这些内容<b>转成英文考试用的双语术语表</b>（比如“凸函数 convex function”、“全局最优 global optimum”、“随机梯度下降 stochastic gradient descent”等），或者帮你设计几道典型考题（证明题/概念题/算法步骤题）来检验理解。你更想先做哪一块？
+如果你愿意，下一步我可以帮你把这些内容<b>转成英文考试用的双语术语表</b>（比如“凸函数 convex function”、“全局最优 global optimum”、“随机梯度下降 stochastic gradient descent”等），或者帮你设计几道典型考题（证明题/概念题/算法步骤题）来检验理解。你更想先做哪一块？
 
 # ML
 

@@ -97,12 +97,14 @@ sidebar_position: 7
 
 用于推荐系统、营销策略、内容设计、异常检测等。
 
+<img src="/assets/DdAObR7RQoYiRrxdYgjctGqEnpH.png" src-width="736" src-height="578" align="center"/>
+
 ---
 
 ### <b>Main Challenges（主要挑战）</b>
 
 - <b>Multichannel input（多通道输入）</b>：数据来源多样，如文本、行为、交易记录。
-- <b>Patterns vs Outliers（模式 vs 异常）</b>：少数类问题难处理。
+- <b>Minority：Patterns vs Outliers（模式 vs 异常）</b>：少数类问题难处理。
 - <b>Scalability（可扩展性）</b>：数据规模大，算法需高效。
 - <b>Interpretability（可解释性）</b>：模型需能解释以便业务使用。
 - <b>Data dependency（数据依赖性）</b>：数据分布变化会影响模型表现。
@@ -125,10 +127,10 @@ Affinity mining 的核心是：
 
 ### Affinity Mining 的定位
 
-Affinity mining 超越简单的二元关系（bivariate analysis），关注：
+Affinity mining 超越Beyond简单的二元关系（bivariate analysis），关注：
 
-- <b>大规模数据中的关联关系</b>
-- <b>可用于描述性、诊断性、处方性数据挖掘</b>
+- 大规模数据中的关联关系<b>Associations in large scale data</b>
+- 可用于描述性、诊断性、处方性数据挖掘<b>Descriptive, diagnostic and prescriptive data mining</b>
     
 ---
 
@@ -156,6 +158,8 @@ Affinity mining 超越简单的二元关系（bivariate analysis），关注：
 Affinity mining 的目标是：
 
 > <b>从一组实体中自动提取“有趣的局部模式”（interesting local patterns）。</b>
+> <b> dissecting the relationships among a given set of entities for automatically extracting</b>
+> <b>interesting local patterns</b>
 
 “Interestingness” 可以基于：
 
@@ -166,14 +170,14 @@ Affinity mining 的目标是：
 
 ---
 
-## <b>2.4 Transactional Dataset（事务型数据集）</b>
+### <b>Transactional Dataset（事务型数据集）</b>
 
 Affinity mining 通常基于 transactional dataset：
 
 - 每条记录 = 一个 transaction（如一次购买）
 - 每个 transaction 包含若干 items
 - 可能还包含额外信息（数量、价格、效用等）
-    
+
 本课程重点：
 
 - <b>Frequent itemset mining（频繁项集挖掘）</b>
@@ -181,61 +185,35 @@ Affinity mining 通常基于 transactional dataset：
     
 ---
 
-# 3. Frequent Itemset & Association Rule Mining
+## Frequent Itemset & Association Rule Mining
 
-## <b>3.1 基本定义</b>
+### <b>基本定义</b>
 
-### <b>Itemset</b>
+<b>Itemset</b>
 
-给定 m 个 items：
+给定 m 个 items：$A = \{a_1, a_2, ..., a_m\}$
 
-\[
+<b>Transaction</b>
 
-A = \{a_1, a_2, ..., a_m\}
+每条记录 $Ti$ 是 items 的子集：
 
-\]
+$$T_i \subseteq A$$
 
-### <b>Transaction</b>
+<b>Transactional Database</b>
 
-每条记录 Ti 是 items 的子集：
-
-\[
-
-T_i \subseteq A
-
-\]
-
-### <b>Transactional Database</b>
-
-\[
-
-T = [T_1, T_2, ..., T_n]
-
-\]
+$$T = [T_1, T_2, ..., T_n]$$
 
 ---
 
-## <b>3.2 Support（支持度）</b>
+### <b>Support（支持度）</b>
 
 支持度 = itemset 在数据库中出现的频率：
 
-\[
+$$\text{support}(B) = \frac{\#\text{transactions containing } B}{n}$$
 
-\text{support}(B) = \frac{\#\text{transactions containing } B}{n}
+<b>Frequent itemset</b> （频繁项集）
 
-\]
-
-### Frequent itemset（频繁项集）
-
-若：
-
-\[
-
-\text{support}(B) \ge S_{\min}
-
-\]
-
-则 B 为频繁项集。
+若：$\text{support}(B) \ge S_{\min}$则 B 为频繁项集。
 
 目标：
 
@@ -243,56 +221,50 @@ T = [T_1, T_2, ..., T_n]
 
 ---
 
-## <b>3.3 Association Rules（关联规则）</b>
+### <b>Association Rules（关联规则）</b>
 
 给定两个 itemsets：
 
-- \( B_i \subset A \)
-- \( B_j \subset A \)
-- 且 \( B_i \cap B_j = \emptyset \)
-    
-规则：
+- $$B_i \subset A$$
+- $$B_j \subset A$$
+- 且 $B_i \cap B_j = \emptyset$
 
-\[
+规则：$B_i \rightarrow B_j$
 
-B_i \rightarrow B_j
-
-\]
-
-表示：若出现 \(B_i\)，则倾向于出现 \(B_j\)。
+表示：若出现 $B_i$，则倾向于出现 $B_j$。
 
 ---
 
-## <b>3.4 Confidence（置信度）</b>
+### <b>Confidence（置信度）</b>
 
-\[
+$$\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)}$$
 
-\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)}
-
-\]
-
-### Strong rule（强规则）
+<b>Strong rule（强规则）</b>
 
 若：
 
 - support ≥ Smin  
 - confidence ≥ Cmin  
-    
+
 则为 strong rule。
+
+<img src="/assets/FU2EbxzcQoJSxQxkrbwc3SXqndd.png" src-width="892" src-height="216" align="center"/>
 
 ---
 
-# 4. Didactic Example（教学示例）
+## ** 到这里没细看了 Didactic Example（教学示例）
 
-## <b>4.1 Example Database</b>
+### <b>Example Database</b>
 
 8 个玩家的购买记录（Elixir、Shield、Wand、Sword、Gem、Giant Wand）。
 
 计算支持度后得到 frequent itemsets（Smin = 0.25）。
 
+<img src="/assets/EuZ2bjAWKo9U3kxH7v8cS7jwnse.png" src-width="424" src-height="334" align="center"/>
+
 ---
 
-## <b>4.2 Frequent Itemsets（频繁项集）</b>
+### <b>Frequent Itemsets（频繁项集）</b>
 
 例如：
 
@@ -313,7 +285,7 @@ B_i \rightarrow B_j
 
 ---
 
-## <b>4.3 Strong Rules（Cmin = 0.50）</b>
+### <b>Strong Rules（Cmin = 0.50）</b>
 
 例如：
 
@@ -340,9 +312,9 @@ B_i \rightarrow B_j
     
 ---
 
-# 5. Apriori Algorithm（Apriori 算法）
+## Apriori Algorithm（Apriori 算法）
 
-## <b>5.1 Motivation（动机）</b>
+### Motivation（动机）
 
 问题：
 
@@ -351,9 +323,9 @@ B_i \rightarrow B_j
     
 ---
 
-## <b>5.2 Apriori Rule（关键性质）</b>
+### Apriori Rule（关键性质）
 
-> <b>若一个 itemset 是频繁的，则它的所有非空子集也必须是频繁的。</b>
+> 若一个 itemset 是频繁的，则它的所有非空子集也必须是频繁的。
 
 反之：
 
@@ -363,12 +335,12 @@ B_i \rightarrow B_j
 
 ---
 
-## <b>5.3 Apriori Algorithm（核心流程）</b>
+### Apriori Algorithm（核心流程）
 
 1. 找到所有 frequent 1-itemsets（F1）
 2. 用 F1 生成 candidate 2-itemsets（C2）
 3. 扫描数据库，得到 frequent 2-itemsets（F2）
-4. 用 F2 生成 C3
+4. 用 F2 生成 C3【这个要说明生成步骤】
 5. 重复直到没有新的频繁项集
     
 算法使用：
@@ -378,7 +350,7 @@ B_i \rightarrow B_j
     
 ---
 
-## <b>5.4 Example：Apriori 运行过程</b>
+### Example：Apriori 运行过程
 
 - F1 = frequent 1-itemsets  
 - C2 = 所有两两组合  
@@ -395,7 +367,7 @@ B_i \rightarrow B_j
     
 ---
 
-# 6. Search Space（搜索空间）
+### Search Space（搜索空间）
 
 随着 k 增大，itemset 数量呈指数增长。  
 
@@ -403,63 +375,420 @@ Apriori 通过剪枝显著减少搜索空间。
 
 ---
 
-# 7. Alternative Approach：FP-Growth（替代方法）
+## Alternative Approach：FP-Growth（替代方法）
 
 当：
 
 - m 很大  
 - n 很大  
 - Smin 很低  
-    
+
 Apriori 会产生大量候选项集。
 
 FP-Growth 通过：
 
 - 构建 FP-tree（压缩数据库）
 - 按条件数据库分段挖掘
-    
+
 实现更高效率。
 
 ---
 
-# 8. Next Steps（课程安排）
+## Lecture 02 的重点与难点总结
 
-- Assignment 1 截止：18.11.25  
-- 下节课：Mining Association Rules & High Utility Itemset Mining  
-- 推荐阅读：
+1. Support / Confidence 的定义与公式
+2. Frequent itemset 的定义
+3. Strong rule 的条件（Smin + Cmin）
+4. Apriori rule（剪枝原理）
+5. Apriori 算法流程（F1 → C2 → F2 → C3 → …）
 
-<em>A Fast High Utility Itemsets Mining Algorithm</em> by Liu et al.
+<b>⚠️ 难点（学生最容易卡住）</b>
 
----
-
-# 🎯 <b>Lecture 02 的重点与难点总结</b>
-
-## ⭐ 必考重点（你必须掌握）
-
-1. <b>Support / Confidence 的定义与公式</b>
-2. <b>Frequent itemset 的定义</b>
-3. <b>Strong rule 的条件（Smin + Cmin）</b>
-4. <b>Apriori rule（剪枝原理）</b>
-5. <b>Apriori 算法流程（F1 → C2 → F2 → C3 → …）</b>
-    
----
-
-## ⚠️ 难点（学生最容易卡住）
-
-1. <b>为什么 Apriori 可以剪枝？</b>
+1. 为什么 Apriori 可以剪枝？
 
 ——因为频繁项集的所有子集必须频繁。
 
-1. <b>如何从 Fk 生成 Ck+1？</b>
+1. 如何从 Fk 生成 Ck+1？
 
 ——需要 lexicographical ordering + join + prune。
 
-1. <b>支持度与置信度的计算</b>
+1. 支持度与置信度的计算
 
 ——尤其是 union 的支持度。
+
 [预测试卷](/QQqNwziPmiYyFBknLftcE8vWnLb/LoWWwmgXLiLtHgk1uHlcXEz3nwb)
 
 # Affinity Mining II
+
+## ⭐ 章节结构总览
+
+1. Recap：Affinity Mining 回顾  
+2. Association Rule Mining（关联规则挖掘）  
+3. Visualization & Interestingness Measures（可视化与有趣度指标）  
+4. High Utility Itemset Mining（高效用项集挖掘）  
+5. AprioriTWHU（高效用 Apriori 变体）  
+
+---
+
+## Recap：Affinity Mining 回顾
+
+### Affinity Mining 的核心思想
+
+Affinity Mining（关联挖掘）旨在：
+
+> <b>从大量事务型数据中自动提取“有趣的局部模式”（interesting local patterns）</b>
+
+这些模式通常表现为：
+
+- 哪些 items 经常一起出现  
+- 哪些行为组合具有统计意义  
+- 哪些内容组合能帮助营销、推荐、内容设计
+    
+---
+
+### 应用场景（非常重要）
+
+- <b>Interest analysis（兴趣分析）</b>
+
+圣诞节哪些 in‑game cosmetic items 会一起卖？
+
+- <b>Diagnostics for content design（内容设计诊断）</b>
+
+玩家退出游戏前通常玩哪些 dungeons？
+
+- <b>Digital marketing（数字营销）</b>
+
+哪些商品可以组合销售以提高销量？
+
+- <b>Recommendation systems（推荐系统）</b>
+
+“Customers who bought X also bought Y”
+
+---
+
+### 基于频率的 Affinity Mining（FIM）
+
+关键概念：
+
+- <b>Frequent itemset</b>：支持度 ≥ Smin  
+- <b>Strong rule</b>：支持度 ≥ Smin 且置信度 ≥ Cmin  
+- <b>Apriori rule</b>：频繁项集的所有非空子集必须频繁  
+- <b>Apriori algorithm</b>：基于 BFS 的 generate‑and‑test 剪枝算法
+    
+---
+
+## Association Rule Mining（关联规则挖掘）
+
+### 目标
+
+> <b>从频繁项集中挖掘条件关系（if X then Y）</b>
+
+给定两个 itemsets：
+
+- \(B_i \subset A\)
+- \(B_j \subset A\)
+- 且 \(B_i \cap B_j = \emptyset\)
+    
+规则：
+
+\[
+
+B_i \rightarrow B_j
+
+\]
+
+表示：出现 \(B_i\) 时倾向于出现 \(B_j\)。
+
+---
+
+### Confidence（置信度）
+
+\[
+
+\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)}
+
+\]
+
+解释：
+
+- 置信度 = 条件概率 \(p(B_j | B_i)\)
+- 越高表示规则越可靠
+    
+---
+
+### Strong Rule（强规则）
+
+满足：
+
+- support ≥ Smin  
+- confidence ≥ Cmin  
+    
+即可视为 strong rule。
+
+---
+
+### ExtractRules 算法（重点）
+
+流程：
+
+1. 对每个频繁项集 f  
+2. 枚举其所有非空子集 g  
+3. 生成规则：
+
+\[
+
+g \rightarrow (f - g)
+
+\]
+
+1. 若 confidence ≥ Cmin，则保留
+    
+---
+
+### 示例：从 {a1, a2, a3} 生成规则
+
+子集 G：
+
+- {a1}, {a2}, {a3}  
+- {a1,a2}, {a1,a3}, {a2,a3}
+    
+计算置信度后得到 strong rules（Cmin = 0.5）：
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>Rule</p></td><td><p>Confidence</p></td></tr>
+<tr><td><p>{a2,a3} → {a1}</p></td><td><p>1.000</p></td></tr>
+<tr><td><p>{a1,a3} → {a2}</p></td><td><p>0.667</p></td></tr>
+<tr><td><p>{a1,a2} → {a3}</p></td><td><p>0.667</p></td></tr>
+<tr><td><p>{a3} → {a1,a2}</p></td><td><p>0.667</p></td></tr>
+</tbody>
+</table>
+
+---
+
+## Additional Topics in Affinity Mining
+
+### Visualization（可视化）
+
+常用方法：
+
+- <b>2D scatter plot</b>  
+    - x 轴：confidence  
+    - y 轴：support  
+    - 点大小/颜色：lift、rule length 等
+        
+---
+
+### Lift（提升度）
+
+衡量两个 item 是否“真正相关”。
+
+\[
+
+\text{lift}(B_i, B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)\cdot \text{support}(B_j)}
+
+\]
+
+解释：
+
+- lift &gt; 1：正相关（interesting）  
+- lift = 1：独立  
+- lift &lt; 1：负相关（avoidance）
+    
+---
+
+## High Utility Itemset Mining（高效用项集挖掘）
+
+⭐ 为什么需要 HUI？（重点）
+
+频繁项集只看“出现次数”，但很多应用需要：
+
+- 收入（revenue）
+- 权重（weight）
+- 价格（price）
+- 重要性（utility）
+    
+例如：
+
+- 一个很少卖但利润极高的商品组合  
+- 一个出现频率不高但价值巨大的 itemset  
+    
+这些在 FIM 中会被忽略。
+
+---
+
+### 数据结构
+
+#### Local utility（局部效用）
+
+每个 transaction 中 item 的数量/价值：
+
+\[
+
+T_i = \{(a_j, v_j)\}
+
+\]
+
+#### Global utility（全局效用）
+
+每个 item 的固定价值（如价格）：
+
+\[
+
+G = \{(a_j, q_j)\}
+
+\]
+
+---
+
+### Utility 定义
+
+#### 单个 item 的 utility：
+
+\[
+
+u(a_j, T_i) = v_j \times q_j
+
+\]
+
+#### itemset 的 utility：
+
+\[
+
+u(B, T_i) = \sum_{a_j \in B} u(a_j, T_i)
+
+\]
+
+#### transactional-utility：
+
+\[
+
+u(B, T) = \sum_{T_i \supseteq B} u(B, T_i)
+
+\]
+
+---
+
+### High Utility Itemset（HUI）
+
+若：
+
+\[
+
+u(B, T) \ge U_{\min}
+
+\]
+
+则 B 为高效用项集。
+
+---
+
+### 示例（Umin = 14）
+
+得到的 HUIs：
+
+- Elixir, Wand（14）
+- Giant Wand（15）
+- Wand（16）
+- Elixir, Shield, Wand（18）
+- Elixir, Giant Wand（20）
+- Shield, Wand（21）
+    
+---
+
+## AprioriTWHU：高效用 Apriori（重点难点）
+
+### 为什么 Apriori 不适用于 HUI？
+
+因为：
+
+> <b>高效用项集的子集不一定高效用</b>
+
+例如：
+
+- Giant Wand（utility = 15）  
+- 但 {Giant Wand, Shield} 可能 utility = 10（反而更低）
+    
+因此：
+
+- Apriori 的 downward closure 不成立  
+- 无法用“子集不频繁 → 超集不频繁”剪枝
+    
+---
+
+### 解决方案：Transaction-Weighted Utility（TWU）
+
+#### Transaction weight：
+
+\[
+
+w_i = \sum_{a_j \in T_i} u(a_j, T_i)
+
+\]
+
+#### TWU：
+
+\[
+
+TWU(B) = \sum_{T_i \supseteq B} w_i
+
+\]
+
+#### 关键性质（TWDC）：
+
+> <b>TWU(B) ≥ TWU(B ∪ C)</b>  
+> （transaction-weighted downward closure）
+
+因此可以用 TWU 来剪枝。
+
+---
+
+### AprioriTWHU 算法流程
+
+1. 计算所有 transaction weights  
+2. 找到 TWU ≥ Umin 的 1-itemsets  
+3. 生成 C2  
+4. 剪枝（基于 TWU）  
+5. 生成 F2  
+6. 重复直到无更多项集  
+7. 最后再过滤一次真正 utility ≥ Umin 的项集
+    
+---
+
+## 🎯 Lecture 03 重点总结（考试向）
+
+### 必考概念
+
+- support / confidence / lift  
+- frequent itemset  
+- strong rule  
+- Apriori 原理  
+- ExtractRules 流程  
+- utility / TWU / HUI  
+- 为什么 Apriori 不适用于 HUI  
+- TWDC（transaction-weighted downward closure）
+    
+### 必考计算
+
+- confidence 计算  
+- lift 计算  
+- utility 计算  
+- TWU 计算  
+- 判断是否为 HUI  
+    
+### 难点
+
+- ExtractRules 的子集枚举  
+- TWU 的剪枝逻辑  
+- utility vs frequency 的区别  
+    
+---
+
+[预测试卷](/QQqNwziPmiYyFBknLftcE8vWnLb/AlHCwR5LUiW2VDkuzaTc8KsQnsf)
 
 # Latent Pattern Mining I
 

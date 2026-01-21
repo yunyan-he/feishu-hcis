@@ -266,22 +266,7 @@ $$\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{s
 
 ### <b>Frequent Itemsets（频繁项集）</b>
 
-例如：
-
-<table>
-<colgroup>
-<col width="200"/>
-<col width="200"/>
-</colgroup>
-<tbody>
-<tr><td><p>Itemset</p></td><td><p>Support</p></td></tr>
-<tr><td><p>Elixir</p></td><td><p>0.75</p></td></tr>
-<tr><td><p>Shield</p></td><td><p>0.625</p></td></tr>
-<tr><td><p>Wand, Shield</p></td><td><p>0.375</p></td></tr>
-<tr><td><p>Elixir, Sword</p></td><td><p>0.375</p></td></tr>
-<tr><td><p>Elixir, Wand, Shield</p></td><td><p>0.25</p></td></tr>
-</tbody>
-</table>
+<img src="/assets/KIHdbj14XoeLaFxQIMfc0JJhnsd.png" src-width="428" src-height="374" align="center"/>
 
 ---
 
@@ -289,20 +274,7 @@ $$\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{s
 
 例如：
 
-<table>
-<colgroup>
-<col width="200"/>
-<col width="200"/>
-</colgroup>
-<tbody>
-<tr><td><p>Rule</p></td><td><p>Confidence</p></td></tr>
-<tr><td><p>Elixir, Wand → Shield</p></td><td><p>1.000</p></td></tr>
-<tr><td><p>Wand → Shield</p></td><td><p>1.000</p></td></tr>
-<tr><td><p>Sword → Elixir</p></td><td><p>1.000</p></td></tr>
-<tr><td><p>Shield → Elixir</p></td><td><p>0.600</p></td></tr>
-<tr><td><p>Elixir → Shield</p></td><td><p>0.500</p></td></tr>
-</tbody>
-</table>
+<img src="/assets/EeBNbU0OhoPDNMxdMAvcfTG6naf.png" src-width="370" src-height="430" align="center"/>
 
 这些规则可用于：
 
@@ -318,14 +290,17 @@ $$\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{s
 
 问题：
 
-- itemset 数量随 m 指数级增长  
+- itemset 数量随 n 指数级增长  
+
+Search space is exponential in n 
+
 - 需要有效剪枝
     
 ---
 
 ### Apriori Rule（关键性质）
 
-> 若一个 itemset 是频繁的，则它的所有非空子集也必须是频繁的。
+> 若一个 itemset 是频繁的，则它的所有非空子集也必须是频繁的。<b>Nonempty subsets of frequent items must also be frequent</b>
 
 反之：
 
@@ -343,6 +318,8 @@ $$\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{s
 4. 用 F2 生成 C3【这个要说明生成步骤】
 5. 重复直到没有新的频繁项集
     
+a generate-and-test method to prune the search space
+
 算法使用：
 
 - <b>Breadth-First Search（广度优先搜索）</b>
@@ -364,14 +341,6 @@ $$\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{s
 - 所有 1-itemsets（支持度 ≥ 0.25）
 - 所有 2-itemsets（支持度 ≥ 0.25）
 - {a1, a2, a3}
-    
----
-
-### Search Space（搜索空间）
-
-随着 k 增大，itemset 数量呈指数增长。  
-
-Apriori 通过剪枝显著减少搜索空间。
 
 ---
 
@@ -485,33 +454,25 @@ Affinity Mining（关联挖掘）旨在：
 
 给定两个 itemsets：
 
-- \(B_i \subset A\)
-- \(B_j \subset A\)
-- 且 \(B_i \cap B_j = \emptyset\)
+- $$B_i \subset A$$
+- $$B_j \subset A$$
+- 且 $B_i \cap B_j = \emptyset$
     
 规则：
 
-\[
+$$B_i \rightarrow B_j$$
 
-B_i \rightarrow B_j
-
-\]
-
-表示：出现 \(B_i\) 时倾向于出现 \(B_j\)。
+表示：出现 $B_i$ 时倾向于出现 $B_j$。
 
 ---
 
 ### Confidence（置信度）
 
-\[
-
-\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)}
-
-\]
+$$\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)}$$
 
 解释：
 
-- 置信度 = 条件概率 \(p(B_j | B_i)\)
+- 置信度 = 条件概率 $p(B_j | B_i)$
 - 越高表示规则越可靠
     
 ---
@@ -522,7 +483,7 @@ B_i \rightarrow B_j
 
 - support ≥ Smin  
 - confidence ≥ Cmin  
-    
+
 即可视为 strong rule。
 
 ---
@@ -535,11 +496,7 @@ B_i \rightarrow B_j
 2. 枚举其所有非空子集 g  
 3. 生成规则：
 
-\[
-
-g \rightarrow (f - g)
-
-\]
+$$g \rightarrow (f - g)$$
 
 1. 若 confidence ≥ Cmin，则保留
     
@@ -587,11 +544,7 @@ g \rightarrow (f - g)
 
 衡量两个 item 是否“真正相关”。
 
-\[
-
-\text{lift}(B_i, B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)\cdot \text{support}(B_j)}
-
-\]
+$$\text{lift}(B_i, B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)\cdot \text{support}(B_j)}$$
 
 解释：
 
@@ -611,7 +564,7 @@ g \rightarrow (f - g)
 - 权重（weight）
 - 价格（price）
 - 重要性（utility）
-    
+
 例如：
 
 - 一个很少卖但利润极高的商品组合  

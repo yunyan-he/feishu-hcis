@@ -578,134 +578,110 @@ $$\text{lift}(B_i, B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i
 
 #### Local utility（局部效用）
 
-每个 transaction 中 item 的数量/价值：
+每个 transaction 中 item 的数量/价值，总之是只在这个transaction中有效的：
 
-\[
+$$T_i = \{(a_j, v_j)\}$$
 
-T_i = \{(a_j, v_j)\}
-
-\]
+- $a_j$ item identifier
+- $v_j$ local value
 
 #### Global utility（全局效用）
 
-每个 item 的固定价值（如价格）：
+每个 item 的固定值（如价格）在整个数据库都是一样的：
 
-\[
+$$G = \{(a_j, q_j)\}$$
 
-G = \{(a_j, q_j)\}
-
-\]
+- $a_j$ item identifier
+- $q_j$ global value
 
 ---
 
 ### Utility 定义
 
-#### 单个 item 的 utility：
+#### 一个transaction中单个 item 的 utility：
 
-\[
+$$u(a_j, T_i) = v_j \times q_j$$
 
-u(a_j, T_i) = v_j \times q_j
-
-\]
+$$≪ a_j ,T_i ≫= T_i [a_j ]×G[a_j ]$$
 
 #### itemset 的 utility：
 
-\[
-
-u(B, T_i) = \sum_{a_j \in B} u(a_j, T_i)
-
-\]
+$$≪ B,T_i ≫ = \sum_{a_j \in B} ≪ a_j, T_i ≫$$
 
 #### transactional-utility：
 
-\[
-
-u(B, T) = \sum_{T_i \supseteq B} u(B, T_i)
-
-\]
+$$≪ B,T ≫ = \sum_{T_i \supseteq B} ≪B, T_i≫$$
 
 ---
 
 ### High Utility Itemset（HUI）
 
-若：
+HUI找的是所有的itemset的 transactional-utility大于等于最小值
 
-\[
+若：$≪ B,T ≫  \ge U_{\min}$ 则 B 为高效用项集。
 
-u(B, T) \ge U_{\min}
-
-\]
-
-则 B 为高效用项集。
-
----
-
-### 示例（Umin = 14）
-
-得到的 HUIs：
-
-- Elixir, Wand（14）
-- Giant Wand（15）
-- Wand（16）
-- Elixir, Shield, Wand（18）
-- Elixir, Giant Wand（20）
-- Shield, Wand（21）
-    
 ---
 
 ## AprioriTWHU：高效用 Apriori（重点难点）
 
 ### 为什么 Apriori 不适用于 HUI？
 
+The apriori rule does not apply for finding high utility itemsets 
+
 因为：
 
-> <b>高效用项集的子集不一定高效用</b>
+> <b>高效用项集的子集不一定高效用 downward closure</b>
 
 例如：
 
-- Giant Wand（utility = 15）  
-- 但 {Giant Wand, Shield} 可能 utility = 10（反而更低）
-    
+- {Wand, Sand}（utility = 15）  
+- 但 {Wand} 可能 utility = 10（反而更低 比如sand的utility很高）
+
 因此：
 
 - Apriori 的 downward closure 不成立  
 - 无法用“子集不频繁 → 超集不频繁”剪枝
-    
+
 ---
 
 ### 解决方案：Transaction-Weighted Utility（TWU）
 
 #### Transaction weight：
 
-\[
+$W = {w_i | ∀w_i = ∑_{a_j∈T_i} ≪ a_j ,T_i ≫}$ 
 
-w_i = \sum_{a_j \in T_i} u(a_j, T_i)
-
-\]
+就是一个transaction的全部utility
 
 #### TWU：
 
-\[
+$$TWU(B,T ) = ∑_{B⊆T_i} w_i$$
 
-TWU(B) = \sum_{T_i \supseteq B} w_i
+包含B的所有transaction
 
-\]
+这些transaction的utility的总和
+
+和前面B的transactional utility区分 这个除了算B 这个set里面元素的utility 还会算其他的 只要这个transaction包括了B 就算全部的item的utility
 
 #### 关键性质（TWDC）：
 
+Transaction-weighted downward closure property
+
 > <b>TWU(B) ≥ TWU(B ∪ C)</b>  
 > （transaction-weighted downward closure）
+> 因为都是算全部transaction元素的utility 只包含B的transaction肯定比包含B和C的transaction多
 
-因此可以用 TWU 来剪枝。
+因此可以用 TWU 来剪枝pruning。
+
+<b>All transaction-weighted high utility itemsets contain the high utility itemsets</b>
 
 ---
 
 ### AprioriTWHU 算法流程
 
-1. 计算所有 transaction weights  
-2. 找到 TWU ≥ Umin 的 1-itemsets  
-3. 生成 C2  
-4. 剪枝（基于 TWU）  
+1. 计算所有 transaction weights  对每条交易 Ti，计算 $w_i$
+2. 找到 $TWU ≥ U_min$ 的 1-itemsets  $\hat U_1={{a_i}∣twu({a_i})≥U_{min}}$
+3. 生成 C2  做 self-join 【Ck+1的生成：2个项 前k-1项一样， 合并】
+4. 剪枝（基于 TWU）  【所有的subset也必须在对应的$\hat U_k$】
 5. 生成 F2  
 6. 重复直到无更多项集  
 7. 最后再过滤一次真正 utility ≥ Umin 的项集
@@ -744,6 +720,417 @@ TWU(B) = \sum_{T_i \supseteq B} w_i
 [预测试卷](/QQqNwziPmiYyFBknLftcE8vWnLb/AlHCwR5LUiW2VDkuzaTc8KsQnsf)
 
 # Latent Pattern Mining I
+
+## Recap：频繁项集与关联规则挖掘
+
+### Frequent Itemset Mining
+
+- 给定 item 集合 $A = \{a_1, a_2, ..., a_m\}$
+- 数据库 $T = [T_1, T_2, ..., T_n]$，每个 $T_i \subseteq A$
+- 支持度定义为：
+
+$$\text{support}(B) = \frac{\#\text{transactions containing } B}{n}$$
+
+- 目标：找出所有支持度 ≥ $S_{\min}$ 的 itemsets
+
+---
+
+### Association Rule Mining
+
+- 目标：找出 itemsets 之间的条件关系 $B_i \rightarrow B_j$
+- 条件：$B_i \cap B_j = \emptyset$
+- 置信度定义为：
+    
+$$\text{conf}(B_i \rightarrow B_j) = \frac{\text{support}(B_i \cup B_j)}{\text{support}(B_i)}$$
+
+- 强规则条件：
+        - support ≥ $S_{\min}$
+    - confidence ≥ $C_{\min}$
+        
+---
+
+### ExtractRules 算法（重点）
+
+对每个频繁项集 $f$：
+
+1. 枚举所有非空 proper 子集 $g$
+2. 构造规则 $g \rightarrow f - g$
+3. 若置信度 ≥ $C_{\min}$，则保留该规则
+    
+---
+
+## Recap：高效用项集挖掘（High Utility Itemset Mining）
+
+### 基本定义
+
+- 每个 transaction $T_i$ 包含若干项及其数量（local utility）：
+
+$$T_i = \{(a_j, v_j)\}$$
+
+- 每个 item $a_j$ 有一个全局效用值（global utility）：
+
+$$G = \{(a_j, q_j)\}$$
+
+- 单个项的效用：
+
+$$
+
+u(a_j, T_i) = v_j \cdot q_j
+
+$$
+
+- itemset 的效用：
+    
+$$
+
+u(B, T_i) = \sum_{a_j \in B} u(a_j, T_i)
+
+$$
+
+- 数据库中的总效用：
+    
+$$
+
+u(B, T) = \sum_{T_i \supseteq B} u(B, T_i)
+
+$$
+
+- 若 $$u(B, T) \ge U_{\min}$$，则 B 为高效用项集（HUI）
+    
+---
+
+### TWU（Transaction-Weighted Utility）
+
+- 每个 transaction 的权重：
+    
+$$
+
+w_i = \sum_{a_j \in T_i} u(a_j, T_i)
+
+$$
+
+- TWU 定义：
+    
+$$
+
+TWU(B) = \sum_{T_i \supseteq B} w_i
+
+$$
+
+- TWU 的 downward closure 性质：
+    
+> 若 B 是某个 itemset 的子集，则 TWU(B) ≥ TWU(B ∪ C)
+
+这使得 TWU 可用于剪枝。
+
+---
+
+## Recommender Systems（推荐系统）
+
+### 推荐系统的作用
+
+- 帮助用户在信息过载中做出选择  
+- 支持电商、社交媒体、内容平台等业务模型
+    
+---
+
+### 推荐系统的类型（重点）
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>类型</p></td><td><p>描述</p></td></tr>
+<tr><td><p>Content-based</p></td><td><p>基于内容特征（如电影类型、文章主题）</p></td></tr>
+<tr><td><p>Collaborative Filtering</p></td><td><p>基于用户或物品之间的相似性</p></td></tr>
+<tr><td><p>Demographic</p></td><td><p>基于用户人口统计信息（年龄、性别等）</p></td></tr>
+<tr><td><p>Knowledge-based</p></td><td><p>基于领域知识和用户需求</p></td></tr>
+<tr><td><p>Community-based</p></td><td><p>基于社交关系（朋友、群组）</p></td></tr>
+<tr><td><p>Hybrid</p></td><td><p>多种方法组合使用</p></td></tr>
+</tbody>
+</table>
+
+---
+
+## Collaborative Filtering（协同过滤）
+
+### Neighborhood-oriented CF（邻域式）
+
+- 构建 item-user 矩阵 $$F \in \mathbb{R}^{m \times n}$$
+- 对用户 $$u$$，找出最相似的邻居用户集合 $$B(u)$$
+- 使用加权平均预测用户对 item $$j$$ 的偏好：
+    
+$$
+
+f_{ju} = \frac{\sum_{b \in B(u)} \text{sim}(f_u, f_b) \cdot f_{jb}}{\sum_{b \in B(u)} \text{sim}(f_u, f_b)}
+
+$$
+
+- 相似度常用 cosine similarity：
+    
+$$
+
+\text{cos}(a, b) = \frac{a^T b}{\|a\| \cdot \|b\|}
+
+$$
+
+---
+
+### Model-oriented CF（模型式）
+
+- 使用矩阵分解：$$F \approx CP^T$$
+    - $$C \in \mathbb{R}^{m \times k}$$：item factors  
+    - $$P \in \mathbb{R}^{n \times k}$$：user factors
+        
+- 对用户 $$u$$，推荐集合为：
+    
+$$
+
+D_u = \{j \mid f_{ju} \text{ 未观察}\}
+
+$$
+
+- 得分计算：
+    
+$$
+
+\hat{f}_{ju} = C_j \cdot P_u
+
+$$
+
+- 可选：在 latent space 中做 user-kNN
+    
+---
+
+## Evaluating Recommender Systems（推荐系统评估）
+
+### Offline Evaluation
+
+- 数据集划分为训练集和测试集  
+- 用训练集训练模型，用测试集评估性能  
+- 优点：易实现  
+- 缺点：可能过拟合，泛化能力差
+    
+---
+
+### Online Evaluation
+
+- A/B 测试：将用户随机分组，展示不同推荐策略  
+- 使用统计检验比较效果  
+- 更贴近真实使用场景
+    
+---
+
+## Latent Pattern Mining（潜在模式挖掘）
+
+### 定义
+
+> 在大规模、稀疏、噪声数据中发现隐藏的结构性模式。
+
+应用领域：
+
+- 描述性分析  
+- 诊断性分析  
+- 预测性分析  
+- 处方性分析
+    
+---
+
+## Matrix Factorization（矩阵分解）
+
+### 基本形式
+
+- 数据矩阵 $$X \in \mathbb{R}^{m \times n}$$
+- 分解为：
+    
+$$
+
+X \approx CP^T
+
+$$
+
+- 每个样本 $$x_i \approx C p_i$$
+    
+- 优点：
+        - 降维：每个样本从 $$m$$ 维变为 $$k$$ 维  
+    - 压缩：存储从 $$O(mn)$$ 降为 $$O(k(m+n))$$
+        
+---
+
+### Alternating Least Squares（ALS）
+
+- 交替优化 C 和 P：
+    
+1. 初始化 C 和 P  
+2. 固定 P，优化 C  
+3. 固定 C，优化 P  
+4. 重复直到收敛
+    
+---
+
+### Rotated Matrix Regression（RMRMF）
+
+- 当一个因子固定时，有闭式解：
+    
+$$
+
+C = X P (P^T P)^{-1},\quad P = X^T C (C^T C)^{-1}
+
+$$
+
+- RMRMF 算法：
+    
+1. 初始化 C 和 P  
+2. 交替更新  
+3. 返回最终因子矩阵
+    
+---
+
+## Singular Value Decomposition（SVD）
+
+### 基本定义
+
+给定一个矩阵  
+
+$$
+
+X \in \mathbb{R}^{m \times n}
+
+$$  
+
+它可以被唯一分解为：
+
+$$
+
+X = U S V^T
+
+$$
+
+其中：
+
+- <b>$$U \in \mathbb{R}^{m \times m}$$</b>：左奇异向量矩阵，列向量正交，满足
+
+$$
+
+U^T U = I_m
+
+$$
+
+- <b>$$V \in \mathbb{R}^{n \times n}$$</b>：右奇异向量矩阵，列向量正交，满足
+
+$$
+
+V^T V = I_n
+
+$$
+
+- <b>$$S \in \mathbb{R}^{m \times n}$$</b>：对角矩阵（主对角线为非负奇异值）
+
+$$
+
+S = \text{diag}(\sigma_1, \sigma_2, \dots, \sigma_r),\quad \sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r \ge 0
+
+$$
+
+这里的 $$\sigma_i$$ 就是奇异值（singular values）。
+
+---
+
+### 截断 SVD（Truncated SVD）
+
+在推荐系统 / 潜在模式挖掘中，我们通常不需要完整秩，而是选前 $$k$$ 个奇异值：
+
+- 取前 $$k$$ 个奇异值和对应的奇异向量：
+
+$$
+
+X \approx \tilde{U} S_k \tilde{V}^T
+
+$$
+
+其中：
+- $$\tilde{U} \in \mathbb{R}^{m \times k}$$
+- $$\tilde{V} \in \mathbb{R}^{n \times k}$$
+- $$S_k \in \mathbb{R}^{k \times k}$$ 为前 $$k$$ 个奇异值构成的对角矩阵
+    
+为了和矩阵分解 $$X \approx C P^T$$ 对齐，可以设：
+
+$$
+
+C = \tilde{U} S_k^{1/2},\quad P = \tilde{V} S_k^{1/2}
+
+$$
+
+这样就得到：
+
+$$
+
+X \approx C P^T
+
+$$
+
+---
+
+### RRSS（Relative Residual Sum of Squares）
+
+SVD 的一个重要优点是可以用奇异值直接衡量“用前 $$k$$ 个因子重构的好坏”。
+
+定义：
+
+$$
+
+RRSS(k) = \frac{\sum_{i = k+1}^{m} \sigma_i^2}{\sum_{i = 1}^{m} \sigma_i^2}
+
+$$
+
+含义：
+
+- 分子：丢掉的奇异值对应的残差能量  
+- 分母：原始矩阵的总能量  
+- RRSS 越小，说明前 $$k$$ 个奇异值已经解释了越多的结构
+    
+在图上通常画成：
+
+- 横轴：rank $$k$$  
+- 纵轴：RRSS  
+- 曲线快速下降 → 说明低秩近似效果好
+    
+---
+
+### 例子（和讲义里的表格对应）
+
+讲义中给了一个 6×7 的二值矩阵 X（电影 × 用户），然后展示了：
+
+1. 原始矩阵 X（0/1）  
+2. 用不同 k（1,2,3,4,5,6）重构后的近似矩阵  
+3. 对应的 RRSS 值：
+    - $$k = 1$$: RRSS ≈ 0.505  
+    - $$k = 2$$: RRSS ≈ 0.169  
+    - $$k = 3$$: RRSS ≈ 0.076  
+    - $$k = 4$$: RRSS ≈ 0.033  
+    - $$k = 5$$: RRSS ≈ 0.013  
+    - $$k = 6$$: RRSS = 0.000（完美重构）
+        
+这说明：
+
+- 用很小的 k（比如 2 或 3）就能捕捉到大部分结构  
+- 这正是 latent pattern mining 的核心：用少量潜在因子解释高维数据
+    
+---
+
+### 和 Latent Pattern Mining 的关系（总结）
+
+- SVD 提供了一种<b>线性、正交的潜在模式分解方式</b>  
+- 在推荐系统中，它可以用来：
+    - 做降维  
+    - 学习用户 / 物品的 latent factors  
+    - 作为矩阵分解的一种特例或初始化方式  
+
+- RRSS 提供了一个<b>选择合适 k 的量化指标</b>
+    
+[预测试卷 L4](/QQqNwziPmiYyFBknLftcE8vWnLb/WJZ2wjquYitDpckdlLZcuKbcnsb)
 
 # Latent Pattern Mining II
 

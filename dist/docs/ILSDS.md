@@ -367,7 +367,7 @@ $$\mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^{-1}$$
 - $\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$[特征值可以重复]
 
 > $diag(λ₁, λ₂, …, λₙ)$ 表示一个对角矩阵：
-> # $$\operatorname{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)
+> $$\operatorname{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)
 =
 \begin{bmatrix}
 \lambda_1 & 0 & \cdots & 0 \\
@@ -706,6 +706,8 @@ PPT 中展示了：
 
 ---
 
+## [考试预测part 1](/QRiFwuy0liWXaGk5KDqcgG4dnYf/Wsm6wYyU1iM22Wk74vtcoBNunAh)
+
 # Optimization
 
 ## 整体结构与大图景
@@ -971,7 +973,7 @@ PPT：
 
 > Convexity is important in machine learning due to having global minima (for strict convexity there is a unique global minimum)
 
-# 解释：
+解释：
 
 - 对于 convex function： 
     - <b>任何 local minimum 都是 global minimum</b>；
@@ -1022,7 +1024,7 @@ PPT：
 > Strict convexity assured for with
  $f(\theta s + (1-\theta) q) < \theta f(s) + (1-\theta) f(q), \quad \forall \theta \in (0,1)$
 
-# 解释：
+解释：
 
 - 与普通 convex 的区别是：不再是“≤”，而是严格“小于”；
 - 结果：global minimum 唯一；
@@ -1159,7 +1161,7 @@ PPT 步骤：
  $\delta_i = \begin{cases} +1 & \text{with prob } 0.5 \ -1 & \text{with prob } 0.5 \end{cases}$
     - $\beta_t$ 是 perturbation scaling factor： 
         - PPT： 
-        > - set the perturbation scaling factor (\beta_t = \frac{c}{(t+1)^\gamma})
+        > - set the perturbation scaling factor $\beta_t = \frac{c}{(t+1)^\gamma}$
     - 分子：
  $f(s_t + \beta_t \Delta_t) - f(s_t - \beta_t \Delta_t)$ 是在两个对称扰动点上的函数值差；
     - 分母：
@@ -1202,7 +1204,7 @@ PPT：
 > Given the gain values:
  $\beta_t = \frac{c}{(t+1)^\gamma}, \quad \alpha_t = \frac{a}{(t+1 + A)^\alpha}$
 
-# 解释：
+解释：
 
 - $\beta_t$：perturbation scaling factor（扰动尺度）；
 - $\alpha_t$：learning rate（学习率）；
@@ -1263,16 +1265,16 @@ PPT 对每个参数给了直观解释和常见范围：
 最后我给你把这份 PPT 的知识点按“考试/理解重点”再压缩成一个结构化清单，方便你回顾：
 
 1. <b>Optimization 基本概念</b>
-    - objective function (f: D \to \mathbb{R})；
-    - feasible set (D)；
-    - solution (s)；
+    - objective function $f: D \to \mathbb{R}$；
+    - feasible set $D$；
+    - solution $s$；
     - maximize vs minimize；
-    - 关心 (s^*) 还是 (f(s^*))。
+    - 关心 $s^*$ 还是 $f(s^*)$。
 
 2. <b>Constraints（约束）</b>
-    - nonnegativity：(s \ge 0)；
-    - stochasticity：(s_i \ge 0, \sum_i s_i = 1)；
-    - 写法：(\min f(s)\ \text{s.t. } \text{constraints on } s)。
+    - nonnegativity：$s \ge 0$；
+    - stochasticity：$s_i \ge 0, \sum_i s_i = 1$；
+    - 写法：$\min f(s)\ \text{s.t. } \text{constraints on } s$。
 
 3. <b>Optimization 分类</b>
     - global vs local optimum；
@@ -1281,18 +1283,18 @@ PPT 对每个参数给了直观解释和常见范围：
     - constraints 的重要性。
 
 4. <b>Gradient Descent（GD）</b>
-    - 目标：最小化可导的 (f(s))；
-    - 步骤：初始化 → 计算梯度 → 更新 (s_{t+1} = s_t - \lambda g_t) → 检查停止条件；
+    - 目标：最小化可导的 $f(s)$；
+    - 步骤：初始化 → 计算梯度 → 更新 $s_{t+1} = s_t - \lambda g_t$ → 检查停止条件；
     - 优点：简单、在 convex 情况下有理论保证；
     - 缺点：要求 (f) 可导。
 
 5. <b>Convexity（凸性）</b>
     - 定义：
- [ f(\theta s + (1-\theta) q) \le \theta f(s) + (1-\theta) f(q) ]
+ $f(\theta s + (1-\theta) q) \le \theta f(s) + (1-\theta) f(q)$
     - strict convexity：不等号变为“&lt;”，global minimum 唯一；
     - 在 ML 中的重要性：local minimum = global minimum；
     - gradient descent 在 convex 上收敛到 global minimum；
-    - learning rate：常数或衰减（如 (\lambda_t = 1/t)），足够小可保证 (f(x_{t+1}) &lt; f(x_t))。
+    - learning rate：常数或衰减（如 $\lambda_t = 1/t)$，足够小可保证 $f(x_{t+1}) < f(x_t)$。
 
 6. <b>Stochastic Gradient Descent（SGD）</b>
     - 用样本近似梯度；
@@ -1301,683 +1303,361 @@ PPT 对每个参数给了直观解释和常见范围：
 
 7. <b>SPSA（Simultaneous Perturbation Stochastic Approximation）</b>
     - 适用于： 
-        - 不可导目标（如 (L_1)-norm, Kendall’s tau）；
+        - 不可导目标（如 $L_1$-norm, Kendall’s tau）；
         - 黑盒目标（函数形式未知，只能 evaluate）；
     - 只用函数值，不需要显式梯度；
     - 每次迭代只需两次函数评估，与维度无关；
     - 算法： 
-        - 随机生成 Rademacher 向量 (\Delta_t)；
-        - 计算 (f(s_t + \beta_t \Delta_t)) 和 (f(s_t - \beta_t \Delta_t))；
-        - 用 pairwise division 构造梯度近似 (g_t)；
-        - 用 (\alpha_t) 更新 (s_t)。
+        - 随机生成 Rademacher 向量 $\Delta_t$；
+        - 计算 $f(s_t + \beta_t \Delta_t)$ 和 $f(s_t - \beta_t \Delta_t)$；
+        - 用 pairwise division 构造梯度近似 $g_t$；
+        - 用 $\alpha_t$ 更新$s_t$。
 
 8. <b>SPSA 超参数</b>
-    - (\beta_t = \frac{c}{(t+1)^\gamma})，(\alpha_t = \frac{a}{(t+1 + A)^\alpha})；
-    - (c)：扰动尺度，常用 0.1 或 0.005；
-    - (\gamma)：扰动衰减速率，([0.101, 0.166])；
-    - (a)：学习率尺度，([0.01, 0.2])；
-    - (A)：防止初期步长过大，常设为最大迭代次数的 10%；
-    - (\alpha)：学习率衰减速率，([0.602, 1])。
+    - $\beta_t = \frac{c}{(t+1)^\gamma}$，$\alpha_t = \frac{a}{(t+1 + A)^\alpha}$；
+    - $c$：扰动尺度，常用 0.1 或 0.005；
+    - $\gamma$：扰动衰减速率，([0.101, 0.166])；
+    - $a$：学习率尺度，([0.01, 0.2])；
+    - $A$：防止初期步长过大，常设为最大迭代次数的 10%；
+    - $\alpha$：学习率衰减速率，([0.602, 1])。
 
 ---
 
 如果你愿意，下一步我可以帮你把这些内容<b>转成英文考试用的双语术语表</b>（比如“凸函数 convex function”、“全局最优 global optimum”、“随机梯度下降 stochastic gradient descent”等），或者帮你设计几道典型考题（证明题/概念题/算法步骤题）来检验理解。你更想先做哪一块？
 
-# ML
+# Machine Learning
 
-# 下面我给你做一份<b>逐页、成体系的知识梳理</b>，内容和这份 Part-4 PPT 一一对应，不遗漏任何知识点。
- 整体用中文解释，但<b>关键术语保留英文</b>（如 supervised learning, logistic regression, cross-entropy loss 等），方便你直接用于英文考试。
+## <b>引言：学习系统与机器学习</b>
 
----
+学习系统（Learning Systems）是能够根据数据或环境交互自动调整内部参数的系统。它们的目标是通过适应性机制解决复杂问题。
 
-## 一、Learning Systems（学习系统）
+学习系统的特点包括：
 
-### Learning systems 的定义
-
-# <b>Learning systems：</b>  
- 指的是一种<b>自适应系统（adaptive systems）</b>，它会根据数据或与环境的交互，自动调整其内部设置（如 parameters 或 rule sets），以解决一类问题。
-
-- <b>核心特征：</b>
-    - <b>不是固定规则（not hardcoded rule-based）</b>
-    - 会根据数据/环境反馈<b>更新内部参数或规则</b>
-    - 目标是：在某个任务上表现越来越好（performance improvement）
-
-### Learning types（学习类型）
-
-# PPT 提到三种“适应发生的方式”：
-
-- <b>Single adaptation in training phase：</b>
-    - 在训练阶段进行一次性学习（offline training），训练完参数就固定了。
-    - 典型：传统 supervised learning 模型，训练好后部署，推理时不再更新参数。
-
-- <b>Contextually with conditional inference based on temporary knowledge：</b>
-    - 在推理时根据<b>当前上下文（context）</b>和<b>临时知识（temporary knowledge）</b>做条件推理。
-    - 模型本身参数可能不变，但推理过程会利用当前环境信息进行调整。
-
-- <b>Continously with new stream of input：</b>
-    - 持续学习（continuous learning / online learning），随着新数据流不断更新模型。
-    - 典型：online learning、streaming data 场景。
-
-### 与 rule-based systems 的关系
-
-- <b>Hardcoded rule-based systems：</b>
-    - 完全依赖人工写死的规则（if-else），不具备自适应能力。
-
-- <b>Hybrid learning approaches：</b>
-    - 将 rule-based / knowledge-based systems 与 data-driven learning systems 结合。
-    - 目标是处理： 
-        - <b>uncertainty（不确定性）</b>
-        - <b>high dimensionality（高维度）</b>
-        - <b>multimodality（多模态）</b>
-    - 这些都是现实世界问题的典型特征。
+- <b>训练阶段的单次适应</b>（如传统监督学习）
+- <b>基于上下文的条件推断</b>（如序列模型）
+- <b>持续学习</b>（如在线学习）
+- <b>处理现实世界的不确定性、高维度、多模态数据</b>
+    
+现代系统常采用<b>混合式学习方法</b>，结合规则系统与数据驱动模型，以应对复杂任务。
 
 ---
 
-## 二、Learning Paradigms（学习范式）
+## <b>学习范式（Learning Paradigms）</b>
 
-# PPT 分成两大类：
+学习范式分为两大类：<b>监督方式</b>与<b>过程方式</b>。
 
-- <b>Supervision based（按监督方式）</b>
-- <b>Process based（按学习过程方式）</b>
+### <b>监督方式（Supervision-based Paradigms）</b>
 
----
+#### <b> Supervised Learning（监督学习）</b>
 
-### Supervision based Learning Paradigms（监督相关范式）
+- 使用<b>带标签数据</b>训练模型
+- 目标：学习输入到输出的映射
+- 典型任务：分类、回归
 
-#### (1) Supervised learning（监督学习）
+#### <b>Semi-supervised Learning（半监督学习）</b>
 
-- <b>数据形式：</b>
-    - 有 label 的数据点，通常是<b>结构化的 input-output tuples（输入-输出对）</b>。
+- 少量<b>金标签（gold labels）</b> + 大量<b>未标注数据</b>
+- 先用金标签训练，再利用模型生成的**银标签（silver labels）**继续训练
 
-- <b>目标：</b>
-    - 学习一个 mapping：从 input 映射到 output。
+#### <b>Unsupervised Learning（无监督学习）</b>
 
-- <b>典型任务：</b> classification, regression 等。
+- 使用<b>无标签数据</b>
+- 目标：发现模式、结构、表示
+- 典型任务：聚类、降维
 
-#### (2) Semi-supervised learning（半监督学习）
+#### <b>Self-supervised Learning（自监督学习）</b>
 
-- <b>场景：</b>
-    - labeled data 很少（small cardinality）
-    - unlabeled data 很多（large cardinality）
+- 从无标签数据中<b>自动构造训练任务</b>
+- 常用于预训练（如语言模型）
 
-- <b>典型流程：</b>
-    1. 先用少量高质量标签（<b>gold labels</b>）训练模型；
-    2. 再用模型对大量未标注数据进行自动标注（得到 <b>silver labeled data</b>）；
-    3. 再用 gold + silver 数据继续训练，提升性能。
+#### <b>Reinforcement Learning（强化学习）</b>
 
-#### (3) Unsupervised learning（无监督学习）
-
-- <b>数据：</b> 完全没有 labels。
-- <b>目标：</b>
-    - 发现数据中的 pattern（模式）
-    - 学习 useful representations（有用表示）
-
-- <b>典型任务：</b> clustering, dimensionality reduction, representation learning 等。
-
-#### (4) Self-supervised learning（自监督学习）
-
-- <b>数据：</b> 起始是完全 unlabeled dataset。
-- <b>核心思想：</b>
-    - 从数据本身自动构造“伪标签”（pseudo labels），用于训练。
-    - 例如：mask 一部分输入，让模型预测被 mask 的部分。
-
-- <b>常见用途：</b>
-    - <b>Pretraining（预训练）</b>，尤其是当前大规模 language model pretraining 的主流方式。
-
-#### (5) Reinforcement learning（强化学习）
-
-- <b>主体：</b> agent（智能体）
-- <b>环境：</b> environment
-- <b>过程：</b>
-    - agent 选择 action 与环境交互，环境状态改变；
-    - 环境给出 reward；
-    - agent 的目标是<b>最大化累积 reward</b>。
-
-- <b>策略：</b>
-    - 选择 action 的规则叫 <b>policy</b>。
+- Agent 与环境交互，通过奖励学习策略（policy）
+- 目标：最大化长期回报
 
 ---
 
-### Process based Learning Paradigms（过程相关范式）
+### <b>过程方式（Process-based Paradigms）</b>
 
-#### (1) Active learning（主动学习）
+#### <b>Active Learning（主动学习）</b>
 
-- <b>目标：</b>
-    - 在训练过程中<b>有选择地挑选数据点</b>进行标注或训练，以最大化性能提升。
+- 模型主动选择最有价值的数据点进行标注
 
-- <b>典型：</b>
-    - 模型主动询问“哪些样本最有价值”，例如不确定性最大的样本。
+#### <b>Curriculum Learning（课程学习）</b>
 
-#### (2) Curriculum learning（课程学习）
+- 按难度排序训练样本，提高学习效率
 
-- <b>核心问题：</b>
-    - 训练样本的<b>呈现顺序（order of examples）</b>会影响模型性能。
+#### <b>Transfer Learning（迁移学习）</b>
 
-- <b>思想：</b>
-    - 像人类学习一样，从简单到困难组织训练数据，以提高最终性能。
+- 将已学知识迁移到新任务
 
-#### (3) Transfer learning（迁移学习）
+#### <b>Online Learning（在线学习）</b>
 
-- <b>流程：</b>
-    1. 先在某一组任务上训练模型；
-    2. 再将训练好的模型（或其一部分）<b>迁移</b>到新的任务上。
-
-- <b>目的：</b>
-    - 利用已有知识解决 novel tasks（新任务），减少新任务所需数据和训练成本。
-
-#### (4) Online learning（在线学习）
-
-- <b>特点：</b>
-    - 模型在数据流到来时<b>持续更新</b>，而不是一次性训练完。
-
-- <b>适用场景：</b>
-    - 数据分布随时间变化（concept drift）、流式数据等。
-
+- 模型持续更新，适应数据流
+    
 ---
 
-## 三、Workflow for Building Learning Systems（构建学习系统的工作流）
+## <b>构建学习系统的工作流程</b>
 
-# PPT 给出一个典型 pipeline：
+一个完整的学习系统通常包含四个阶段：
 
 1. <b>Data Acquisition（数据获取）</b>
-    - 从各种来源收集数据：数据库、日志、传感器、网络等。
-
 2. <b>Data Processing（数据处理）</b>
-    - 清洗（cleaning）、预处理（preprocessing）、特征工程（feature engineering）、缺失值处理等。
-
 3. <b>Modeling（建模）</b>
-    - 选择模型（model choice）、训练（training）、调参（hyperparameter tuning）。
-
 4. <b>Output Utilization（输出利用）</b>
-    - 将模型输出用于实际应用：预测、推荐、决策支持等。
-
+    
 ---
 
-## 四、Typical Learning Cycle when Modeling（典型学习循环）
+## <b>学习系统的典型循环（Learning Cycle）</b>
 
-# PPT 给出一个循环过程：
+学习过程通常遵循以下循环：
 
 1. <b>Observation（观察）</b>
-    - 观察数据、环境状态、模型表现。
-
 2. <b>Acting（行动）</b>
-    - 模型做出预测或采取行动。
-
 3. <b>Evaluation（评估）</b>
-    - 评估行动效果：loss、accuracy、reward 等。
-
 4. <b>Update（更新）</b>
-    - 根据评估结果更新模型参数或策略。
-
 5. <b>Consolidation（巩固）</b>
-    - 将有效的知识固化下来，形成稳定的模型或策略。
+    
+---
 
-# 这个循环体现了“learning as optimization + feedback”的过程。
+## <b>优化在学习系统中的作用</b>
+
+给定训练集 $D_{\text{Train}}$，学习过程可视为求解：
+
+$$w^* = \arg\min_w f(w \mid D_{\text{Train}})$$
+
+并要求模型在未见数据（如 $D_{\text{Test}}$）上具有良好泛化能力。
+
+### <b>常见优化方法</b>
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>场景</p></td><td><p>方法</p></td></tr>
+<tr><td><p>小规模、凸优化</p></td><td><p>Gradient Descent</p></td></tr>
+<tr><td><p>大规模、凸/非凸</p></td><td><p>Stochastic Gradient Descent (SGD)</p></td></tr>
+<tr><td><p>超大规模深度学习</p></td><td><p>Adam / Adagrad</p></td></tr>
+<tr><td><p>不可微目标</p></td><td><p>零阶优化（Gradient-free）</p></td></tr>
+</tbody>
+</table>
+
+#### <b>挑战</b>
+
+- 局部最优
+- 可微性问题
+- 超参数调优
+- 收敛性
+- 模型偏差
+    
+---
+
+## <b>泛化能力：过拟合与欠拟合</b>
+
+### <b>Overfitting（过拟合）</b>
+
+- 训练集表现好，但测试集表现差
+- 原因：模型过于复杂，学习到噪声
+    
+<b>解决方法：</b>
+
+- 交叉验证
+- 正则化
+- 早停（early stopping）
+- 噪声注入
+- 集成学习
+- 数据增强
+- 简化模型结构
+    
+### <b>Underfitting（欠拟合）</b>
+
+- 训练集和测试集都表现差
+- 原因：模型过于简单
+    
+<b>解决方法：</b>
+
+- 增加模型复杂度
+- 减少正则化
+    
+---
+
+## <b>常见机器学习任务</b>
+
+### <b>监督任务</b>
+
+- <b>Classification（分类）</b>
+- <b>Regression（回归）</b>
+    
+### <b>无监督任务</b>
+
+- <b>Clustering（聚类）</b>
+- <b>Dimensionality Reduction（降维）</b>
+    
+### <b>其他任务</b>
+
+- <b>Ranking（排序）</b>
+- <b>Anomaly Detection（异常检测）</b>
+- <b>Association Rule Learning（关联规则）</b>
+- <b>Reinforcement Learning（强化学习）</b>
+- <b>Generative Modeling（生成建模）</b>
+    
+---
+
+## <b>线性分类器（Linear Classifier）</b>
+
+线性分类器定义为：
+
+$$c(x) = v^T x + v_0$$
+
+- 若 $c(x) > 0$ → 类别 $C_1$
+- 若 $c(x) < 0$ → 类别 $C_2$
+    
+可写为：
+
+$$c(x) = w^T \tilde{x}$$
+
+其中：
+
+- $$w = [v_0, v]^T$$
+- $$\tilde{x} = [1, x]^T$$
+    
+---
+
+## <b>分类性能评估指标</b>
+
+基于混淆矩阵：
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td></td><td><p>Real True</p></td><td><p>Real False</p></td></tr>
+<tr><td><p>Pred True</p></td><td><p>TP</p></td><td><p>FP</p></td></tr>
+<tr><td><p>Pred False</p></td><td><p>FN</p></td><td><p>TN</p></td></tr>
+</tbody>
+</table>
+
+指标：
+
+- <b>Accuracy</b>
+
+$$\frac{TP + TN}{TP + TN + FP + FN}$$
+
+- <b>Recall</b>
+
+$$\frac{TP}{TP + FN}$$
+
+- <b>Precision</b>
+
+$$\frac{TP}{TP + FP}$$
+
+- <b>F1-score</b>
+
+$$F_1 = \frac{2PR}{P + R}$$
 
 ---
 
-## 五、The Role of Optimization in Learning Systems（优化的角色）
+## <b>Logistic Regression（逻辑回归）</b>
 
-### 学习 = 优化问题
+逻辑回归是一个<b>概率二分类模型</b>。
 
-# 给定训练数据集 ( D_{\text{Train}} )，学习可以形式化为：
+### <b>Sigmoid 函数</b>
 
-# [ W^* = \arg\min_W f(W \mid D_{\text{Train}}) ]
+$$\sigma(s) = \frac{1}{1 + e^{-s}}$$
 
-- ( W )：模型参数
-- ( f )：objective function（目标函数），例如 loss function
+输出范围 $[0,1]$，可解释为概率。
 
-# 同时要求模型在<b>未见数据（unseen datasets）</b>上也有良好表现，例如 test dataset ( D_{\text{Test}} )，这就是 <b>generalization（泛化）</b>。
+### <b>模型定义</b>
 
-### 常见优化方法的“配方”
+给定数据：
 
-- <b>Small scale datasets + convex objective functions：</b>
-    - 用 <b>Gradient Descent（梯度下降）</b>
+- $$x_i \in \mathbb{R}^m$$
+- $$y_i \in \{0,1\}$$
+    
+预测：
 
-- <b>Large-scale + convex / nonconvex：</b>
-    - 用 <b>Stochastic Gradient Descent（SGD）</b>
+$$p_i = \sigma(w^T x_i)$$
 
-- <b>Very large-scale deep learning：</b>
-    - 用 <b>Adam / Adagrad</b> 等自适应优化算法
+### <b>似然与损失函数</b>
 
-- <b>Small to mid-range + nondifferentiable objectives：</b>
-    - 用 <b>Gradient-free (zero order) optimization methods</b>
-        - 如 evolutionary algorithms, Nelder–Mead 等。
+单样本似然：
 
-- <b>Challenges（挑战）：</b>
-    - <b>Local minima（局部最小）</b>
-    - <b>Differentiation（可导性问题）</b>
-    - <b>Hyperparameter tuning（超参数调优）</b>
-    - <b>Convergence（收敛）</b>
-    - <b>Model bias（模型偏差）</b> 等。
+$$q_i = p_i^{y_i} (1 - p_i)^{1 - y_i}$$
 
----
+整体似然：
 
-## 六、Generalization：Overfitting 与 Underfitting
+$$Q = \prod_i q_i$$
 
-### Overfitting（过拟合）
+负对数似然（NLL）：
 
-# <b>现象：</b>
+$$-\log Q = -\sum_i \left[ y_i \log p_i + (1 - y_i)\log(1 - p_i) \right]$$
 
-- 训练集表现非常好（well training performance）
-- 验证/测试集表现很差（poor validation/test performance）
-
-# <b>原因：</b>
-
-- 模型复杂度过高，开始“学习噪声和无关模式”（learning noise and irrelevant patterns）。
-
-# <b>应对方法：</b>
-
-- <b>Cross-validation（交叉验证）</b>
-- <b>Regularization（正则化）</b>
-- <b>调整优化过程：</b>
-    - Early stopping（提前停止）
-    - Noise injection（噪声注入）等
-
-- <b>Ensemble methods（集成方法）</b>
-- <b>Data augmentation（数据增强）：</b>
-    - 合成数据（synthetic）
-    - 扩展真实观测（extending real observations）
-
-- <b>Simpler architectures（简化模型结构）</b>
-
-### Underfitting（欠拟合）
-
-# <b>现象：</b>
-
-- 训练集和验证/测试集表现都不好（poor training and validation/test performance）
-
-# <b>原因：</b>
-
-- 模型太简单，无法捕捉数据中的有用模式。
-
-# <b>可能的解决：</b>
-
-- <b>增加模型复杂度</b>
-- <b>减少过拟合防护措施</b>（如过强的正则化）
+即<b>交叉熵损失（cross-entropy loss）</b>。
 
 ---
 
-## 七、Common Tasks in Machine Learning（常见任务）
+## <b>Logistic Regression 的优化：梯度下降</b>
 
-### Common Tasks (1)
+目标：
 
-- <b>Classification（分类）：</b>
-    - 将数据实体分配到预定义的 class（类别），类别数通常是固定的。
-    - 例：predicting customer churn（预测客户流失）。
+$$w^* = \arg\min_w -\log Q$$
 
-- <b>Regression（回归）：</b>
-    - 预测一个数值（numerical value）。
-    - 例：predicting customer spending（预测客户消费金额）。
+梯度：
 
-- <b>Dimensionality Reduction（降维）：</b>
-    - 减少特征维度，去除噪声，同时尽量保留数据结构。
-    - 例：random projection, matrix factorization 等。
+$$g = -X (y - \sigma(Xw))$$
 
-- <b>Clustering（聚类）：</b>
-    - 将 unlabeled data 按相似性分组。
-    - 例：customer profiling（客户画像）。
+更新规则：
 
-- <b>Ranking（排序）：</b>
-    - 按相关性对实体排序。
-    - 例：movie recommender systems（电影推荐系统）。
-
-### Common Tasks (2)
-
-- <b>Anomaly/Novelty Detection（异常/新颖性检测）：</b>
-    - 识别不寻常的模式或实体。
-    - 例：detect fraudulent transactions（检测欺诈交易）。
-
-- <b>Association Rule (Affinity) Learning（关联规则学习）：</b>
-    - 学习实体之间的关系。
-    - 例：customer item preferences（客户商品偏好）。
-
-- <b>Reinforcement Learning（强化学习）：</b>
-    - 通过 reward-guided trial-and-error 探索环境，学习决策策略。
-    - 例：learning to play a board game（学会下棋）。
-
-- <b>Generative Modeling（生成式建模）：</b>
-    - 训练模型生成内容。
-    - 例：image generation, text generation。
+$$w \leftarrow w - \eta g$$
 
 ---
 
-## 八、Linear Classifier（线性分类器）
+## <b>文本分类示例：铃声短信识别</b>
 
-### 线性分类函数
+给定 7 条短信，标签为：
 
-# 给定输入向量 ( x )，线性分类器定义为：
+- 前 4 条：非铃声（0）
+- 后 3 条：铃声（1）
+    
+训练得到权重向量 $w \in \mathbb{R}^{69}$。
 
-# [ c(x) = v^T x + v_0 ]
+### <b>特征重要性</b>
 
-- ( v )：权重向量，决定超平面的方向（orientation）
-- ( v_0 )：偏置项，和 ( v ) 一起决定超平面到原点的距离
+绝对值大于 0.25 的词：
 
-# <b>二分类：</b>
+- are (−0.27)
+- claim (−0.25)
+- ringtone (0.43)
+- tone (0.27)
+- you (−0.27)
+    
+### <b>推断示例</b>
 
-- 输出类别集合：({C_1, C_2})
-- 决策规则： 
-    - 若 ( c(x) &gt; 0 )，则 ( x \in C_1 )
-    - 若 ( c(x) &lt; 0 )，则 ( x \in C_2 )
+对两条新短信 q1、q2 进行向量化后：
 
-### 重写为统一形式
-
-# 可以写成：
-
-# [ c(x) = w^T \tilde{x} ]
-
-- 定义： 
-    - ( w^T = ([v_0,] @ v)^T )
-    - ( \tilde{x} = ([1,] @ x) )
-    - 这里 @ 表示 concatenation（拼接）
-
-# 这样就把 bias ( v_0 ) 合并进 weight 向量 ( w ) 中。
-
+- $\sigma(w^T q1) = 0.26$ → 非铃声
+- $\sigma(w^T q2) = 0.65$ → 铃声
+    
 ---
 
-## 九、Classification Evaluation Measures（分类评估指标）
-
-### Confusion Matrix（混淆矩阵）
-
-- <b>TP（True Positive）</b>
-- <b>FP（False Positive）</b>
-- <b>FN（False Negative）</b>
-- <b>TN（True Negative）</b>
-
-### 常用指标
-
-- <b>Accuracy：</b>
-
-# [ \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN} ]
-
-- <b>Recall（也写作 Acc+）：</b>
-
-# [ \text{Recall} = \frac{TP}{TP + FN} ]
-
-- <b>Precision：</b>
-
-# [ \text{Precision} = \frac{TP}{TP + FP} ]
-
-- <b>F(_\kappa) score：</b>
-
-# [ F_\kappa = \frac{(\kappa^2 + 1) \cdot P \cdot R}{\kappa^2 P + R} ]
-
-- <b>Special case：F1 score</b>
-
-# [ F_1 = \frac{2 \cdot P \cdot R}{P + R} ]
-
----
-
-## 十、Logistic Regression（逻辑回归）
-
-# 这是 PPT 的重点部分之一，我会细致展开。
-
-### 基本思想
-
-- Logistic Regression 是一种<b>probabilistic classification model（概率分类模型）</b>。
-- 目标：将 datapoints 映射到 discrete classes（离散类别），通常是二分类。
-- 核心：通过 <b>sigmoid function</b> 将线性组合映射到 ([0,1]) 的概率。
-
-### Sigmoid function（S 型函数）
-
-# 定义：
-
-# [ \sigma(s) = \frac{1}{1 + e^{-s}}, \quad s \in \mathbb{R} ]
-
-- 输出范围：(\sigma(s) \in [0,1])
-- 性质： 
-    - ( s \to +\infty \Rightarrow \sigma(s) \to 1 )
-    - ( s \to -\infty \Rightarrow \sigma(s) \to 0 )
-    - ( s = 0 \Rightarrow \sigma(0) = 0.5 )
-
-# PPT 中给出 sigmoid 曲线图，横轴是 ( s )，纵轴是 ( \sigma(s) )。
-
----
-
-### Logistic Regression (2)：数据与概率建模
-
-# 给定：
-
-- 输入数据集：
-
-# [ X = { x_i \in \mathbb{R}^m \mid i = 1, \dots, n } ]
-
-- 标签：
-
-# [ y = { y_i \in {0,1} \mid i = 1, \dots, n } ]
-
-- 使用 sigmoid：
-
-# [ \sigma(s) = \frac{1}{1 + e^{-s}} ]
-
-# <b>模型：</b>
-
-- 对于每个 ( x_i )，定义其属于 class 1 的概率：
-
-# [ p_i = \sigma(w^T x_i), \quad w \in \mathbb{R}^m, ; p_i \in [0,1] ]
-
-- 属于 class 0 的概率：
-
-# [ P(y_i = 0 \mid x_i) = 1 - p_i ]
-
----
-
-### Logistic Regression (3)：Likelihood（似然）
-
-# 对于每个样本 ( (x_i, y_i) )，其被模型正确描述的概率可以写为：
-
-# [ q_i = (p_i)^{y_i} (1 - p_i)^{1 - y_i} ]
-
-- 若 ( y_i = 1 )，则 ( q_i = p_i )
-- 若 ( y_i = 0 )，则 ( q_i = 1 - p_i )
-- 所以 ( q_i \in [0,1] )，表示在参数 ( w ) 下，模型对该样本的“解释程度”。
-
-# <b>假设样本独立（independence assumption）：</b>
-
-- 整个数据集的 likelihood：
-
-# [ Q_X = \prod_i q_i ]
-
----
-
-### Logistic Regression (4)：优化目标
-
-# <b>目标：</b> 找到一个好的 ( w ) 使得 likelihood ( Q_X ) 最大。
-
-- 最大化 ( Q_X ) 等价于： 
-    - 最大化 log-likelihood：(\log(Q_X))
-    - 或最小化 negative log-likelihood：(-\log(Q_X))
-
-# 因此优化问题可以写为：
-
-# [ w^* = \arg\min_{w \in \mathbb{R}^m} -\log(Q_X) ]
-
----
-
-### Logistic Regression (5)：推导 cross-entropy loss
-
-# 从：
-
-# [ w^* = \arg\min -\log(Q_X) ]
-
-# 展开：
-
-# [ -\log(Q_X) = -\log\left(\prod_i q_i\right) = -\sum_i \log(q_i) ]
-
-# 代入 ( q_i = p_i^{y_i} (1 - p_i)^{1 - y_i} )：
-
-# [ -\sum_i \log\left(p_i^{y_i} (1 - p_i)^{1 - y_i}\right) = -\sum_i \left( y_i \log(p_i) + (1 - y_i)\log(1 - p_i) \right) ]
-
-# 再代入 ( p_i = \sigma(w^T x_i) )：
-
-# [ -\sum_i \left[ y_i \log(\sigma(w^T x_i)) + (1 - y_i)\log(1 - \sigma(w^T x_i)) \right] ]
-
-# 这就是经典的 <b>cross-entropy loss（交叉熵损失）</b>。
-
-# PPT 明确指出：
-
-> # The expression
- (-\sum_i [y_i \log(\sigma(w^T x_i)) + (1 - y_i)\log(1 - \sigma(w^T x_i))])
- is called the <b>cross-entropy loss</b>.
-
----
-
-### Logistic Regression (6)：Gradient Descent 回顾
-
-# <b>Gradient Descent（梯度下降）用于最小化目标函数 ( f(s) )：</b>
-
-1. <b>Step 1：</b> 初始化解 ( s \in \mathbb{R}^m )
-2. <b>Step 2：</b> 计算梯度 ( g \in \mathbb{R}^m )，其中
-
-# [ g = \frac{\partial f(s)}{\partial s} ]
-
-1. <b>Step 3：</b> 更新：
-
-# [ s \leftarrow s - \eta g ]
-
-# 其中 ( \eta ) 是 learning rate。
-
-1. <b>Step 4：</b> 若未满足停止条件，回到 Step 2。
-
-# 对于 Logistic Regression，我们的目标是：
-
-# [ w^* = \arg\min_w -\log(Q_X) ]
-
-# 所以需要计算：
-
-# [ g = \frac{\partial}{\partial w} \left[ -\sum_i \left( y_i \log(\sigma(w^T x_i)) + (1 - y_i)\log(1 - \sigma(w^T x_i)) \right) \right] ]
-
----
-
-### Logistic Regression (7)：Gradient 结果
-
-# PPT 给出最终梯度形式：
-
-# [ g = \frac{\partial}{\partial w} \left[ -\sum_i \left( y_i \log(\sigma(w^T x_i)) + (1 - y_i)\log(1 - \sigma(w^T x_i)) \right) \right] = - X^T (y - \sigma(X w)) ]
-
-- 其中： 
-    - ( X \in \mathbb{R}^{m \times n} )：特征矩阵（列或行的具体定义视约定而定，这里 PPT 用的是 ( X \in \mathbb{R}^{m \times n} )）
-    - ( y \in {0,1}^n )
-    - ( \sigma(X w) )：对每个样本的线性组合 ( w^T x_i ) 施加 sigmoid
-
-# 这个梯度形式是 logistic regression 用 gradient descent / SGD 的基础。
-
----
-
-## 十一、Back to Inference and Retrieval（回到推理与检索）
-
-# 这一部分是一个<b>文本分类 / 信息检索的例子</b>，用 logistic regression 的权重来解释特征重要性和推断。
-
-### 数据示例（短信文本）
-
-# 有 7 条消息（m1–m7），内容大致分为两类：
-
-- m1–m4：关于 money award, winner, cash prize 等
-- m5–m7：关于 ringtone, tone, weekly ringtone 等
-
-# 给出的标签是：
-
-# [ [0, 0, 0, 0, 1, 1, 1] ]
-
-# 也就是：
-
-- m1–m4：label = 0
-- m5–m7：label = 1
-
-### 已训练好的权重向量 ( w )
-
-# PPT 给出一个具体的 ( w \in \mathbb{R}^{69} )（因为字典大小为 69，外加 bias 维度）：
-
-# [ w = [-0.25, 0.05, -0.04, -0.02, \dots, -0.27] ]
-
-# （完整向量已在 PPT 中列出）
-
-# 这些权重对应于词典中的各个单词（包括一个常数 1 维度）。
-
-### Feature importance and interpretability（特征重要性与可解释性）
-
-# PPT 提取了绝对值大于 0.25 的权重对应的词：
-
-- (are, -0.27)
-- (claim, -0.25)
-- (ringtone, 0.43)
-- (tone, 0.27)
-- (you, -0.27)
-
-# 解释：
-
-- 权重绝对值大 → 该词对分类决策影响大。
-- 正权重（如 ringtone, tone）→ 倾向于预测为 class 1（这里是 ringtone 类）。
-- 负权重（如 are, claim, you）→ 倾向于预测为 class 0（非 ringtone 类）。
-
-# 这体现了 logistic regression 的一个优点：<b>线性模型的可解释性（interpretability）</b>。
-
----
-
-### Back to Inference and Retrieval (3)：新查询 q1, q2
-
-# 给出两个新的 query：
-
-- <b>q1：</b>
-
-> # "please call our customer service representative on 08001696031 between 10am-9pm as you have won a guaranteed £1000 cash or £5000 prize"
-
-- <b>q2：</b>
-
-> # "get the official england poly ringtone or colour flag on yer mobile for tonights game! text tone or flag to 84199. optout txt eng stop box39822 w111wx £1.50"
-
-# <b>步骤：</b>
-
-1. 使用之前的 dictionary（词典）对 q1, q2 进行 vectorization（向量化），得到：
-    - ( q_1 \in \mathbb{R}^{69} )
-    - ( q_2 \in \mathbb{R}^{69} )
-    - 第一维为 1（bias term）
-
-2. 使用训练好的 ( w ) 计算：
-
-# [ p_1 = \sigma(w^T q_1), \quad p_2 = \sigma(w^T q_2) ]
-
-# PPT 给出的结果：
-
-- ( \sigma(w^T q_1) = 0.26 )
-- ( \sigma(w^T q_2) = 0.65 )
-
-# 解释：
-
-- 这两个概率表示“属于 class 1（ringtone 类）”的概率。
-- q1：0.26 → 更像非 ringtone 类（class 0）
-- q2：0.65 → 更像 ringtone 类（class 1）
-
-# 这展示了 logistic regression 在文本分类 / 信息检索中的实际推理过程。
-
----
-
-## 总结：这份 PPT 的核心知识结构
-
-1. <b>Learning systems：</b> 自适应系统，通过数据/环境交互调整内部参数。
-2. <b>Learning paradigms：</b>
-    - 按监督：supervised, semi-supervised, unsupervised, self-supervised, reinforcement learning
-    - 按过程：active learning, curriculum learning, transfer learning, online learning
-
-3. <b>Workflow：</b> Data Acquisition → Data Processing → Modeling → Output Utilization
-4. <b>Learning cycle：</b> Observation → Acting → Evaluation → Update → Consolidation
-5. <b>Optimization：</b> 学习 = 优化目标函数；不同规模/性质用不同优化算法。
-6. <b>Generalization：</b> overfitting vs underfitting 及其应对策略。
-7. <b>Common tasks：</b> classification, regression, clustering, dimensionality reduction, ranking, anomaly detection, association rule learning, reinforcement learning, generative modeling。
-8. <b>Linear classifier：</b> 线性决策边界，二分类，重写为 ( w^T \tilde{x} ) 形式。
-9. <b>Evaluation metrics：</b> confusion matrix, accuracy, precision, recall, F1。
-10. <b>Logistic Regression：</b>
-    - 使用 sigmoid 将线性组合映射为概率；
-    - 通过 likelihood / log-likelihood 建立优化目标；
-    - 得到 cross-entropy loss；
-    - 用 gradient descent 优化，梯度形式为 ( -X^T (y - \sigma(Xw)) )。
-
-11. <b>Text classification example：</b>
-    - 用 logistic regression 权重解释词的重要性；
-    - 对新 query 计算概率，完成推理。
-
-# 
-## Deep Learning
-
-Logistics regression
+## <b>总结</b>
+
+这份讲解文档涵盖了 PPT 中的全部内容，并按照逻辑顺序重新组织为：
+
+1. 学习系统基础  
+2. 学习范式  
+3. 工作流程与学习循环  
+4. 优化与泛化  
+5. 常见任务  
+6. 线性分类器  
+7. 分类评估指标  
+8. Logistic Regression 的完整推导  
+9. 文本分类案例  
+    
+[预测试卷part 4](/QRiFwuy0liWXaGk5KDqcgG4dnYf/O1qawgEaMiZ5t4ku4T9czdAynj0)
 

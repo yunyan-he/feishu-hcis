@@ -73,7 +73,7 @@ sidebar_position: 7
     - 预测<b>数值型</b>变量numerical values
     - 示例：customer lifetime value prediction（客户生命周期价值预测）
 
-# Affinity Mining I
+# √Affinity Mining I
 
 ## Recap：数据挖掘基础回顾
 
@@ -387,7 +387,7 @@ FP-Growth 通过：
 
 [预测试卷](/QQqNwziPmiYyFBknLftcE8vWnLb/LoWWwmgXLiLtHgk1uHlcXEz3nwb)
 
-# Affinity Mining II
+# √Affinity Mining II
 
 ## ⭐ 章节结构总览
 
@@ -773,29 +773,17 @@ $$G = \{(a_j, q_j)\}$$
 
 - 单个项的效用：
 
-$$
-
-u(a_j, T_i) = v_j \cdot q_j
-
-$$
+$$u(a_j, T_i) = v_j \cdot q_j$$
 
 - itemset 的效用：
-    
-$$
 
-u(B, T_i) = \sum_{a_j \in B} u(a_j, T_i)
-
-$$
+$$u(B, T_i) = \sum_{a_j \in B} u(a_j, T_i)$$
 
 - 数据库中的总效用：
-    
-$$
 
-u(B, T) = \sum_{T_i \supseteq B} u(B, T_i)
+$$u(B, T) = \sum_{T_i \supseteq B} u(B, T_i)$$
 
-$$
-
-- 若 $$u(B, T) \ge U_{\min}$$，则 B 为高效用项集（HUI）
+- 若 $u(B, T) \ge U_{\min}$，则 B 为高效用项集（HUI）
     
 ---
 
@@ -803,19 +791,11 @@ $$
 
 - 每个 transaction 的权重：
     
-$$
-
-w_i = \sum_{a_j \in T_i} u(a_j, T_i)
-
-$$
+$$w_i = \sum_{a_j \in T_i} u(a_j, T_i)$$
 
 - TWU 定义：
     
-$$
-
-TWU(B) = \sum_{T_i \supseteq B} w_i
-
-$$
+$$TWU(B) = \sum_{T_i \supseteq B} w_i$$
 
 - TWU 的 downward closure 性质：
     
@@ -858,47 +838,31 @@ $$
 
 ### Neighborhood-oriented CF（邻域式）
 
-- 构建 item-user 矩阵 $$F \in \mathbb{R}^{m \times n}$$
-- 对用户 $$u$$，找出最相似的邻居用户集合 $$B(u)$$
-- 使用加权平均预测用户对 item $$j$$ 的偏好：
+- 构建 item-user 矩阵 $F \in \mathbb{R}^{m \times n}$
+- 对用户 u，找出最相似的邻居用户集合 B(u)
+- 使用加权平均预测用户对 item j 的偏好：
     
-$$
-
-f_{ju} = \frac{\sum_{b \in B(u)} \text{sim}(f_u, f_b) \cdot f_{jb}}{\sum_{b \in B(u)} \text{sim}(f_u, f_b)}
-
-$$
+$$f_{ju} = \frac{\sum_{b \in B(u)} \text{sim}(f_u, f_b) \cdot f_{jb}}{\sum_{b \in B(u)} \text{sim}(f_u, f_b)}$$
 
 - 相似度常用 cosine similarity：
-    
-$$
 
-\text{cos}(a, b) = \frac{a^T b}{\|a\| \cdot \|b\|}
-
-$$
+$$\text{cos}(a, b) = \frac{a^T b}{\|a\| \cdot \|b\|}$$
 
 ---
 
 ### Model-oriented CF（模型式）
 
-- 使用矩阵分解：$$F \approx CP^T$$
-    - $$C \in \mathbb{R}^{m \times k}$$：item factors  
-    - $$P \in \mathbb{R}^{n \times k}$$：user factors
+- 使用矩阵分解：$F \approx CP^T$
+    - $C \in \mathbb{R}^{m \times k}$：item factors  
+    - $P \in \mathbb{R}^{n \times k}$：user factors
         
-- 对用户 $$u$$，推荐集合为：
+- 对用户 u，推荐集合为：
     
-$$
-
-D_u = \{j \mid f_{ju} \text{ 未观察}\}
-
-$$
+$$D_u = \{j \mid f_{ju} \text{ 未观察}\}$$
 
 - 得分计算：
     
-$$
-
-\hat{f}_{ju} = C_j \cdot P_u
-
-$$
+$$\hat{f}_{ju} = C_j \cdot P_u$$
 
 - 可选：在 latent space 中做 user-kNN
     
@@ -942,20 +906,16 @@ $$
 
 ### 基本形式
 
-- 数据矩阵 $$X \in \mathbb{R}^{m \times n}$$
+- 数据矩阵 $X \in \mathbb{R}^{m \times n}$
 - 分解为：
     
-$$
+$$X \approx CP^T$$
 
-X \approx CP^T
-
-$$
-
-- 每个样本 $$x_i \approx C p_i$$
+- 每个样本 $x_i \approx C p_i$
     
 - 优点：
-        - 降维：每个样本从 $$m$$ 维变为 $$k$$ 维  
-    - 压缩：存储从 $$O(mn)$$ 降为 $$O(k(m+n))$$
+        - 降维：每个样本从 m 维变为 k 维  
+    - 压缩：存储从 O(mn) 降为 O(k(m+n))
         
 ---
 
@@ -974,11 +934,7 @@ $$
 
 - 当一个因子固定时，有闭式解：
     
-$$
-
-C = X P (P^T P)^{-1},\quad P = X^T C (C^T C)^{-1}
-
-$$
+$$C = X P (P^T P)^{-1},\quad P = X^T C (C^T C)^{-1}$$
 
 - RMRMF 算法：
     
@@ -994,96 +950,60 @@ $$
 
 给定一个矩阵  
 
-$$
-
-X \in \mathbb{R}^{m \times n}
-
-$$  
+$$X \in \mathbb{R}^{m \times n}$$
 
 它可以被唯一分解为：
 
-$$
-
-X = U S V^T
-
-$$
+$$X = U S V^T$$
 
 其中：
 
-- <b>$$U \in \mathbb{R}^{m \times m}$$</b>：左奇异向量矩阵，列向量正交，满足
+- $U \in \mathbb{R}^{m \times m}$：左奇异向量矩阵，列向量正交，满足
 
-$$
+$$U^T U = I_m$$
 
-U^T U = I_m
+- $V \in \mathbb{R}^{n \times n}$：右奇异向量矩阵，列向量正交，满足
 
-$$
+$$V^T V = I_n$$
 
-- <b>$$V \in \mathbb{R}^{n \times n}$$</b>：右奇异向量矩阵，列向量正交，满足
+- $S \in \mathbb{R}^{m \times n}$：对角矩阵（主对角线为非负奇异值）
 
-$$
+$$S = \text{diag}(\sigma_1, \sigma_2, \dots, \sigma_r),\quad \sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r \ge 0$$
 
-V^T V = I_n
-
-$$
-
-- <b>$$S \in \mathbb{R}^{m \times n}$$</b>：对角矩阵（主对角线为非负奇异值）
-
-$$
-
-S = \text{diag}(\sigma_1, \sigma_2, \dots, \sigma_r),\quad \sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r \ge 0
-
-$$
-
-这里的 $$\sigma_i$$ 就是奇异值（singular values）。
+这里的 $\sigma_i$ 就是奇异值（singular values）。
 
 ---
 
 ### 截断 SVD（Truncated SVD）
 
-在推荐系统 / 潜在模式挖掘中，我们通常不需要完整秩，而是选前 $$k$$ 个奇异值：
+在推荐系统 / 潜在模式挖掘中，我们通常不需要完整秩，而是选前 k 个奇异值：
 
-- 取前 $$k$$ 个奇异值和对应的奇异向量：
+- 取前k个奇异值和对应的奇异向量：
 
-$$
-
-X \approx \tilde{U} S_k \tilde{V}^T
-
-$$
+$$X \approx \tilde{U} S_k \tilde{V}^T$$
 
 其中：
 - $$\tilde{U} \in \mathbb{R}^{m \times k}$$
 - $$\tilde{V} \in \mathbb{R}^{n \times k}$$
-- $$S_k \in \mathbb{R}^{k \times k}$$ 为前 $$k$$ 个奇异值构成的对角矩阵
+- $S_k \in \mathbb{R}^{k \times k}$为前 k 个奇异值构成的对角矩阵
     
-为了和矩阵分解 $$X \approx C P^T$$ 对齐，可以设：
+为了和矩阵分解 $X \approx C P^T$ 对齐，可以设：
 
-$$
-
-C = \tilde{U} S_k^{1/2},\quad P = \tilde{V} S_k^{1/2}
-
-$$
+$$C = \tilde{U} S_k^{1/2},\quad P = \tilde{V} S_k^{1/2}$$
 
 这样就得到：
 
-$$
-
-X \approx C P^T
-
-$$
+$$X \approx C P^T$$
 
 ---
 
 ### RRSS（Relative Residual Sum of Squares）
 
-SVD 的一个重要优点是可以用奇异值直接衡量“用前 $$k$$ 个因子重构的好坏”。
+SVD 的一个重要优点是可以用奇异值直接衡量“用前 k 个因子重构的好坏”。
 
 定义：
 
-$$
-
-RRSS(k) = \frac{\sum_{i = k+1}^{m} \sigma_i^2}{\sum_{i = 1}^{m} \sigma_i^2}
-
-$$
+$$RRSS(k) = \frac{\sum_{i = k+1}^{m} \sigma_i^2}{\sum_{i = 1}^{m} \sigma_i^2}$$
 
 含义：
 
@@ -1106,12 +1026,12 @@ $$
 1. 原始矩阵 X（0/1）  
 2. 用不同 k（1,2,3,4,5,6）重构后的近似矩阵  
 3. 对应的 RRSS 值：
-    - $$k = 1$$: RRSS ≈ 0.505  
-    - $$k = 2$$: RRSS ≈ 0.169  
-    - $$k = 3$$: RRSS ≈ 0.076  
-    - $$k = 4$$: RRSS ≈ 0.033  
-    - $$k = 5$$: RRSS ≈ 0.013  
-    - $$k = 6$$: RRSS = 0.000（完美重构）
+    - k = 1: RRSS ≈ 0.505  
+    - k = 2: RRSS ≈ 0.169  
+    - k = 3: RRSS ≈ 0.076  
+    - k = 4: RRSS ≈ 0.033  
+    - k = 5: RRSS ≈ 0.013  
+    - k = 6: RRSS = 0.000（完美重构）
         
 这说明：
 

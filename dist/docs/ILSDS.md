@@ -1327,77 +1327,83 @@ PPT 对每个参数给了直观解释和常见范围：
 
 # Machine Learning
 
-## <b>引言：学习系统与机器学习</b>
+## Learning systems and machine learning 
 
-学习系统（Learning Systems）是能够根据数据或环境交互自动调整内部参数的系统。它们的目标是通过适应性机制解决复杂问题。
+### <b>引言：学习系统与机器学习</b>
 
-学习系统的特点包括：
+学习系统（Learning Systems）是能够根据数据或环境交互自动调整内部参数的系统。它们的目标是通过适应性机制解决复杂问题。Learning systems: <b>Adaptive systems</b> adjusting their <b>internal settings</b> (such as parameters or rule sets) based on data or interactions with environments to solve set of problems. 
 
-- <b>训练阶段的单次适应</b>（如传统监督学习）
-- <b>基于上下文的条件推断</b>（如序列模型）
-- <b>持续学习</b>（如在线学习）
+学习类型包括：
+
+- <b>训练阶段的单次适应</b>single adaptation in training phase （如传统监督学习）
+- <b>基于上下文的条件推断 </b>contextually with conditional inference based on temporary knowledge（如序列模型）
+- <b>持续学习</b>continously with new stream of input （如在线学习）
 - <b>处理现实世界的不确定性、高维度、多模态数据</b>
     
-现代系统常采用<b>混合式学习方法</b>，结合规则系统与数据驱动模型，以应对复杂任务。
+现代系统常采用<b>混合式学习方法</b>，结合规则系统rule and knowledge based systems与数据驱动模型data driven learning systems（deal with uncertainty, high dimensionality, multimodality），以应对复杂任务。
 
 ---
 
-## <b>学习范式（Learning Paradigms）</b>
+### <b>学习范式（Learning Paradigms）</b>
 
 学习范式分为两大类：<b>监督方式</b>与<b>过程方式</b>。
 
-### <b>监督方式（Supervision-based Paradigms）</b>
+#### <b>监督方式（Supervision-based Paradigms）</b>
 
-#### <b> Supervised Learning（监督学习）</b>
+1. <b>Supervised Learning（监督学习）</b>
 
-- 使用<b>带标签数据</b>训练模型
-- 目标：学习输入到输出的映射
+- 使用<b>带标签数据</b>训练模型 using labeled datapoints
+- 目标：学习输入到输出的映射 objective：learning to map inputs to outputs.
 - 典型任务：分类、回归
 
-#### <b>Semi-supervised Learning（半监督学习）</b>
+1. <b>Semi-supervised Learning（半监督学习）</b>
 
-- 少量<b>金标签（gold labels）</b> + 大量<b>未标注数据</b>
-- 先用金标签训练，再利用模型生成的**银标签（silver labels）**继续训练
+- 少量<b>金标签（gold labels 标注数据）</b> + 大量<b>未标注数据</b>
+- 先用金标签训练，再利用模型生成的<b>银标签（silver labels）</b> 继续训练
 
-#### <b>Unsupervised Learning（无监督学习）</b>
+1. <b>Unsupervised Learning（无监督学习）</b>
 
 - 使用<b>无标签数据</b>
 - 目标：发现模式、结构、表示
-- 典型任务：聚类、降维
+- 典型任务：pattern identification（比如聚类clusting） learning useful representations （降维是其中一个方法）
 
-#### <b>Self-supervised Learning（自监督学习）</b>
+1. <b>Self-supervised Learning（自监督学习）</b>
 
-- 从无标签数据中<b>自动构造训练任务</b>
+- 从无标签数据中<b>自动构造训练任务 </b>objective： <b>creating labels</b> from dataset automatically
 - 常用于预训练（如语言模型）
 
-#### <b>Reinforcement Learning（强化学习）</b>
+1. <b>Reinforcement Learning（强化学习）</b>
 
-- Agent 与环境交互，通过奖励学习策略（policy）
+- Agent 与环境交互，通过奖励学习策略（policy  the strategy to select action is called policy.）
 - 目标：最大化长期回报
 
 ---
 
-### <b>过程方式（Process-based Paradigms）</b>
+#### <b>过程方式（Process-based Paradigms）</b>
 
-#### <b>Active Learning（主动学习）</b>
+1. <b>Active Learning（主动学习）</b>
 
-- 模型主动选择最有价值的数据点进行标注
+- 在训练过程中选择某些数据点，以提高特定任务的性能。
+    - 模型主动选择最有价值的数据点进行标注（copilot解释）
 
-#### <b>Curriculum Learning（课程学习）</b>
+1. <b>Curriculum Learning（课程学习）</b>
 
-- 按难度排序训练样本，提高学习效率
+- 处理示例的呈现顺序order presented examples，以最大化模型在特定任务上的性能。
+    - 按难度排序训练样本，提高学习效率
 
-#### <b>Transfer Learning（迁移学习）</b>
+1. <b>Transfer Learning（迁移学习）</b>
 
-- 将已学知识迁移到新任务
+- 首先为特定任务集训练模型，然后将（部分）训练好的模型迁移到解决不同的新任务。
+    - 将已学知识迁移到新任务
 
-#### <b>Online Learning（在线学习）</b>
+1. <b>Online Learning（在线学习）</b>
 
-- 模型持续更新，适应数据流
-    
+- 持续训练模型。
+    - 模型持续更新，适应数据流
+        
 ---
 
-## <b>构建学习系统的工作流程</b>
+### <b>构建学习系统的工作流程</b>
 
 一个完整的学习系统通常包含四个阶段：
 
@@ -1405,10 +1411,12 @@ PPT 对每个参数给了直观解释和常见范围：
 2. <b>Data Processing（数据处理）</b>
 3. <b>Modeling（建模）</b>
 4. <b>Output Utilization（输出利用）</b>
-    
+
+<img src="/assets/Ax09bfad5oRKjDxzlWfcKXiinvd.png" src-width="558" src-height="452" align="center"/>
+
 ---
 
-## <b>学习系统的典型循环（Learning Cycle）</b>
+### <b>学习系统的典型循环（Learning Cycle）</b>
 
 学习过程通常遵循以下循环：
 
@@ -1417,30 +1425,34 @@ PPT 对每个参数给了直观解释和常见范围：
 3. <b>Evaluation（评估）</b>
 4. <b>Update（更新）</b>
 5. <b>Consolidation（巩固）</b>
-    
+
+<img src="/assets/C1y8buXIfoSa1kxTcZJcXP5lnnf.png" src-width="672" src-height="150" align="center"/>
+
 ---
 
-## <b>优化在学习系统中的作用</b>
+### <b>优化在学习系统中的作用</b>
 
-给定训练集 $D_{\text{Train}}$，学习过程可视为求解：
+给定训练集 $D_{\text{Train}}$，学习过程可视为求解 
 
-$$w^* = \arg\min_w f(w \mid D_{\text{Train}})$$
+<b>the notion of learning boils down to solving an optimization problem </b>直译是 “学习的本质归结为求解一个优化问题”
+
+$w^* = \arg\min_w f(w \mid D_{\text{Train}})$：<b>不返回函数的最小值，而是返回能让函数取到最小值的那个（或那组）自变量</b> W。
 
 并要求模型在未见数据（如 $D_{\text{Test}}$）上具有良好泛化能力。
 
-### <b>常见优化方法</b>
+<b>常见优化方法</b>
 
 <table>
 <colgroup>
-<col width="200"/>
+<col width="234"/>
 <col width="200"/>
 </colgroup>
 <tbody>
 <tr><td><p>场景</p></td><td><p>方法</p></td></tr>
-<tr><td><p>小规模、凸优化</p></td><td><p>Gradient Descent</p></td></tr>
-<tr><td><p>大规模、凸/非凸</p></td><td><p>Stochastic Gradient Descent (SGD)</p></td></tr>
-<tr><td><p>超大规模深度学习</p></td><td><p>Adam / Adagrad</p></td></tr>
-<tr><td><p>不可微目标</p></td><td><p>零阶优化（Gradient-free）</p></td></tr>
+<tr><td><p>小规模Small scale datasets、凸优化convex objective functions</p></td><td><p>Gradient Descent</p></td></tr>
+<tr><td><p>大规模、凸/非凸<br/>convex and nonconvex objective<br/>functions</p></td><td><p>Stochastic Gradient Descent (SGD)</p></td></tr>
+<tr><td><p>超大规模深度学习 Very large-scale deep learning model training</p></td><td><p>Adam / Adagrad</p></td></tr>
+<tr><td><p>Small to mid-range dataset/不可微 models with nondifferentiable<br/>objectives</p></td><td><p>零阶优化（Gradient-free）</p></td></tr>
 </tbody>
 </table>
 
@@ -1448,84 +1460,117 @@ $$w^* = \arg\min_w f(w \mid D_{\text{Train}})$$
 
 - 局部最优
 - 可微性问题
-- 超参数调优
-- 收敛性
-- 模型偏差
+- 超参数调优 hyperparameter tuning
+- 收敛性 convergence
+- 模型偏差 model bias
     
 ---
 
-## <b>泛化能力：过拟合与欠拟合</b>
+### <b>泛化能力：过拟合与欠拟合</b>
 
-### <b>Overfitting（过拟合）</b>
+#### <b>Overfitting（过拟合）</b>
 
-- 训练集表现好，但测试集表现差
+- 训练集表现好，但测试集表现差 well training and poor validation/test performance
 - 原因：模型过于复杂，学习到噪声
+- increased model <b>complexity</b> leading to learning the <b>noise</b> and <b>irrelevant patterns</b>
+
+<b>解决方法：</b>
+
+- 交叉验证 cross-validation
+- 正则化regularization
+- adjusting optimization processes (早停early stopping、噪声注入 noise injection）
+- 集成学习 building ensemble method
+- 数据增强 data augmentation（synthetic or extend real observation）
+- 简化模型结构 simpler architectures
+
+#### <b>Underfitting（欠拟合）</b>
+
+- 训练集和测试集都表现差 poor training and validation/test performance
+- 原因：模型过于简单 the model is too simple failing to capture useful patterns
     
 <b>解决方法：</b>
 
-- 交叉验证
-- 正则化
-- 早停（early stopping）
-- 噪声注入
-- 集成学习
-- 数据增强
-- 简化模型结构
-    
-### <b>Underfitting（欠拟合）</b>
+- 增加模型复杂度 Increasing the model complexity
+- reducing certain overfitting measures 减少过拟合措施
 
-- 训练集和测试集都表现差
-- 原因：模型过于简单
-    
-<b>解决方法：</b>
-
-- 增加模型复杂度
-- 减少正则化
-    
 ---
 
-## <b>常见机器学习任务</b>
+## Typical tasks 
 
-### <b>监督任务</b>
+### <b>常见机器学习任务</b>
+
+#### <b>监督任务</b>
 
 - <b>Classification（分类）</b>
+    - Assigning a given <b>data entity</b> to a <b>predefined class</b>, where the number of classes is usually fixed (e.g.predicting customer churn)
+    - 将给定的数据实体分配到一个预定义的类别中，其中类别的数量通常是固定的（例如：
+
 - <b>Regression（回归）</b>
+    - Assigning a <b>numerical</b> value (e.g. Predicting customer spending).
+    - 分配一个数值（例如，预测客户支出）。
     
-### <b>无监督任务</b>
+#### <b>无监督任务</b>
 
 - <b>Clustering（聚类）</b>
+    - putting <b>unlabeled</b> data into similar groups (e.g. For customer profiling)
+    - 将未标记数据放入相似组（例如用于客户画像）。
+
 - <b>Dimensionality Reduction（降维）</b>
-    
-### <b>其他任务</b>
+    - reducing data features to <b>remove noise </b>and <b>preserve structure</b> (e.g. random projection, matrix factorization and etc)
+    - 减少数据特征以去除噪声并保留结构（例如随机投影、矩阵分解等）。
+
+- <b>Association Rule Learning（关联规则）</b>
+    - Learning how certain relationships between entities (e.g. for learning customer item preferences).
+    - 学习实体之间的特定关系（例如，用于学习客户物品偏好）。
+
+#### <b>其他任务 </b>
+
+分类方式更灵活，部分属于独立的学习范式，部分则会融合多种学习模式。
 
 - <b>Ranking（排序）</b>
+    - ordering entities based on their relevance for specific tasks (e.g. movie recommender systems).
+    - 根据特定任务的相关性对实体进行排序（例如电影推荐系统）。
+
 - <b>Anomaly Detection（异常检测）</b>
-- <b>Association Rule Learning（关联规则）</b>
+    - identfiying <b>unusual</b> patterns or entities based on a given dataset (e.g. to detect fraudulant transactions).
+    - 基于给定数据集识别异常模式或实体（例如，检测欺诈交易）。
+
 - <b>Reinforcement Learning（强化学习）</b>
+    - <b>Reward</b> guided trial-and-error environment exploration to learn to make decisions (e.g. Learning to play a board game).
+    - 通过奖励引导的试错环境探索来学习做决策（例如，学习玩棋盘游戏）。
+
 - <b>Generative Modeling（生成建模）</b>
     
 ---
 
-## <b>线性分类器（Linear Classifier）</b>
+## Logistic Regression
 
-线性分类器定义为：
+### <b>线性分类器（Linear Classifier）</b>
+
+线性分类器Linear classification function定义为：
 
 $$c(x) = v^T x + v_0$$
 
 - 若 $c(x) > 0$ → 类别 $C_1$
 - 若 $c(x) < 0$ → 类别 $C_2$
-    
+
 可写为：
 
 $$c(x) = w^T \tilde{x}$$
 
 其中：
 
-- $$w = [v_0, v]^T$$
-- $$\tilde{x} = [1, x]^T$$
-    
+- $$w^T=([v0,]⊕v)^T$$
+- $$\tilde{x} = ([1,]⊕ x)^T$$
+    $\oplus$ 表示<b>拼接算子</b>（向量拼接操作）。
+
+<img src="/assets/SQjHbk0KKobypGxhJhwcVuignrd.png" src-width="794" src-height="482" align="center"/>
+
+这里用了距离公式 
+
 ---
 
-## <b>分类性能评估指标</b>
+### <b>分类性能评估指标</b>
 
 基于混淆矩阵：
 
@@ -1548,46 +1593,64 @@ $$c(x) = w^T \tilde{x}$$
 
 $$\frac{TP + TN}{TP + TN + FP + FN}$$
 
-- <b>Recall</b>
+- <b>Recall = Acc+</b>
 
-$$\frac{TP}{TP + FN}$$
+$\frac{TP}{TP + FN}$ 真正的true 有多少被预测对了 遗漏少则recall高
 
 - <b>Precision</b>
 
-$$\frac{TP}{TP + FP}$$
+$\frac{TP}{TP + FP}$ 被预测的true里面多少是true  垃圾邮件过滤 → 更看重 Precision（不能误杀正常邮件）
 
 - <b>F1-score</b>
 
 $$F_1 = \frac{2PR}{P + R}$$
 
+$$F = \frac{(K^2 + 1) · P · R}{K^2P + R}$$
+
 ---
 
-## <b>Logistic Regression（逻辑回归）</b>
+### <b>Logistic Regression（逻辑回归）</b>
+
+A very popular probabilistic
+
+classification model to map
+
+datapoints into discrete
+
+classes
+
+一种非常流行的概率分类模型，用于将数据点映射到离散类别中。
 
 逻辑回归是一个<b>概率二分类模型</b>。
 
-### <b>Sigmoid 函数</b>
+#### <b>Sigmoid 函数</b>
 
 $$\sigma(s) = \frac{1}{1 + e^{-s}}$$
 
 输出范围 $[0,1]$，可解释为概率。
 
-### <b>模型定义</b>
+#### <b>模型定义</b>
 
 给定数据：
 
-- $$x_i \in \mathbb{R}^m$$
-- $$y_i \in \{0,1\}$$
+- $x_i \in \mathbb{R}^m$i from 1-n . n个数据点 每个点m维度
+- $y_i \in \{0,1\}$n个输出 一个x对应一个y
     
 预测：
 
-$$p_i = \sigma(w^T x_i)$$
+$p_i = \sigma(w^T x_i)$ 这是The probability of every $x_i$
 
-### <b>似然与损失函数</b>
+belonging to class 1
+
+the probability of $x_i$
+
+belonging to class 0 is $1 − p_i$
+
+#### <b>似然与损失函数</b>
 
 单样本似然：
 
-$$q_i = p_i^{y_i} (1 - p_i)^{1 - y_i}$$
+$q_i = p_i^{y_i} (1 - p_i)^{1 - y_i}$ 意思是 pi是sigmoid函数输出值。如果y是1 就保留pi y是0就保留1-pi。相相当一个选择器
 
 整体似然：
 
@@ -1601,7 +1664,7 @@ $$-\log Q = -\sum_i \left[ y_i \log p_i + (1 - y_i)\log(1 - p_i) \right]$$
 
 ---
 
-## <b>Logistic Regression 的优化：梯度下降</b>
+### <b>Logistic Regression 的优化：梯度下降</b>
 
 目标：
 
@@ -1659,5 +1722,736 @@ $$w \leftarrow w - \eta g$$
 8. Logistic Regression 的完整推导  
 9. 文本分类案例  
     
-[预测试卷part 4](/QRiFwuy0liWXaGk5KDqcgG4dnYf/O1qawgEaMiZ5t4ku4T9czdAynj0)
+## [预测试卷part 4](/QRiFwuy0liWXaGk5KDqcgG4dnYf/O1qawgEaMiZ5t4ku4T9czdAynj0)
+
+## 
+# Plus Advanced Optimization
+
+# Plus NLP core
+
+# DeepLearning
+
+## Deep Learning
+
+### Definition & Core Idea
+
+<b>Deep Learning</b>：  
+
+A subfield of machine learning that focuses on <b>learning complex representations</b> from data <b>using neural network based models</b>.
+
+- <b>Key phrases for exam:</b>
+    - <b>representation learning</b>：表示学习  
+    - <b>neural network based models</b>：基于神经网络的模型  
+    - <b>complex representations</b>：复杂表示  
+        
+<b>What makes deep learning special?</b>
+
+- <b>Scalable</b>：可以通过增加层数、宽度、数据量来提升能力  
+- <b>Flexible</b>：可以适配不同任务（classification, regression, generation, sequence modeling, graph learning, etc.）  
+- <b>Trainable</b>：通过 gradient-based optimization（基于梯度的优化）自动学习参数  
+- <b>Knowledge encoding via learned representations</b>：通过学习到的表示来编码知识，而不是手工特征工程  
+    
+### Neural Networks Landscape
+
+PPT 提到的神经网络类型：
+
+- <b>Feed-Forward Neural Networks (FNN)</b>：前馈神经网络，最基础的结构，用于一般的回归/分类  
+- <b>Recurrent Neural Networks (RNN)</b>：处理序列数据（时间序列、文本等）  
+- <b>Convolutional Neural Networks (CNN)</b>：处理具有空间结构的数据（图像、网格）  
+- <b>Transformers</b>：基于 attention 的架构，广泛用于 NLP、Vision 等  
+- <b>Graph Neural Networks (GNN)</b>：处理图结构数据  
+    
+<b>考试用一句话总结：</b>  
+
+> Deep learning models are universal function approximators that can learn hierarchical representations from data.
+
+---
+
+## Perceptrons
+
+Perceptron 是神经网络的最基本单元（computational unit）。
+
+### Perceptron Structure
+
+输入向量：$h = (h_0, h_1, \dots, h_q) \in \mathbb{R}^{q+1}$
+
+其中：
+
+- $h_0 = 1$：bias term（偏置项）
+- 其余$h_1, \dots, h_q$：真实输入特征
+
+权重向量：
+
+$$w = (w_0, w_1, \dots, w_q)$$
+
+#### Propagation（传播）
+
+$$p = \sum_{s=0}^{q} w_s h_s = w^T h$$
+
+这是一个线性组合（linear combination）。
+
+#### Activation（激活）
+
+经典感知机使用 sign 函数：$f = \text{sign}(p) =
+\begin{cases}
+1 & p \ge 0 \\
+0 & p < 0
+\end{cases}$
+
+<b>直观理解：</b>
+
+- Perceptron 就是在做：
+
+$$\text{if } w^T h \ge 0 \Rightarrow \text{class 1, else class 0}$$
+
+- 本质是一个 <b>linear classifier（线性分类器）</b>，决策边界是一个超平面。
+    
+---
+
+## Differentiable Activations（可微激活函数）
+
+为了使用 gradient descent（梯度下降）训练网络，我们需要激活函数是可微的。
+
+### Sigmoid Activation
+
+定义：$f(p) = \sigma(p) = \frac{1}{1 + e^{-p}}$
+
+导数：
+
+$$\sigma'(p) = \sigma(p)(1 - \sigma(p))$$
+
+<b>推导解释：</b>
+
+1. 设
+
+$$\sigma(p) = \frac{1}{1 + e^{-p}}$$
+
+1. 对$p$求导：
+
+$$\sigma'(p) = \frac{d}{dp} (1 + e^{-p})^{-1}
+= -(1 + e^{-p})^{-2} \cdot (-e^{-p})
+= \frac{e^{-p}}{(1 + e^{-p})^2}$$
+
+1. 注意到：
+
+$$\sigma(p) = \frac{1}{1 + e^{-p}},\quad 1 - \sigma(p) = \frac{e^{-p}}{1 + e^{-p}}$$
+
+所以：
+
+$$\sigma(p)(1 - \sigma(p)) = \frac{1}{1 + e^{-p}} \cdot \frac{e^{-p}}{1 + e^{-p}}
+= \frac{e^{-p}}{(1 + e^{-p})^2}$$
+
+与上式一致。
+
+<b>考试要点：</b>
+
+- 记住：$\sigma'(p) = \sigma(p)(1 - \sigma(p))$
+- 这是 backprop 中非常常用的公式。
+    
+---
+
+## Feed-forward Neural Networks (FNN)
+
+### Basic Structure
+
+给定数据集：
+
+$$X = \{x_i \in \mathbb{R}^m \mid i = 1, \dots, n\}$$
+
+$$y = \{y_i \in \mathbb{R}^r \mid i = 1, \dots, n\}$$
+
+网络由多层组成：
+
+- Input layer  
+- One or more Hidden layers  
+- Output layer  
+    
+每个 neuron 执行：
+
+$$\text{output}_b = f_a(f_p(h_b, W_b))$$
+
+其中：
+
+- $f_p$：propagation function（线性部分）
+- $f_a$：activation function（非线性部分）
+    
+### Typical Choices
+
+- <b>Input layer</b>：只是分发
+    - $f_p(h_b, 1) = h_b$（不做线性变换）
+    - $f_a(q) = q$（identity activation）
+        
+- <b>Hidden / Output layers</b>：
+    - $$f_p(h_b, W_b) = h_b W_b$$
+    - $f_a(q)$可以是：
+        - $$\tanh(q)$$
+        - $$\sigma(q) = \frac{1}{1 + e^{-q}}$$
+        - identity（回归任务）
+            
+<b>直观理解：</b>
+
+- FNN 就是在做一系列线性变换 + 非线性变换的组合：
+
+$$y = f_L(W_L f_{L-1}(W_{L-1} \dots f_1(W_1 x)))$$
+
+- 通过多层非线性组合，FNN 可以逼近任意连续函数（universal function approximator）。
+    
+---
+
+## Training Feed-forward Neural Networks
+
+### Objective Function
+
+以回归任务为例，使用 Residual Sum of Squares (RSS)：
+
+$$E_{RSS} = \frac{1}{2} \sum_{i=1}^n \|y_i - \hat{y}_i\|^2$$
+
+其中：
+
+- $y_i$：真实标签  
+- $\hat{y}_i$：网络输出  
+    
+### Parameterization
+
+网络参数：
+
+$$w = \{W_1, W_2, \dots, W_L\}$$
+
+有时会将所有权重向量化：
+
+$$s = \text{vec}(W_1) \oplus \text{vec}(W_2) \oplus \dots \oplus \text{vec}(W_L)$$
+
+### Optimization Methods
+
+- <b>Stochastic Approximation</b>（如 SPSA）  
+- <b>Gradient Descent</b>（需要计算$\frac{\partial E}{\partial W}$）  
+    - 由于网络是多层非线性，梯度计算通过 <b>Backpropagation</b> 完成。
+        
+---
+
+## Backpropagation Algorithm
+
+这是 PPT 的重点之一，推导要清楚。
+
+### Setup
+
+对单个样本$z_i = (x_i, y_i)$，网络输出$\hat{y}_i$。
+
+误差函数（以平方误差为例）：
+
+$$E_i = \frac{1}{2} \sum_{j=1}^r (y_{ij} - \hat{y}_{ij})^2$$
+
+目标：对每个权重$W_{ab}$计算：
+
+$$\frac{\partial E_i}{\partial W_{ab}}$$
+
+并更新：
+
+$$W_{ab} \leftarrow W_{ab} - \eta \frac{\partial E_i}{\partial W_{ab}}$$
+
+### Propagation Value of Neuron a
+
+对 neuron a：
+
+$$p_a = \sum_s W_{as} h_s$$
+
+其中：
+
+- $h_s$：来自前一层 neuron s 的输出  
+- $W_{as}$：从 s 到 a 的权重  
+    
+输出：
+
+$$f_a = \phi(p_a)$$
+
+### Gradient Decomposition
+
+利用链式法则：
+
+$$\frac{\partial E_i}{\partial W_{ab}}
+= \frac{\partial E_i}{\partial p_a} \cdot \frac{\partial p_a}{\partial W_{ab}}$$
+
+注意：
+
+$$p_a = \sum_s W_{as} h_s \Rightarrow \frac{\partial p_a}{\partial W_{ab}} = h_b$$
+
+因此：
+
+$$\frac{\partial E_i}{\partial W_{ab}} = \delta_a h_b$$
+
+其中：
+
+$$\delta_a = \frac{\partial E_i}{\partial p_a}$$
+
+<b>这一步非常关键：</b>  
+
+- 所有复杂性都被压缩进$\delta_a$ 
+- 一旦知道每个 neuron 的$\delta_a$，权重梯度就是$\delta_a \cdot h_b$
+    
+---
+
+### Output Neuron Case
+
+假设 neuron a 是输出层 neuron，对应输出$\hat{y}_{ia} = f_a$，真实标签为$y_{ia}$。
+
+误差：
+
+$$E_i = \frac{1}{2} \sum_j (y_{ij} - \hat{y}_{ij})^2$$
+
+对输出 neuron a：
+
+$$\frac{\partial E_i}{\partial f_a} = f_a - y_{ia}$$
+
+又因为：
+
+$$f_a = \phi(p_a) \Rightarrow \frac{\partial f_a}{\partial p_a} = \phi'(p_a)$$
+
+所以：
+
+$$\delta_a = \frac{\partial E_i}{\partial p_a}
+= \frac{\partial E_i}{\partial f_a} \cdot \frac{\partial f_a}{\partial p_a}
+= (f_a - y_{ia}) \cdot \phi'(p_a)$$
+
+若使用 sigmoid 激活：
+
+$$\phi(p_a) = f_a,\quad \phi'(p_a) = f_a(1 - f_a)$$
+
+则：
+
+$$\delta_a = (f_a - y_{ia}) f_a (1 - f_a)$$
+
+<b>考试要点：</b>
+
+- 输出层$\delta_a$公式要熟：
+
+$$\delta_a = (f_a - y_{ia}) f_a (1 - f_a)$$
+
+---
+
+### Hidden Neuron Case
+
+现在 neuron a 是隐藏层 neuron，它不会直接出现在误差表达式中，而是通过后续 neuron 影响误差。
+
+设从 neuron a 出发的下一层 neuron 集合为：
+
+$$V = \{v_1, v_2, \dots, v_l\}$$
+
+每个$v_k$的 propagation：
+
+$$p_{v_k} = \sum_s W_{v_k s} h_s$$
+
+其中包括来自 a 的连接$W_{v_k a}$。
+
+误差对$p_a$的影响通过所有$p_{v_k}$传递：
+
+$$\delta_a = \frac{\partial E_i}{\partial p_a}
+= \sum_k \frac{\partial E_i}{\partial p_{v_k}} \cdot \frac{\partial p_{v_k}}{\partial p_a}$$
+
+注意：
+
+- $\frac{\partial E_i}{\partial p_{v_k}} = \delta_{v_k}$（这是下一层 neuron 的 delta）  
+- $p_{v_k} = \sum_s W_{v_k s} h_s$，而$h_a = f_a = \phi(p_a)$
+
+$$\frac{\partial p_{v_k}}{\partial h_a} = W_{v_k a},\quad
+\frac{\partial h_a}{\partial p_a} = \phi'(p_a)$$
+
+所以：
+
+$$\frac{\partial p_{v_k}}{\partial p_a}
+= \frac{\partial p_{v_k}}{\partial h_a} \cdot \frac{\partial h_a}{\partial p_a}
+= W_{v_k a} \cdot \phi'(p_a)$$
+
+代入：$\delta_a = \sum_k \delta_{v_k} W_{v_k a} \phi'(p_a)$
+
+若激活为 sigmoid：
+
+$$\phi'(p_a) = f_a(1 - f_a)$$
+
+则：
+
+$$\delta_a = f_a(1 - f_a) \sum_k \delta_{v_k} W_{v_k a}$$
+
+<b>考试要点：</b>
+
+- 隐藏层 delta 公式：
+
+$$\delta_a = \phi'(p_a) \sum_k \delta_{v_k} W_{v_k a}$$
+
+---
+
+### Final Weight Update Rule
+
+对任意连接$b \to a$的权重$W_{ab}$：
+
+$$\frac{\partial E_i}{\partial W_{ab}} = \delta_a h_b$$
+
+更新：
+
+$$W_{ab} \leftarrow W_{ab} - \eta \delta_a h_b$$
+
+其中：
+
+- 若 a 是输出 neuron：
+
+$$\delta_a = (f_a - y_{ia}) f_a (1 - f_a)$$
+
+- 若 a 是隐藏 neuron：
+
+$$\delta_a = f_a(1 - f_a) \sum_k \delta_{v_k} W_{v_k a}$$
+
+<b>一句话总结：</b>
+
+> Backpropagation computes gradients layer by layer from output to input using local error terms$\delta_a$, and each weight update is proportional to$\delta_a$times the input$h_b$.
+
+---
+
+## Convolutional Neural Networks (CNNs)
+
+虽然不在 agenda 标题里，但 PPT 有一大块内容，考试肯定可能考。
+
+### Motivation
+
+CNN 是一种 <b>constrained neural network</b>，专门用于学习 <b>spatial features（空间特征）</b>。
+
+优势：
+
+- <b>Less parameters</b>：参数共享（shared weights）  
+- <b>Faster to train</b>：参数少，计算更高效  
+- <b>Less data required</b>：更不容易过拟合  
+- <b>More robust to noise and overfitting</b>
+
+### Convolution Operator
+
+输入矩阵（例如图像 patch）：
+
+$$A =
+\begin{bmatrix}
+a_1 & a_2 & a_3 & a_4 \\
+a_5 & a_6 & a_7 & a_8 \\
+\vdots & & &
+\end{bmatrix}$$
+
+卷积核（kernel matrix）：
+
+$$K =
+\begin{bmatrix}
+k_1 & k_2 \\
+k_3 & k_4
+\end{bmatrix}$$
+
+滑动窗口取子块$A_i$，例如$A_1$是左上角$2 \times 2$：
+
+$$A_1 =
+\begin{bmatrix}
+a_1 & a_2 \\
+a_5 & a_6
+\end{bmatrix}$$
+
+将其向量化：
+
+$$\text{vec}(A_1),\quad \text{vec}(K)$$
+
+卷积输出（未加激活）：
+
+$$s_i = \text{vec}(A_i)^T \text{vec}(K)$$
+
+加激活：
+
+$$f_a(s_i)$$
+
+<b>直观理解：</b>
+
+- 卷积就是在不同位置上用同一个 kernel 做加权求和，提取局部模式（edges, textures, shapes）。
+    
+---
+
+### Pooling Operator
+
+Pooling 用于降维和增强不变性。
+
+#### Max Pooling
+
+例如对$2 \times 2$区域：
+
+$$\max\{a_1, a_2, a_5, a_6\}$$
+
+作用：
+
+- 保留最强响应（strongest activation）  
+- 对小的平移、噪声不敏感  
+    
+#### Mean Pooling
+
+$$\text{mean}\{a_1, a_2, a_5, a_6\}$$
+
+作用：
+
+- 平滑特征  
+- 降低噪声  
+    
+### Deep Convolutional Networks
+
+典型结构：
+
+1. Convolution  
+2. Activation  
+3. Pooling  
+4. 重复多层  
+5. Vectorization（展平）  
+6. Fully-connected layer（FNN）  
+    
+---
+
+## Recurrent Neural Networks (RNNs) & Echo State Networks (ESNs)
+
+### Why RNN?
+
+Feed-forward networks 不能直接处理序列依赖：
+
+$$y_t = f(x_1, x_2, \dots, x_t)$$
+
+RNN 通过引入 <b>hidden state</b> 来建模时间依赖。
+
+---
+
+### Echo State Networks (ESNs)
+
+ESN 是一种特殊的 RNN：
+
+- Input weights$A$：随机  
+- Reservoir weights$B$：随机  
+- Only output weights$c$are trained  
+
+#### ESN Dynamics
+
+给定序列数据：
+
+$$\{(x_1, y_1), (x_2, y_2), \dots, (x_T, y_T)\}$$
+
+状态更新：
+
+$$h_t = f_h(B h_{t-1} + A x_t)$$
+
+输出：
+
+$$\hat{y}_t = f_o(c^T h_t)$$
+
+其中：
+
+- $x_t \in \mathbb{R}^n$：输入  
+- $h_t \in \mathbb{R}^k$：reservoir state  
+- $A \in \mathbb{R}^{k \times n}$：input weights  
+- $B \in \mathbb{R}^{k \times k}$：reservoir weights  
+- $c \in \mathbb{R}^k$：output weights  
+    
+#### Training ESN
+
+若输出激活$f_o(q) = q$（线性），则训练过程：
+
+1. 随机初始化$A, B$ 
+2. 对每个时间步计算$h_t$，构造矩阵：
+
+$$G =
+\begin{bmatrix}
+h_1^T \\
+h_2^T \\
+\vdots \\
+h_T^T
+\end{bmatrix}$$
+
+1. 构造标签向量：
+
+$$y =
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_T
+\end{bmatrix}$$
+
+1. 用线性回归求解：
+
+$$c = (G^T G)^{-1} G^T y$$
+
+<b>关键点：</b>
+
+- ESN 把复杂的时间依赖交给随机的 reservoir  
+- 只训练线性 readout，训练非常快  
+
+---
+
+### ESN-based Representation Extraction
+
+给定一组时间序列：
+
+$$D = \{d_1, d_2, \dots, d_u\},\quad d_i = \{x_{i1}, x_{i2}, \dots, x_{iT_i}\}$$
+
+对每个序列$d_i$：
+
+1. 初始化$h_0 = 0$ 
+2. 对$t = 1, \dots, T_i$：
+
+$$h_t = f_h(A x_{it} + B h_{t-1})$$
+
+1. 取最终状态：
+
+$$z_i = h_{T_i}$$
+
+1. 用$\{z_i\}$作为固定维度表示，进行：
+    - classification  
+    - clustering  
+    - other downstream tasks  
+        
+---
+
+## Autoencoders (AE) & Outlier Detection
+
+### Autoencoder Basics
+
+Autoencoder 是一种 <b>neural network model for learning latent patterns</b>。
+
+目标：学习一个低维表示（latent representation），并尽可能重构输入。
+
+给定数据：
+
+$$X = \{x_i \in \mathbb{R}^m \mid i = 1, \dots, n\}$$
+
+单隐层 AE：
+
+- Encoder：
+
+$$p_i = f_1(W_1 x_i)$$
+
+- Decoder：
+
+$$\hat{x}_i = f_2(W_2 p_i)$$
+
+### Matrix Factorization Interpretation
+
+若激活函数都是 identity：
+
+$$f_1(q) = q,\quad f_2(q) = q$$
+
+则：$p_i = W_1 x_i,\quad \hat{x}_i = W_2 p_i = W_2 W_1 x_i$
+
+记：$C = W_2 W_1$
+
+则：$\hat{x}_i = C x_i$
+
+从整体上看：$X \approx C X$
+
+也可以理解为：$X \approx C P,\quad P = W_1 X$
+
+这与 <b>matrix factorization</b>（矩阵分解）非常类似。
+
+---
+
+### Autoencoders for Outlier Detection
+
+这是 PPT agenda 中明确提到的重点。
+
+<b>One-class classification setting：</b>
+
+- 用 AE 在单一“正常类”（inlier class）上训练  
+- 目标：让 AE 对 inlier 数据重构误差尽可能小  
+    
+<b>Decision principle：</b>
+
+- 对于 unseen data：
+    - 若属于 inlier class → reconstruction error 小  
+    - 若是 outlier → reconstruction error 大  
+        
+常用指标：Mean Square Error (MSE)：
+
+$$\text{MSE}(x, \hat{x}) = \frac{1}{m} \sum_{j=1}^m (x_j - \hat{x}_j)^2$$
+
+<b>决策方式示例：</b>
+
+- 设定阈值$\tau$：
+    - 若$\text{MSE}(x, \hat{x}) \le \tau$→ inlier  
+    - 若$\text{MSE}(x, \hat{x}) > \tau$→ outlier  
+        
+PPT 中的图示：
+
+- inlier points 的重构误差集中在较小范围  
+- outlier points 的误差明显偏大  
+    
+---
+
+### Autoencoders for Collaborative Filtering
+
+给定 item-user matrix：
+
+$$F \in \mathbb{R}^{m \times n}$$
+
+#### Model-oriented CF
+
+Matrix Factorization (MF)：
+
+$$F \approx C P^T,\quad f_{ju} \approx c_j^T p_u$$
+
+AE approach：
+
+对 user u 的向量$f_u$：
+
+$$\hat{f}_{ju} = \big(f_2(W_2 f_1(W_1 f_u))\big)_j$$
+
+#### Neighborhood-oriented CF with AE
+
+1. 用 AE 得到 user embedding：
+
+$$p_u = f_1(W_1 f_u)$$
+
+1. 找到与 user u 最相似的 r 个用户，集合为$B$ 
+2. 用 similarity-based aggregation 估计 user u 对 item j 的偏好：
+
+$$\hat{f}_{ju} =
+\frac{\sum_{b \in B} g_{\text{sim}}(p_u, p_b) f_{jb}}
+{\sum_{b \in B} g_{\text{sim}}(p_u, p_b)}$$
+
+常用 similarity：cosine similarity
+
+$$g_{\cos}(a_j, a_b) = \frac{a_j^T a_b}{\|a_j\| \|a_b\|}$$
+
+---
+
+## Agenda 对应小结（按考试视角）
+
+1. <b>Deep Learning</b>
+
+- 定义：neural network based models, representation learning  
+- 特点：scalable, flexible, trainable  
+    
+1. <b>Perceptrons</b>
+
+- Propagation：$p = w^T h$
+- Activation：sign function  
+- 本质：linear classifier  
+    
+1. <b>Feed-forward Neural Networks</b>
+
+- 多层结构：input, hidden, output  
+- 每层：linear propagation + nonlinear activation  
+- Universal function approximator  
+    
+1. <b>Backpropagation Algorithm</b>
+
+- 目标：计算$\frac{\partial E}{\partial W_{ab}}$ 
+- 核心公式：
+    - $$\frac{\partial E}{\partial W_{ab}} = \delta_a h_b$$
+    - 输出层：
+    $$\delta_a = (f_a - y_{ia}) f_a (1 - f_a)$$
+    - 隐藏层：
+    $$  \delta_a = f_a(1 - f_a) \sum_k \delta_{v_k} W_{v_k a}$$
+
+1. <b>Autoencoder and Outlier Detection</b>
+
+- AE：encoder + decoder，学习 latent representation  
+- 矩阵分解视角：$X \approx C P$
+- Outlier detection：基于 reconstruction error（MSE）  
+- One-class classification：只用 inlier 训练 AE  
+
+## [part 4](/QRiFwuy0liWXaGk5KDqcgG4dnYf/R5iKwcIHPi1bbIkKz73cd7WWndb)
+
+# Reinforce learning
 

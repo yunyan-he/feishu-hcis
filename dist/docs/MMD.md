@@ -1013,7 +1013,7 @@ $$RRSS(k) = \frac{\sum_{i = k+1}^{m} \sigma_i^2}{\sum_{i = 1}^{m} \sigma_i^2}$$
     
 在图上通常画成：
 
-- 横轴：rank $$k$$  
+- 横轴：rank $k$  
 - 纵轴：RRSS  
 - 曲线快速下降 → 说明低秩近似效果好
     
@@ -1050,9 +1050,309 @@ $$RRSS(k) = \frac{\sum_{i = k+1}^{m} \sigma_i^2}{\sum_{i = 1}^{m} \sigma_i^2}$$
 
 - RRSS 提供了一个<b>选择合适 k 的量化指标</b>
     
-[预测试卷 L4](/QQqNwziPmiYyFBknLftcE8vWnLb/WJZ2wjquYitDpckdlLZcuKbcnsb)
+## [预测试卷 L4](/QQqNwziPmiYyFBknLftcE8vWnLb/WJZ2wjquYitDpckdlLZcuKbcnsb)
 
 # Latent Pattern Mining II
+
+## <b>Agenda 总览（按 PPT 顺序）</b>
+
+1. Recap  
+    - Categories of Recommender Systems  
+    - Collaborative Filtering (Neighborhood-oriented & Model-oriented)  
+    - Latent Pattern Mining  
+    - Rotated Matrix Regression  
+    - Singular Value Decomposition  
+
+2. Behavioral Profiling  
+3. Interpretable Matrix Factorization  
+4. k-Means Clustering  
+5. Archetypal Analysis  
+6. Optimization for AA  
+    
+## <b>Recap 回顾</b>
+
+### <b>Categories of Recommender Systems 推荐系统类别</b>
+
+六大类推荐系统：
+
+<table>
+<colgroup>
+<col width="164"/>
+<col width="137"/>
+<col width="254"/>
+</colgroup>
+<tbody>
+<tr><td><p>Category</p></td><td><p>中文解释</p></td><td><p>核心思想</p></td></tr>
+<tr><td><p><b>Content-based</b></p></td><td><p>基于内容</p></td><td><p>Recommendations based on根据内容特征（如电影类型、文章主题）推荐相似内容</p></td></tr>
+<tr><td><p><b>Collaborative Filtering (CF)</b></p></td><td><p>协同过滤</p></td><td><p>Recommendations by matching similar entities根据用户之间或物品之间的相似性进行推荐</p></td></tr>
+<tr><td><p><b>Demographic</b></p></td><td><p>基于人口统计</p></td><td><p>Demographic information根据年龄、性别、国家等人口属性推荐</p></td></tr>
+<tr><td><p><b>Knowledge-based</b></p></td><td><p>基于知识</p></td><td><p>Recommendations based on domain knowledge根据用户明确需求和领域知识推荐（如旅游、房地产）meet the user’s specific requirements.</p></td></tr>
+<tr><td><p><b>Community-based</b></p></td><td><p>基于社交关系</p></td><td><p>Recommendations to the user based on their social connections根据好友或社交网络关系推荐</p></td></tr>
+<tr><td><p><b>Hybrid</b></p></td><td><p>混合推荐</p></td><td><p>多种方法组合，提高鲁棒性</p></td></tr>
+</tbody>
+</table>
+
+<b>考试重点：</b>  
+
+你需要能解释每种方法的核心思想、适用场景、优缺点。
+
+---
+
+### <b>Collaborative Filtering 协同过滤</b>
+
+分为两类：
+
+#### <b>Neighborhood-oriented CF（基于邻域的协同过滤）</b>
+
+核心对象：  
+
+- F ∈<b> </b>$R^{m×n}$：item-user matrix  
+- $f_u$<b>:</b> 用户 u 的列向量  
+- $f_b$<b>:</b> 邻居用户 b 的列向量  
+- $B(u)$：与用户 u 最相似的 r 个用户（neighbors）
+    
+<b>评分预测公式（kNN-based CF）</b>
+
+$$\hat f_{ju} = \frac{\sum_{b\in B(u)} g_{\text{sim}}(f_u, f_b) \cdot f_{jb}}{\sum_{b\in B(u)} g_{\text{sim}}(f_u, f_b)}$$
+
+中文解释：  
+
+预测用户 u 对 item j 的偏好，就是对邻居用户 b 的评分加权平均，权重是相似度。
+
+<b>常用相似度Popular choice for </b>$g_{sim}$<b>：Cosine Similarity</b>
+
+$$g_{\cos}(a,b)=\frac{a^T b}{\|a\|\|b\|}$$
+
+<b>重点理解：</b>  
+
+- 只在 co-rated items 上计算  
+- 适合稀疏矩阵  
+- 计算简单，效果稳定
+    
+---
+
+#### <b>Model-oriented CF（基于模型的协同过滤）</b>
+
+核心思想：  
+
+通过 <b>Matrix Factorization (MF)</b> 学习 latent factors。
+
+<b>MF 模型</b>
+
+$$F \approx C P^T$$
+
+- <b>F ∈</b> $R^{m×n}$ : item–user matrix
+- <b>C ∈ </b>$R^{m×k}$：item latent factors  行
+- <b>P ∈ </b>$R^{n×k}$：user latent factors   $P^T$就是列
+    
+Candidate set for user u: $Ω_u = \set {j | f_{ju} observed }, D_u = {1,...,m} \backslash Ω_u$. 
+
+假设一个推荐系统有 $m=5$ 个电影（索引 1-5），用户 $u_1$ 对电影 1、3 打过分（即 $f_{1u_1},f_{3u_1}$ 被观测）。
+
+- 则 $\Omega_{u_1} = \{1,3\}$
+- 未观测的电影索引集合 $D_{u_1} = \{1,2,3,4,5\} \setminus \{1,3\} = \{2,4,5\}$
+
+<b>推荐流程 MF scoring (item→user): </b>
+
+1. 找到用户 u 未评分的 item 集合 Du  
+2. 计算预测分数：
+
+$$\hat C_u=C[D_u,:]∈R^{∣D_u∣×k},\hat f_u=\hat C_up_u$$
+- 提取用户u未观测物品的嵌入子矩阵（仅保留<b>用户</b>u<b>未交互物品</b>$D_u$ 对应的行,因此维度是这样 行数是$D_u$的数量，得到子矩阵$\hat{C}_u$）
+
+1. 选 top-l items 推荐 将$\hat f_u$降序排列
+    
+---
+
+<b>Latent user-kNN（可选）</b>
+
+在 latent space 中计算用户相似度：
+
+$$B(u) = Top-r\set{b : g_{sim}(p_u: ,p_b:)}$$
+
+$$\hat f_{ju} = \frac{\sum_{b\in B(u)} g_{\text{sim}}(P_u, P_b) f_{jb}}{\sum_{b\in B(u)} g_{\text{sim}}(P_u, P_b)}$$
+
+<b>重点：</b>  
+
+latent space 更密集、噪声更小，相似度更可靠。
+
+---
+
+### <b>Latent Pattern Mining（潜在模式挖掘）</b>
+
+核心思想：  
+
+Low-rank approximation
+
+通过 MF 或 SVD 找到数据中的 hidden structures（latent factors）。
+
+<b>MF 的意义</b>
+
+- 降维  
+- 去噪  
+- 提取潜在模式  
+- 数据压缩：  
+    - 原始 O(mn)  
+    - MF 后 O(k(m+n))
+        
+---
+
+### <b>Rotated Matrix Regression (RMRMF)</b>
+
+算法流程：
+
+1. 随机初始化 C, P  
+2. 交替更新：
+    
+$$C \leftarrow X P (P^T P)^{-1}$$
+
+$$P \leftarrow X^T C (C^T C)^{-1}$$
+
+1. 直到收敛
+    
+<b>解释：</b>  
+
+这是 Alternating Least Squares (ALS) 的一种形式。
+
+---
+
+### <b>Singular Value Decomposition (SVD)</b>
+
+$$X = U S V^T$$
+
+Truncated SVD（取前 k 个 singular values）：
+
+$$X \approx \hat U S_k V_k^T$$
+
+与 MF 的关系：
+
+$$C = \hat U S^{1/2}, \quad P = V S^{1/2}$$
+
+<b>如何选择 k？Elbow Method</b>
+
+RRSS（Residual Relative Sum of Squares）随 k 增大而下降，找到“肘部”即可。
+
+---
+
+## <b>Behavioral Profiling（行为画像）</b>
+
+应用场景：
+
+- Exploratory analysis  
+- Digital marketing  
+- Digital forensics  
+- Player behavior analysis  
+    
+MF 可以提取 latent profiles，但 <b>可解释性差</b>。
+
+---
+
+## <b>Interpretable Matrix Factorization</b>
+
+目标：  
+
+让 latent factors 更容易解释。
+
+方法：  
+
+将 MF 与 clustering 结合，例如：
+
+- k-Means  
+- Archetypal Analysis (AA)
+    
+---
+
+## <b>k-Means Clustering</b>
+
+#### <b>目标函数</b>
+
+$$\min_{C_1,\dots,C_k} \sum_{i=1}^k \sum_{x_j\in C_i} \|x_j - m_i\|^2$$
+
+#### <b>算法步骤</b>
+
+1. 初始化 k 个随机中心  
+2. Assignment step：分配最近中心  
+3. Update step：更新中心为均值  
+4. 重复直到收敛
+    
+<b>特点：</b>
+
+- 找“dense centers”  
+- 对噪声敏感  
+- 结果依赖初始化  
+- 适合球状 cluster
+    
+---
+
+## <b>Archetypal Analysis (AA)</b>
+
+（本讲最重要内容之一）
+
+AA 与 k-Means 的区别：
+
+<table>
+<colgroup>
+<col width="134"/>
+<col width="248"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>方法</p></td><td><p>找到的点</p></td><td><p>解释性</p></td></tr>
+<tr><td><p>k-Means</p></td><td><p>dense centers</p></td><td><p>中等</p></td></tr>
+<tr><td><p><b>AA</b></p></td><td><p>extreme points（数据的“角落”）</p></td><td><p><b>非常强</b></p></td></tr>
+</tbody>
+</table>
+
+AA 假设：
+
+- 每个数据点是 archetypes 的 convex combination  
+- 每个 archetype 是数据点的 convex combination  
+    
+#### <b>模型形式</b>
+
+$$X \approx Z H^T = X B H^T$$
+
+其中：
+
+- <b>Z = X B</b>：archetypes  
+- <b>H</b>：每个数据点的 mixture weights  
+- <b>B</b>：archetypes 的 mixture weights  
+    
+#### <b>Simplex constraints</b>
+
+B 的每列、H 的每行都必须满足：
+
+$$v_i \ge 0,\quad \sum_i v_i = 1$$
+
+解释：  
+
+权重必须像概率一样。
+
+---
+
+## <b>Hard Clustering in AA</b>
+
+对每个数据点 $x_i$：
+
+$$o_i = \arg\max_c h_{ic}$$
+
+即：属于权重最大的 archetype。
+
+---
+
+## <b>Optimization for AA（PGD-AA）</b>
+
+使用 Projected Gradient Descent：
+
+1. 更新 H  
+2. 投影到 simplex  
+3. 更新 B  
+4. 投影到 simplex  
+5. 计算 Z = X B  
+    
+核心难点：  
+
+<b>Simplex Projection</b>（Duchi 2008）
 
 # Neural Networks/Gradient Descent
 

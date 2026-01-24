@@ -76,10 +76,25 @@
     "node_token": "X5HAwhUxHixmzTkqv9BcS22Cn6c",
     "parent_node_token": "",
     "obj_create_time": "1760967507",
-    "obj_edit_time": "1769193094",
+    "obj_edit_time": "1769194869",
     "obj_token": "T06ldPjHVovsbOx4A6Ecx1P9n8g",
-    "children": [],
-    "has_child": false,
+    "children": [
+      {
+        "depth": 1,
+        "title": "Learning Goal",
+        "node_token": "BBEOwHkYViRIM1kzyxHc8iKgnMc",
+        "parent_node_token": "X5HAwhUxHixmzTkqv9BcS22Cn6c",
+        "obj_create_time": "1769194894",
+        "obj_edit_time": "1769199577",
+        "obj_token": "JAY1dsDCDoJTZExeCdHcZpZJnFG",
+        "children": [],
+        "has_child": false,
+        "slug": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc",
+        "position": 0,
+        "filename": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc.md"
+      }
+    ],
+    "has_child": true,
     "slug": "X5HAwhUxHixmzTkqv9BcS22Cn6c",
     "position": 2,
     "filename": "X5HAwhUxHixmzTkqv9BcS22Cn6c.md"
@@ -233,7 +248,7 @@
     "node_token": "QRiFwuy0liWXaGk5KDqcgG4dnYf",
     "parent_node_token": "",
     "obj_create_time": "1767649676",
-    "obj_edit_time": "1769184694",
+    "obj_edit_time": "1769197083",
     "obj_token": "Yn6NduxUfo9XU1xtkmrccxAmnac",
     "children": [
       {

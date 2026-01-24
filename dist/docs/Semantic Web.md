@@ -725,9 +725,7 @@ FILTER(NOT EXISTS { 子图模式 })
 PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :Student ;:hasName ?studentName .FILTER(EXISTS { ?student :attends ?course })}
 ```
 
-# <b>示例 2</b>：筛选不选修逻辑课的学生（不存在性）
-
-# sparql
+<b>示例 2</b>：筛选不选修逻辑课的学生（不存在性）
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :Student ;:hasName ?studentName .FILTER(NOT EXISTS {?student :attends ?course .?course :hasName "Logic" .})}
@@ -735,11 +733,9 @@ PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :S
 
 ## 三、 逻辑组合多条件
 
-# 当需要同时满足多个筛选条件时，可使用<b>逻辑运算符</b>组合，替代多个并列的 `FILTER` 子句。
+当需要同时满足多个筛选条件时，可使用<b>逻辑运算符</b>组合，替代多个并列的 `FILTER` 子句。
 
-# <b>示例</b>：筛选年级≤4 <b>且</b> 姓名不以 F 开头的学生
-
-# sparql
+<b>示例</b>：筛选年级≤4 <b>且</b> 姓名不以 F 开头的学生
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?studentName ?semesterWHERE {?student a :Student ;:hasName ?studentName ;:hasSemester ?semester .FILTER(?semester <= 4 && !STRSTARTS(?studentName, "F"))}
@@ -753,21 +749,17 @@ PREFIX : <http://example.org/university/>SELECT ?studentName ?semesterWHERE {?st
 
 ---
 
-# 需要我基于这个总结，出一道<b>综合练习题</b>并附上参考答案，帮你巩固这些知识点吗？
-
 # SPARQL 进阶子句详细总结（`OPTIONAL`/`UNION`/`MINUS`/`FILTER NOT EXISTS`）
 
-# 本文梳理 SPARQL 中处理<b>可选数据、结果合并、结果剔除</b>的核心进阶子句，对比它们的语法、逻辑和适用场景，帮你精准掌握用法。
+本文梳理 SPARQL 中处理<b>可选数据、结果合并、结果剔除</b>的核心进阶子句，对比它们的语法、逻辑和适用场景，帮你精准掌握用法。
 
 ## 一、 `OPTIONAL`：匹配可选属性，保留基础结果
 
 ### 核心作用
 
-# 针对 RDF 数据中<b>并非所有资源都具备的属性</b>（如部分学生有学籍号，部分没有），尝试匹配该属性；匹配失败时，不丢弃基础结果，仅让可选变量保持<b>未绑定状态</b>。
+针对 RDF 数据中<b>并非所有资源都具备的属性</b>（如部分学生有学籍号，部分没有），尝试匹配该属性；匹配失败时，不丢弃基础结果，仅让可选变量保持<b>未绑定状态</b>。
 
 ### 语法结构
-
-# sparql
 
 ```text
 SELECT ?基础变量 ?可选变量
@@ -795,9 +787,7 @@ WHERE {# 主模式：必须匹配的基础图模式（返回核心结果集）
 
 ### 典型示例
 
-# 查询所有学生姓名，<b>可选匹配</b>学籍号：
-
-# sparql
+查询所有学生姓名，<b>可选匹配</b>学籍号：
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?studentName ?matricNoWHERE {?student a :Student ;:hasName ?studentName .OPTIONAL {?student :hasMatriculationNumber ?matricNo .}}
@@ -807,11 +797,9 @@ PREFIX : <http://example.org/university/>SELECT ?studentName ?matricNoWHERE {?st
 
 ### 核心作用
 
-# 将<b>多个独立图模式</b>的匹配结果合并成一个结果集，实现 “满足任意一个模式即可” 的逻辑，是 SPARQL 实现 `OR` 的核心方式。
+将<b>多个独立图模式</b>的匹配结果合并成一个结果集，实现 “满足任意一个模式即可” 的逻辑，是 SPARQL 实现 `OR` 的核心方式。
 
 ### 语法结构
-
-# sparql
 
 ```text
 SELECT ?共享变量
@@ -827,9 +815,7 @@ WHERE {# 模式1：匹配第一类资源{ ?主体1 a :类型1 ; :属性 ?共享�
 
 ### 典型示例
 
-# 查询<b>课程的标题</b>和<b>助教的研究方向</b>，统一放在 `?title` 列输出：
-
-# sparql
+查询<b>课程的标题</b>和<b>助教的研究方向</b>，统一放在 `?title` 列输出：
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?entity ?titleWHERE {{ ?entity a :Lecture ; :hasTitle ?title . }UNION{ ?entity a :Assistant ; :hasSpecialization ?title . }}
@@ -839,11 +825,9 @@ PREFIX : <http://example.org/university/>SELECT ?entity ?titleWHERE {{ ?entity a
 
 ### 核心作用
 
-# 先计算主模式的结果集 `A`，再计算剔除模式的结果集 `P`，最终返回 <b>A - P</b>（属于 `A` 但不属于 `P` 的结果），实现 “排除符合某模式的解” 的需求。
+先计算主模式的结果集 `A`，再计算剔除模式的结果集 `P`，最终返回 <b>A - P</b>（属于 `A` 但不属于 `P` 的结果），实现 “排除符合某模式的解” 的需求。
 
 ### 语法结构
-
-# sparql
 
 ```text
 SELECT ?主模式变量
@@ -865,17 +849,13 @@ WHERE {# 主模式：结果集 A
 
 ### 典型示例
 
-# 查询<b>不参加逻辑课</b>的学生姓名：
-
-# sparql
+查询<b>不参加逻辑课</b>的学生姓名：
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :Student ; :hasName ?studentName .MINUS {?student :attends :LogicLecture .}}
 ```
 
 ### 踩坑案例（非共享变量导致意外剔除）
-
-# sparql
 
 ```text
 # 主模式：所有学生（只有 ?student / ?studentName）?student a :Student ; :hasName ?studentName .# 剔除模式：多了非共享变量 ?gradeMINUS {?student :attends :LogicLecture ; :hasGrade ?grade .}
@@ -887,11 +867,9 @@ PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :S
 
 ### 核心作用
 
-# 对主模式的<b>每一个解</b>，独立检查 “指定子模式是否存在匹配”；若不存在，则保留该解；若存在，则过滤该解。
+对主模式的<b>每一个解</b>，独立检查 “指定子模式是否存在匹配”；若不存在，则保留该解；若存在，则过滤该解。
 
 ### 语法结构
-
-# sparql
 
 ```text
 SELECT ?主模式变量
@@ -908,9 +886,7 @@ WHERE {# 主模式：生成待检查的解
 
 ### 典型示例
 
-# 查询<b>不参加逻辑课</b>的学生姓名（精准无坑）：
-
-# sparql
+查询<b>不参加逻辑课</b>的学生姓名（精准无坑）：
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :Student ; :hasName ?studentName .FILTER NOT EXISTS {?student :attends ?lecture .?lecture :hasTitle "Logic" .}}
@@ -918,17 +894,13 @@ PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :S
 
 ## 五、 `MINUS` vs `FILTER NOT EXISTS` 核心差异对照表
 
-# 需要我帮你整理一份<b>SPARQL 进阶子句速查表</b>，把语法、用途、坑点都浓缩在一页里方便你复习吗？
-
-# 我们今天新学的这些东西，你把它整理一下，给我一个非常详细的解释。
-
 # SPARQL 进阶查询语法全梳理
 
-# 本次学习的内容分为两大模块：<b>结果集修饰符</b>（排序、截取、去重）和<b>聚合函数</b>（统计、分组、分组过滤），它们均作用于 `WHERE` 子句匹配出的原始结果集，和 SQL 语法逻辑高度一致，以下是详细拆解。
+本次学习的内容分为两大模块：<b>结果集修饰符</b>（排序、截取、去重）和<b>聚合函数</b>（统计、分组、分组过滤），它们均作用于 `WHERE` 子句匹配出的原始结果集，和 SQL 语法逻辑高度一致，以下是详细拆解。
 
 ## 一、 结果集修饰符（Solution Modifiers）
 
-# 这类子句的核心作用是<b>调整结果的展示形式</b>（排序、分页）或<b>精简结果内容</b>（去重），执行顺序在 `WHERE` 子句之后。
+这类子句的核心作用是<b>调整结果的展示形式</b>（排序、分页）或<b>精简结果内容</b>（去重），执行顺序在 `WHERE` 子句之后。
 
 ### 1. `DISTINCT`：去除重复结果行
 
@@ -936,9 +908,7 @@ PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :S
 - <b>语法位置</b>：紧跟 `SELECT` 关键字，格式为 `SELECT DISTINCT ?var1 ?var2`。
 - <b>适用场景</b>：`UNION` 合并结果、多对多关联查询时，避免重复数据。
 
-# <b>示例</b>：查询学生选修的所有课程名称，去重
-
-# sparql
+<b>示例</b>：查询学生选修的所有课程名称，去重
 
 ```text
 PREFIX : <http://example.org/university/>SELECT DISTINCT ?courseNameWHERE {?student a :Student ;:attends ?course .?course :hasTitle ?courseName .}
@@ -953,9 +923,7 @@ PREFIX : <http://example.org/university/>SELECT DISTINCT ?courseNameWHERE {?stud
 
 - <b>语法</b>：`ORDER BY [ASC|DESC](?var1) [ASC|DESC](?var2)`
 
-# <b>示例</b>：按学生姓名升序、成绩降序排序
-
-# sparql
+<b>示例</b>：按学生姓名升序、成绩降序排序
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?studentName ?scoreWHERE {?student a :Student ;:hasName ?studentName ;:hasScore ?score .}ORDER BY ASC(?studentName) DESC(?score)
@@ -963,11 +931,9 @@ PREFIX : <http://example.org/university/>SELECT ?studentName ?scoreWHERE {?stude
 
 ### 3. `LIMIT` & `OFFSET`：结果分页截取
 
-# 两者需搭配使用，常用于<b>分页查询</b>，依赖 `ORDER BY` 保证结果顺序固定（无排序时，分页结果无意义）。
+两者需搭配使用，常用于<b>分页查询</b>，依赖 `ORDER BY` 保证结果顺序固定（无排序时，分页结果无意义）。
 
-# <b>示例</b>：分页查询第 2 页的学生（每页 10 条）
-
-# sparql
+<b>示例</b>：分页查询第 2 页的学生（每页 10 条）
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :Student ;:hasName ?studentName .}ORDER BY ?studentName  # 必须排序，否则分页结果不固定LIMIT 10 OFFSET 10
@@ -975,15 +941,15 @@ PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :S
 
 ### 结果集修饰符执行顺序
 
-# `SELECT DISTINCT` → `WHERE` 匹配 → `ORDER BY` 排序 → `OFFSET` 跳过 → `LIMIT` 截取
+`SELECT DISTINCT` → `WHERE` 匹配 → `ORDER BY` 排序 → `OFFSET` 跳过 → `LIMIT` 截取
 
 ## 二、 聚合函数（Aggregate Functions）
 
-# 核心作用是对结果集进行<b>统计汇总</b>（如计数、求和、平均值），可分为「全局聚合」和「分组聚合」两类，常搭配 `GROUP BY` 和 `HAVING` 使用。
+核心作用是对结果集进行<b>统计汇总</b>（如计数、求和、平均值），可分为「全局聚合」和「分组聚合」两类，常搭配 `GROUP BY` 和 `HAVING` 使用。
 
 ### 常用聚合函数及功能
 
-# <b>关键注意</b>：`SUM`/`AVG` 仅支持 `xsd:integer`/`xsd:double` 等数值类型，非数值类型需先做类型转换。
+<b>关键注意</b>：`SUM`/`AVG` 仅支持 `xsd:integer`/`xsd:double` 等数值类型，非数值类型需先做类型转换。
 
 ### 全局聚合（无 `GROUP BY`）
 
@@ -991,17 +957,13 @@ PREFIX : <http://example.org/university/>SELECT ?studentNameWHERE {?student a :S
 - <b>强制规则</b>：`SELECT` 子句中<b>不能出现非聚合变量</b>（只能写聚合函数或其别名）。
 - <b>语法</b>：`SELECT 聚合函数 AS ?别名`
 
-# <b>示例 1</b>：统计数据集中的学生总数
-
-# sparql
+<b>示例 1</b>：统计数据集中的学生总数
 
 ```text
 PREFIX : <http://example.org/university/>SELECT COUNT(?student) AS ?totalStudentsWHERE {?student a :Student .}
 ```
 
-# <b>示例 2</b>：计算所有学生的平均成绩
-
-# sparql
+<b>示例 2</b>：计算所有学生的平均成绩
 
 ```text
 PREFIX : <http://example.org/university/>PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>SELECT AVG(?score) AS ?averageScoreWHERE {?student a :Student ;:hasScore ?score .FILTER (xsd:integer(?score))  # 确保成绩是数值类型}
@@ -1015,9 +977,7 @@ PREFIX : <http://example.org/university/>PREFIX xsd: <http://www.w3.org/2001/XML
     2. `SELECT` 子句中<b>只能出现两类内容</b>：`GROUP BY` 里的变量、被聚合函数包裹的变量。
     3. 执行顺序在 `WHERE` 之后，`HAVING` 之前。
 
-# <b>示例</b>：按教授分组，统计每位教授的授课数量
-
-# sparql
+<b>示例</b>：按教授分组，统计每位教授的授课数量
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?profName COUNT(?lecture) AS ?lectureCountWHERE {?prof a :Professor ;:hasName ?profName ;:teaches ?lecture .?lecture a :Lecture .}GROUP BY ?profName  # 按教授姓名分组
@@ -1030,9 +990,7 @@ PREFIX : <http://example.org/university/>SELECT ?profName COUNT(?lecture) AS ?le
 
 - <b>强制规则</b>：`HAVING` <b>必须和 </b><b>GROUP BY</b><b> 搭配使用</b>，不能单独出现。
 
-# <b>示例</b>：筛选授课数 ≥ 3 的教授及其授课数
-
-# sparql
+<b>示例</b>：筛选授课数 ≥ 3 的教授及其授课数
 
 ```text
 PREFIX : <http://example.org/university/>SELECT ?profName COUNT(?lecture) AS ?lectureCountWHERE {?prof a :Professor ;:hasName ?profName ;:teaches ?lecture .?lecture a :Lecture .}GROUP BY ?profNameHAVING (COUNT(?lecture) >= 3)  # 过滤聚合后的分组
@@ -1040,19 +998,17 @@ PREFIX : <http://example.org/university/>SELECT ?profName COUNT(?lecture) AS ?le
 
 ### 聚合相关子句执行顺序
 
-# `WHERE` 匹配 → `GROUP BY` 分组 → 聚合函数计算 → `HAVING` 过滤分组 → `ORDER BY` 排序 → `LIMIT`/`OFFSET` 截取
+`WHERE` 匹配 → `GROUP BY` 分组 → 聚合函数计算 → `HAVING` 过滤分组 → `ORDER BY` 排序 → `LIMIT`/`OFFSET` 截取
 
 ## 三、 综合查询示例（含所有语法）
 
-# 需求：查询平均成绩 ≥ 80 的班级，展示班级 ID、平均成绩、最高成绩，按平均成绩降序排序，取前 5 个班级。
-
-# sparql
+需求：查询平均成绩 ≥ 80 的班级，展示班级 ID、平均成绩、最高成绩，按平均成绩降序排序，取前 5 个班级。
 
 ```text
 PREFIX : <http://example.org/university/>PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>SELECT ?classId AVG(?score) AS ?avgScore MAX(?score) AS ?maxScoreWHERE {?student a :Student ;:belongsToClass ?classId ;:hasScore ?score .FILTER (xsd:integer(?score))  # 确保成绩是数值}GROUP BY ?classIdHAVING (AVG(?score) >= 80)  # 过滤平均成绩达标班级ORDER BY DESC(?avgScore)LIMIT 5
 ```
 
-# 需要我帮你出一份<b>包含这些语法的练习题</b>，让你巩固实战吗？
+需要我帮你出一份<b>包含这些语法的练习题</b>，让你巩固实战吗？
 
 # Schema
 

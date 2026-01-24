@@ -4,6 +4,7 @@
   - [A22/23](DyrnwQs57iVgXkkXv06cIEjKnkf/Jk0Rw4WfBiCHBtkDw0BcSIF0nGh.md)
   - [](DyrnwQs57iVgXkkXv06cIEjKnkf/MQhLw6x5titkaNkGH63c6OP1nbd.md)
 - [Semantic Web](X5HAwhUxHixmzTkqv9BcS22Cn6c.md)
+  - [Learning Goal](X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc.md)
 - [DIS](KtpqwJBThilgLukXLE6cKJKSn2c.md)
   - [重构版本](KtpqwJBThilgLukXLE6cKJKSn2c/YYYIwNzSaixmbrkg6E1cPeYhnIh.md)
   - [Exam](KtpqwJBThilgLukXLE6cKJKSn2c/D0mew4MJxiQkaRk5xybcKBlpnvf.md)

@@ -829,6 +829,1186 @@ The user agent (a machine, bot, or browser) navigates this web to discover and p
 - <b>Action:</b> The agent follows the links provided by the server (Principle 4) to "crawl" the Knowledge Graph.
 - <b>Detail:</b> By following links (e.g., clicking from "Aachen" to "Germany" to "Berlin"), the agent discovers related data across different servers and organizations. This allows the agent to aggregate information from heterogeneous sources into a single result,.
 
+Read and interpret HTTP request/response pairs, including
+
+HTTP redirects and content negotiation
+
+Read and interpret HTTP request/response pairs, including
+
+HTTP redirects and content negotiation
+
+## Read and interpret HTTP request/response pairs, including HTTP redirects and content negotiation 
+
+## Explain the mechanisms behind hash URIs and slash URIs for separating URIs denoting other resources from URIs denoting information resources 
+
+Based on the content provided in your query and the lecture materials, here is a detailed explanation of the mechanisms behind <b>Hash URIs</b> and <b>Slash URIs</b>.
+
+These two strategies are designed to solve a fundamental problem in the Semantic Web: distinguishing between a <b>Non-Information Resource</b> (a real-world object or abstract concept, e.g., the city of Aachen) and an <b>Information Resource</b> (a document describing that object, e.g., an RDF file or HTML page).
+
+### Hash URIs
+
+<b>Mechanism:</b>
+
+A Hash URI uses a <b>fragment identifier</b> (indicated by the `#` symbol) to separate the document's address from the specific resource description within it.
+
+- <b>Structure:</b> The URI follows the pattern `http://example.org/vocabulary#ConceptA`. As noted in the sources, the fragment (starting with `#`) identifies a specific part or view of a resource within a shared "base IRI".
+- <b>The Process:</b>
+    1. <b>Stripping the Hash:</b> When a user agent (client) looks up a Hash URI, it processes the URI locally. It <b>strips off the hash</b> and the fragment identifier (everything after the `#`) to determine the address of the main resource [User Query].
+    2. <b>Access:</b> The client requests the base URI (the part before the `#`) from the server.
+    3. <b>Retrieval:</b> The server returns the entire document (the Information Resource).
+    4. <b>Extraction:</b> Once the document is downloaded, the client locates the specific section or entity identifying with the fragment (e.g., `#ConceptA`) inside that document.
+        
+<b>Use Case:</b> This is often used for vocabularies (like RDFS or OWL) or small datasets where it is efficient to download all related terms in a single file.
+
+### Slash URIs
+
+<b>Mechanism:</b>
+
+A Slash URI uses standard hierarchical path segments (indicated by `/`) to identify a resource, such as `http://dbpedia.org/resource/Aachen`. Since the server cannot transmit a physical city or abstract concept over the wire, it uses a redirection mechanism.
+
+- <b>Structure:</b> The hierarchical part of the URI contains a path to the resource.
+- <b>The Process (HTTP 303 Redirect):</b>
+    1. <b>Request:</b> The client attempts to access the URI.
+    2. <b>Redirect:</b> Because the URI denotes a "thing" (Non-Information Resource) and not a document, the server does not return a "200 OK". Instead, it responds with an <b>HTTP 303 (See Other)</b> status code [User Query].
+    3. <b>Retrieval:</b> This status code tells the client: "The object you asked for is not a document, but you can find a document <em>describing</em> it at this other location." The client then automatically follows this new URI to retrieve the information.
+
+- <b>Content Negotiation:</b>
+
+Slash URIs support <b>Content Negotiation</b>, which allows different versions of a description to be served based on the user's needs.
+1. <b>Specification:</b> In the HTTP request, the user (client) specifies their preferred content format (e.g., "I want HTML" for a human or "I want Turtle" for a machine) using the `Accept` header [User Query].
+2. <b>Redirection:</b> The server analyzes this request and redirects the client to the specific document that matches the requested format (e.g., redirecting to `page.html` vs. `data.ttl`) [User Query].
+    
+### Summary Comparison
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>Feature</p></td><td><p>Hash URI (<code>#</code>)</p></td><td><p>Slash URI (<code>/</code>)</p></td></tr>
+<tr><td><p><b>Identification</b></p></td><td><p>Separates the &quot;thing&quot; from the &quot;file&quot; using a fragment.</p></td><td><p>Separates the &quot;thing&quot; from the &quot;file&quot; using HTTP redirection.</p></td></tr>
+<tr><td><p><b>Server Action</b></p></td><td><p>Returns the file immediately (client handles the logic).</p></td><td><p>Returns a <b>303 Redirect</b> to a specific document URI [User Query].</p></td></tr>
+<tr><td><p><b>Efficiency</b></p></td><td><p>Good for small datasets (one request gets all data).</p></td><td><p>Good for large datasets (fetches only what is needed).</p></td></tr>
+<tr><td><p><b>Flexibility</b></p></td><td><p>Less flexible regarding data formats.</p></td><td><p>Supports <b>Content Negotiation</b> (serving HTML or RDF based on request) [User Query].</p></td></tr>
+</tbody>
+</table>
+
+## Describe the connection between resources and information resources (correspondence) 
+
+Based on the lecture content and the Linked Data principles described in the sources, here is a detailed explanation of the connection between <b>Resources</b> and <b>Information Resources</b>, and the concept of <b>Correspondence</b> (Learning Goal 2.10).
+
+### The Distinction: Resources vs. Information Resources
+
+To understand the connection, one must first distinguish between the two types of entities existing on the Semantic Web:
+
+- <b>Resources (The "Referent"):</b> In RDF, a resource can be *anything*. This includes physical things (e.g., the city of Aachen), abstract concepts (e.g., the idea of "University"), or people. These "real-world" objects cannot be transmitted over the internet (you cannot download a physical city).
+- <b>Information Resources (The "Document"):</b> These are digital documents that <em>describe</em> the resources. Examples include an RDF file, an HTML page, or an image. These <em>can</em> be transmitted over the internet.
+    
+### Correspondence
+
+<b>Correspondence</b> is the function or mechanism that links these two together. It associates the <b>URI of a Resource</b> (the abstract name) with the <b>URI of its corresponding Information Resource</b> (the concrete file location).
+
+This ensures that when a user looks up a name (Principle 2: Dereferencing), they receive useful data (Principle 3: RDF/SPARQL).
+
+### Mechanisms of Correspondence
+
+The correspondence function is implemented differently depending on whether the URI identifies an Information Resource or a Non-Information Resource (Other Resource).
+
+#### A. Information Resources (Direct Access)
+
+If the URI identifies a digital document itself (e.g., a specific Turtle file), the correspondence is direct.
+
+- <b>Protocol:</b> When a client performs an HTTP GET request on this URI.
+- <b>Result:</b> The server responds with a <b>200 OK</b> status code and sends the content of the file immediately.
+- <b>User's Text Context:</b> This matches the condition where the URI denotes a set of information directly.
+    
+#### B. Other Resources (Indirection)
+
+If the URI identifies a real-world object (a Non-Information Resource), the server cannot send the object. It must use a mechanism to "point" to the corresponding information resource. There are two standard strategies for this:
+
+1. <b>Hash URIs (Fragment Identifiers)</b>
+
+- <b>Structure:</b> The URI contains a hash symbol `#` (e.g., `http://example.org/vocab#Concept`).
+- <b>Mechanism:</b> The correspondence is handled by the <b>client</b>.
+    - The client strips off the fragment (`#Concept`) and requests the base URI.
+    - The server returns <b>200 OK</b> for the base document (the Information Resource).
+    - The client then searches inside that document for the specific entity labeled `#Concept`.
+
+- <b>Correspondence:</b> The Resource URI is a specific "view" or fragment within the Information Resource URI.
+    
+1. <b>Slash URIs (HTTP 303 Redirection)</b>
+
+- <b>Structure:</b> The URI looks like a standard path (e.g., `http://dbpedia.org/resource/Aachen`).
+- <b>Mechanism:</b> The correspondence is handled by the <b>server</b>.
+    - The client requests the Resource URI.
+    - The server knows this URI represents a "Thing," not a file. It responds with <b>HTTP 303 See Other</b> (Redirection).
+    - This response contains the location of the <em>Corresponding Information Resource</em> (e.g., `http://dbpedia.org/data/Aachen.ttl`).
+    - The client performs a second request to that new URI and gets a <b>200 OK</b>.
+
+- <b>Correspondence:</b> The server explicitly maps the requested Resource URI to a different Information Resource URI via the 303 header.
+    
+### Summary of the Correspondence Function
+
+The correspondence function ensures that while the <b>name</b> (IRI) is unique and global, the <b>access</b> to information about that name is handled correctly via HTTP protocols:
+
+- <b>URI refers to Document:</b> $\rightarrow$ Return <b>200 OK</b>.
+- <b>URI refers to Thing:</b> $\rightarrow$ Return <b>303 Redirect</b> (Slash) OR Return <b>200 OK</b> for the containing document (Hash).
+
+Describe the connection between resources and information
+
+resources (correspondence)
+
+## Describe the process for dereferencing graphs, including parsing and the correct handling of blank nodes 
+
+Based on the provided sources, here is a detailed explanation of the process for dereferencing graphs, the subsequent parsing of that data, and the specific handling of blank nodes.
+
+### The Dereferencing Process
+
+Dereferencing is the mechanism of using a specific protocol to look up a name (URI) to retrieve information about the resource it identifies.
+
+- <b>HTTP Protocol:</b> The Semantic Web relies on <b>HTTP URIs</b> (or IRIs) so that both humans and machines can look them up. When a User Agent (like a browser or a script) accesses an HTTP IRI, it performs a "look-up".
+- <b>Retrieval:</b> Ideally, this look-up returns useful data in a standardized format like RDF. This allows the agent to retrieve a description of the resource,.
+- <b>Zero Edits (JSON-LD context):</b> In some cases, such as with JSON-LD, a server can serve plain JSON but make it interpretable as a Linked Data graph by adding an <b>HTTP Link header</b>. This header points to a remote context file (e.g., `Link: <context.jsonld>; rel="..."`), allowing the client to "dereference" the meaning of the JSON keys without modifying the file content,.
+    
+### Parsing the Graph
+
+Once the data is retrieved (serialized in formats like Turtle or JSON-LD), it must be parsed to construct the internal <b>RDF Graph Data Model</b>.
+
+- <b>Activation:</b> A specialized backend library is activated to parse the syntax (e.g., Turtle code).
+- <b>Prefix Expansion:</b> During parsing, abbreviations are resolved. For instance, in Turtle, the parser replaces prefixed names (like `rdfs:label`) with their full IRIs (like `<http://www.w3.org/2000/01/rdf-schema#label>`) before processing the triples.
+- <b>Syntactic Expansion:</b> The parser translates "syntactic sugar" (shorthands) into the underlying graph structure.
+    - <b>Collections:</b> A list written as `( <A> <B> )` in Turtle is internally translated by the parser into a chain of blank nodes connected by `rdf:first` and `rdf:rest` predicates, ending in `rdf:nil`,.
+    - <b>JSON-LD Contexts:</b> A JSON-LD processor combines the JSON body with the `@context` to generate the abstract RDF triples.
+
+- <b>Graph Construction:</b> The final output of the parser is an internal graph object (e.g., an `rdflib.Graph`) consisting of nodes (resources/literals) and edges (properties).
+    
+### Handling Blank Nodes
+
+Blank nodes (anonymous resources) require specific handling during parsing and storage because they lack global identifiers.
+
+#### A. Identity and Scope
+
+- <b>Local Scope:</b> The identity of a blank node is restricted to the specific RDF graph or file it resides in. An identifier used in a serialization, such as `_:b1`, is only unique within that specific document.
+- <b>Non-equivalence:</b> Two blank nodes with the same label (e.g., `_:b1`) in <em>different</em> RDF documents are <b>not</b> the same resource.
+    
+#### B. Parsing and Serialization (Skolemization)
+
+- <b>Existential Quantification:</b> Logically, blank nodes represent "something exists" with certain properties. This corresponds to <b>Skolem constants</b> in formal logic,.
+- <b>Label Variation:</b> When parsing or serializing RDF, the internal identifiers for blank nodes can vary. A node labeled `_:b1` in the source file might be renamed by the parser or when the graph is re-serialized,.
+- <b>Syntax Handling:</b>
+    - <b>Named Blank Nodes:</b> The parser interprets `_:identifier` as a reference to a specific blank node used multiple times within the file.
+    - <b>Anonymous Nodes:</b> The parser interprets square brackets `[ ... ]` as creating a new blank node "inline" without a user-defined label.
+        
+#### C. Internal Storage (ObjectIDs)
+
+There is a critical distinction between the blank node in the <b>RDF Model</b> and its <b>Internal ObjectID</b> in a database:
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>Feature</p></td><td><p>Blank Node (RDF Model)</p></td><td><p>Internal ObjectID (Database)</p></td></tr>
+<tr><td><p><b>Visibility</b></p></td><td><p>Visible in serialization (e.g., <code>_:b1</code>), but the label is not globally stable.</p></td><td><p>Purely internal, invisible to the user.</p></td></tr>
+<tr><td><p><b>Uniqueness</b></p></td><td><p>Unique only within the specific graph/context.</p></td><td><p>Globally unique within the storage system.</p></td></tr>
+<tr><td><p><b>Persistence</b></p></td><td><p>Labels may change with each parsing/serialization.</p></td><td><p>Usually stable across transactions for the lifetime of the node.</p></td></tr>
+</tbody>
+</table>
+
+Therefore, while the parser handles the temporary labels (`_:b1`) found in the dereferenced file, the underlying database system assigns stable <b>Internal ObjectIDs</b> (OIDs) to efficiently manage and reference these nodes persistently.
+
+## Describe the process for constructing RDF datasets for local processing 
+
+Based on the provided lecture materials, specifically content from the "Introduction to RDF", "Turtle", and "JSON-LD" sections, here is a detailed explanation of the process for constructing RDF datasets for local processing (Learning Goal 2.12).
+
+The process involves transforming unstructured information (like natural language) into a structured, machine-readable graph format. This involves several distinct stages:
+
+### 1. Conceptual Modeling: From Statements to Triples
+
+The first step is breaking down information into the fundamental <b>Subject-Predicate-Object</b> structure.
+
+- <b>Decomposition:</b> Natural language sentences (e.g., "Aachen is a city") are analyzed to identify the entity being described (Subject), the relationship (Predicate), and the value or related entity (Object),.
+- <b>Graph Structure:</b> This creates a mental or visual graph where nodes represent resources or values, and directed edges represent relationships,.
+    
+### 2. Coin Identifiers (IRIs)
+
+To make the data globally unique and mergeable, local names must be replaced with <b>Internationalized Resource Identi</b><b>fiers (IRIs)</b>.
+
+- <b>Global Uniqueness:</b> Instead of using a string like "Aachen", which is ambiguous, you assign a specific IRI such as `<http://dbpedia.org/resource/Aachen>`,.
+- <b>Vocabulary Selection:</b> You must select standard IRIs for predicates to ensure semantic interoperability. For example, using `rdf:type` to classify a resource or `schema:name` for a label,.
+- <b>Reuse:</b> The process encourages reusing existing namespaces (e.g., DBpedia, Schema.org) to facilitate data integration rather than inventing new IRIs for common concepts,.
+    
+### 3. Handle Data Values (Literals)
+
+For objects that represent concrete data rather than other resources, you construct <b>Literals</b>.
+
+- <b>Typing:</b> You must decide if the value is a simple string or requires a specific datatype. For valid local processing (e.g., sorting numbers correctly), you attach <b>XML Schema Datatypes</b> (XSD).
+    - <i>Example:</i> `"247380"^^xsd:integer` allows the system to treat the population as a number rather than a text string,.
+
+- <b>Language Tags:</b> For text strings, you may attach language tags (e.g., `"Aachen"@de`) to support multilingual processing,.
+    
+### 4. Handle Anonymous Resources (Blank Nodes)
+
+If a resource exists but does not require a global reference (e.g., a specific address structure or a list container), you construct a <b>Blank Node</b>.
+
+- <b>Existential Quantification:</b> This models the concept that "something exists" with certain properties without naming it globally.
+- <b>Local Scope:</b> When constructing the dataset, you assign these nodes temporary local identifiers (like `_:b1`) or use nested syntax structures. It is important to note that these identifiers are only valid within the specific local file or graph.
+    
+### 5. Serialization (Writing the Data)
+
+To process the abstract graph locally, it must be serialized into a concrete file format. The choice of format affects how the dataset is constructed syntactically.
+
+- <b>Using Turtle (for readability):</b>
+    - You define <b>Prefixes</b> (`@prefix`) to abbreviate long IRIs.
+    - You group statements using <b>semicolons</b> (`;`) for the same subject and <b>commas</b> (`,`) for the same predicate to create a compact dataset,.
+    - You use syntactic sugar like `a` for `rdf:type` or `( )` for lists,.
+
+- <b>Using JSON-LD (for web/API integration):</b>
+    - You define a <b>@context</b> to map simple JSON keys (like "name") to full IRIs (like `http://schema.org/name`).
+    - You use <b>@id</b> to ensure the JSON object is treated as a specific node in the graph, not just a data object.
+        
+### 6. Parsing and Internal Representation
+
+The final step in constructing the dataset for processing is loading the serialized data into an RDF environment (e.g., using Python libraries like `rdflib` or `jupyter-rdfify` as seen in the notebooks).
+
+- <b>Parser Activation:</b> The system reads the syntax (e.g., Turtle or JSON-LD) and converts it into an internal object model.
+- <b>Skolemization/Internal IDs:</b> During this phase, the parser converts the temporary blank node labels (like `_:b1`) into persistent internal <b>ObjectIDs</b> (OIDs) specific to the local database or memory store. This ensures the nodes can be managed efficiently during processing, even though the external labels are not globally stable,.
+    
+<b>Summary:</b> Constructing an RDF dataset moves from <b>linguistic statements</b> $\rightarrow$ <b>IRI assignment</b> $\rightarrow$ <b>Serialization</b> (Turtle/JSON-LD) $\rightarrow$ <b>Parsing</b> into an internal graph object for querying and manipulation.
+
+# Querying RDF with SPARQL 
+
+## Basics 
+
+Based on the provided lecture content, here is a detailed explanation of the <b>Basics of SPARQL</b> (Learning Goal 3.1).
+
+<b>SPARQL</b> (SPARQL Protocol and RDF Query Language) is the standard W3C <b>query language</b> for retrieving and manipulating data stored in RDF graphs,. It functions for RDF graphs similarly to how SQL functions for relational databases.
+
+### General Structure of a SPARQL Query
+
+A standard SPARQL query comprises four main components processed in a specific order:
+
+1. <b>Prefix Declarations:</b> These define abbreviations (CURIEs) for long IRIs to improve readability. Unlike Turtle syntax, SPARQL prefix declarations do <b>not</b> start with an `@` symbol and do <b>not</b> end with a period,.
+    - <i>Example:</i> `PREFIX ex: <http://example.com/resources/>`
+
+2. <b>Query Form and Projection:</b> This specifies the type of query (e.g., `SELECT`) and the variables to be returned.
+3. <b>Dataset Selection:</b> The `FROM` or `FROM NAMED` clauses specify which RDF graphs are being queried.
+4. <b>Where Clause (Query Patterns):</b> This contains the <b>Graph Patterns</b> that match against the RDF data.
+5. <b>Query Modifiers:</b> Clauses like `ORDER BY` or `LIMIT` that rearrange or slice the final results,.
+    
+---
+
+### Variable Projections
+
+Variables in SPARQL act as placeholders that bind to RDF terms (URIs, literals, or blank nodes) in the data.
+
+- <b>Syntax:</b> Variables are prefixed with either a question mark (<b>?</b>) or a dollar sign (<b>$</b>). Both are valid, though `?` is more commonly used.
+- <b>Select All:</b> The wildcard <b>*</b> (e.g., `SELECT *`) is used to return all variables bound in the `WHERE` clause.
+    
+---
+
+### Query Forms
+
+SPARQL supports four specific query forms, each returning different types of results:
+
+- <b>SELECT:</b>
+    - <b>Output:</b> Returns a <b>table</b> (solution sequence) where each row represents a solution and columns represent variables.
+    - <i>Usage:</i> This is the most common form, used to extract specific values.
+
+- <b>ASK:</b>
+    - <b>Output:</b> Returns a <b>boolean</b> value (`true` or `false`).
+    - <i>Usage:</i> Checks <em>whether</em> a specific graph pattern exists in the dataset without returning the actual data. It is useful for validation or yes/no questions.
+
+- <b>CONSTRUCT:</b>
+    - <b>Output:</b> Returns a <b>new RDF Graph</b>.
+    - <i>Usage:</i> It uses a <b>graph template</b>. The variables in the template are filled with the solutions found in the `WHERE` clause to generate new triples. This is often used to transform data from one vocabulary to another,.
+
+- <b>DESCRIBE:</b>
+    - <b>Output:</b> Returns an <b>RDF Graph</b> describing one or more resources.
+    - <i>Usage:</i> The exact structure of the description (e.g., whether to include incoming or outgoing edges) is determined by the SPARQL processor implementation, making it useful for exploratory analysis without knowing the exact data structure,.
+        
+---
+
+### Dataset Selection (The FROM Clause)
+
+The dataset definition determines the scope of the query.
+
+- <b>FROM </b><b>&lt;IRI&gt;</b><b>:</b> Specifies the graph to be used as the <b>default graph</b> for the query. If multiple `FROM` clauses are used, their data is merged,.
+- <b>FROM NAMED </b><b>&lt;IRI&gt;</b><b>:</b> Used to include graphs that can be referenced explicitly using the `GRAPH` keyword within the query patterns.
+- If omitted, the query executes against the endpoint's pre-configured default graph.
+    
+---
+
+### Query Patterns (The WHERE Clause)
+
+The core logic resides in the `WHERE` block, which contains a <b>Basic Graph Pattern (BGP)</b>.
+
+- <b>Triple Patterns:</b> These look like RDF triples but may contain variables in the subject, predicate, or object positions.
+- <b>Implicit AND:</b> A list of triple patterns must all match for a solution to be valid (logical conjunction).
+- <b>Implicit JOIN:</b> If the same variable name (e.g., `?x`) appears in multiple patterns, the SPARQL engine ensures that the variable binds to the <b>same RDF term</b> in all occurrences, effectively joining the data.
+- <b>Abbreviations:</b> SPARQL supports Turtle-style abbreviations inside the `WHERE` clause:
+    - <b>a</b>: Shorthand for `rdf:type`.
+    - <b>;</b>: Repeats the subject for the next predicate-object pair.
+    - <b>,</b>: Repeats the subject and predicate for the next object.
+        
+---
+
+### Sequence Modifiers
+
+Modifiers are applied after the pattern matching to organize the result set.
+
+- <b>ORDER BY:</b> Sorts the results based on variable values.
+    - <i>Syntax:</i> `ORDER BY ?var` (default ascending), `ORDER BY ASC(?var)`, or `ORDER BY DESC(?var)`.
+
+- <b>LIMIT:</b> Restricts the output to a maximum number of rows. This is essential for performance when querying large datasets (e.g., DBpedia).
+- <b>OFFSET:</b> Skips the first <em>x</em> solutions.
+    - <i>Usage:</i> Combined with `LIMIT`, this enables <b>pagination</b> (e.g., "show results 11–20").
+
+- <b>DISTINCT:</b> Removes duplicate rows from the result set.
+    - <i>Usage:</i> `SELECT DISTINCT ?x` ensures that even if `?x` is matched via multiple paths, it appears only once in the table.
+
+## Write BGP queries in SPARQL with different forms (SELECT, CONSTRUCT, ASK, DESCRIBE)  
+
+Based on the provided sources, here is a detailed explanation of Basic Graph Patterns (BGPs), the theoretical concepts of solution mappings, and how to utilize them across the four primary SPARQL query forms (SELECT, CONSTRUCT, ASK, DESCRIBE).
+
+### Basic Graph Patterns (BGP) and Solution Mappings
+
+The core of a SPARQL query is the <b>Basic Graph Pattern (BGP)</b> found within the `WHERE` clause.
+
+- <b>Definition:</b> A BGP is a set of <b>triple patterns</b>. A triple pattern is similar to an RDF triple but allows variables (prefixed with `?` or `$`) in the subject, predicate, or object positions.
+- <b>Logical Conjunction:</b> BGPs represent a logical <b>AND</b>. All triple patterns within a BGP must match the data for a solution to be valid.
+- <b>Implicit Joins:</b> If the same variable name appears in multiple triple patterns within a BGP, the SPARQL engine enforces a join. The variable must bind to the <b>same RDF term</b> in all its occurrences.
+- <b>Syntax:</b> BGPs can use Turtle-style abbreviations, such as `;` (semicolon) to repeat a subject, `,` (comma) to repeat a predicate, and `a` for `rdf:type`.
+    
+#### Theoretical Foundation: Solution Mappings ($\mu$) and Sequences ($\Omega$)
+
+To evaluate a BGP, the SPARQL engine performs pattern matching to find a subgraph in the data that matches the pattern.
+
+- <b>Solution Mapping (</b>$\mu$<b>):</b> This is a partial function that maps variables ($V$) to RDF terms (URIs, Blank Nodes, or Literals). It represents a single "row" of results.
+    - <i>User Example:</i> $\mu_1(?borough) = :Pankow, \mu_1(?berlin) = :Berlin$. This indicates that in one specific match found in the data, the variable `?borough` corresponds to the entity `:Pankow` and `?berlin` to `:Berlin`.
+
+- <b>Solution Sequence (</b>$\Omega$<b>):</b> This is a collection (ordered list or multiset) of all solution mappings generated by evaluating the graph pattern against the dataset.
+    - <i>User Example:</i> $\Omega = \{ \mu_1, \mu_2 \}$ represents the full set of answers found.
+        
+---
+
+### SPARQL Query Forms
+
+While the BGP (the `WHERE` clause) determines <em>what</em> data is matched, the <b>Query Form</b> determines <em>how</em> that data is returned.
+
+#### A. SELECT
+
+The <b>SELECT</b> query returns a table (a solution sequence) of variable bindings. It projects specific variables from the solution mappings found in the pattern matching phase.
+
+- <b>Function:</b> It is an algebra expression of the form $SELECT_S(P)$, where $P$ is the graph pattern and $S$ is the set of variables to project.
+- <b>Output:</b> A table where rows are solutions and columns are variables.
+- <b>Algebraic Process:</b> It evaluates the graph pattern to get $\Omega$ and then projects out the selected variables.
+- <b>Example:</b>
+    ```text
+SELECT ?y WHERE {
+   _:x :name ?y .
+}
+```
+    If the graph contains `_:x :name "Berlin"`, the result is a sequence containing the mapping `{?y -> "Berlin"}`.
+    
+#### B. ASK
+
+The <b>ASK</b> query returns a <b>boolean</b> (True/False). It checks whether a solution exists without returning the actual data.
+
+- <b>Function:</b> It is an expression of the form $ASK(P)$.
+- <b>Logic:</b> It returns `TRUE` if the set of solution mappings $\Omega$ is <b>not empty</b> ($\Omega \neq \emptyset$), and `FALSE` otherwise.
+- <b>Use Case:</b> Useful for validating if a specific pattern or condition exists in the dataset (e.g., "Are there any students in semester 6?").
+- <b>Example:</b>
+    ```text
+ASK WHERE {
+   ?student :semesterCount ?s .
+   FILTER(?s > 10)
+}
+```
+    
+#### C. CONSTRUCT
+
+The <b>CONSTRUCT</b> query returns a <b>new RDF Graph</b>. It uses a graph template to generate triples based on the query results.
+
+- <b>Function:</b> It takes a graph pattern ($P$) to find solutions and a template set of triple patterns ($Q$) to generate new data: $CONSTRUCT(P, Q)$.
+- <b>Process:</b>
+    1. Evaluate the `WHERE` clause ($P$) to get the solution sequence $\Omega$.
+    2. For every mapping $\mu$ in $\Omega$, apply the variable values to the template ($Q$).
+    3. The union of all these generated triples forms the resulting graph.
+
+- <b>Handling Blank Nodes:</b> If the template ($Q$) contains a blank node, the system generates a <b>fresh blank node</b> for every solution mapping. This ensures distinct resources are created for each result.
+- <b>Example:</b>
+    ```text
+CONSTRUCT { ?student ex:name ?name }
+WHERE { ?student :name ?name }
+```
+    This transforms the data into a new graph using the `ex:name` property.
+    
+#### D. DESCRIBE
+
+The <b>DESCRIBE</b> query returns an <b>RDF Graph</b> that describes specific resources.
+
+- <b>Function:</b> It returns an RDF description of the resources identified by IRIs or variables provided in the query.
+- <b>Flexibility:</b> The exact definition of "description" is <b>implementation-dependent</b>. It is not strictly defined by the SPARQL standard. Typically, it returns all triples where the resource is the subject, and sometimes triples where it is the object (inverse relationships) or related blank nodes.
+- <b>Use Case:</b> Useful for exploratory data analysis when you do not know the exact structure of the data surrounding a resource.
+- <b>Example:</b>
+    ```text
+DESCRIBE :student28106
+```
+    This would return all available information (triples) regarding that specific student.
+
+## Correctly apply UNION in queries  
+
+Based on the provided sources, here is a detailed explanation of <b>Learning Goal 3.3: Correctly apply UNION in queries</b>.
+
+### 1. The Concept of UNION
+
+The `UNION` clause in SPARQL is used to combine results from two or more alternative graph patterns. It allows you to search for data that matches <b>either</b> one pattern <b>or</b> another, effectively functioning as a logical <b>OR</b>.
+
+- <b>Mechanism:</b> The SPARQL processor evaluates each graph pattern separated by `UNION` <b>independently</b>. The results (solution mappings) from these independent evaluations are then merged into a single result set.
+- <b>Algebraic Definition:</b> Formally, the Union operator takes two sets of solution mappings ($\Omega_l$ and $\Omega_r$) and creates a new set containing all mappings found in either: $Union(\Omega_l, \Omega_r) := \{ \mu \mid \mu \in \Omega_l \text{ or } \mu \in \Omega_r \}$.
+    
+### 2. Analyzing Your Examples
+
+Your query provides two ways to write a request for city names where the name property might vary (either `:name` or `rdfs:label`).
+
+#### Approach A: Repeating the Common Pattern (Verbose)
+
+```text
+SELECT ?name WHERE {
+  { ?city :name ?name . ?city a :City }
+  UNION
+  { ?city rdfs:label ?name . ?city a :City }
+}
+```
+
+- <b>Logic:</b> Here, the condition `?city a :City` is repeated inside every branch of the `UNION`.
+- <b>Execution:</b> The processor searches for cities with a `:name`, then independently searches for cities with an `rdfs:label`. Finally, it merges the two lists.
+- <b>Redundancy:</b> While valid, this approach forces you to repeat shared constraints (like being a `:City`) in every alternative block.
+    
+#### Approach B: Factoring Out the Common Pattern (Optimized)
+
+```text
+SELECT ?name WHERE {
+  ?city a :City .
+  { ?city :name ?name }
+  UNION
+  { ?city rdfs:label ?name }
+}
+```
+
+- <b>Logic:</b> You state the common requirement (`?city a :City`) once, outside the `UNION` block.
+- <b>Execution:</b> This acts as a logical conjunction (AND). The query engine finds resources that are of type `:City` <b>AND</b> (have a `:name` <b>OR</b> have an `rdfs:label`).
+- <b>Benefit:</b> This is generally preferred for readability and maintenance. As noted in your query, "If a query is repeated, it can be used once" by placing it outside the `UNION` block, applying it to the combined results of the union.
+    
+### 3. Key Rules for Applying UNION
+
+<b>1. Independent Evaluation</b>
+
+Patterns inside `UNION` blocks are evaluated independently. A variable bound in the first block does not constrain the second block during the initial pattern matching of that specific block. However, if a variable (like `?city` in your examples) is bound outside the `UNION`, that binding is carried into the union evaluation.
+
+<b>2. Variable Binding</b>
+
+- <b>Shared Variables:</b> If the same variable (e.g., `?name`) is used in both branches, it will be bound in the final result regardless of which branch produced the solution.
+- <b>Unshared Variables:</b> If a variable appears in only one branch (e.g., `?name` in branch 1 and `?label` in branch 2), it will remain <b>unbound</b> for solutions generated by the other branch.
+    
+<b>3. Handling Duplicates (Set vs. Bag Semantics)</b>
+
+- <b>Standard Behavior:</b> Unlike the mathematical set union, the SPARQL `UNION` clause retains duplicates by default (similar to SQL's `UNION ALL`). If a city has <em>both</em> a `:name` "Berlin" and an `rdfs:label` "Berlin", and both match the query, "Berlin" will appear twice in the results.
+- <b>Correction:</b> To ensure unique results, you must explicitly use the `SELECT DISTINCT` modifier.
+    
+### 4. Application Example
+
+From the lecture data, imagine we want to list all people, whether they are Students or Professors. We can use `UNION` to combine these two disjoint types:
+
+```text
+SELECT ?person ?name WHERE {
+  {
+    ?person a :Student ;       # First block: find students
+            :name ?name .
+  }
+  UNION
+  {
+    ?person a :Professor ;     # Second block: find professors
+            :name ?name .
+  }
+}
+```
+
+This merges the set of students with the set of professors into a single "people" list.
+
+## Correctly apply OPTIONAL in queries 
+
+Based on the provided lecture content, here is a detailed explanation of <b>Learning Goal 3.4: Correctly apply OPTIONAL in queries</b>, specifically analyzing your example query.
+
+### 1. The Purpose of OPTIONAL
+
+In real-world RDF datasets, data is often "ragged" or heterogeneous, meaning not all resources share the same set of properties. For example, while every city might have a name, not every city in a dataset might have a recorded zip code.
+
+- <b>Standard Behavior (BGP):</b> A standard Basic Graph Pattern acts as a logical <b>AND</b>. If you wrote the query without `OPTIONAL` (e.g., `?city :name ?name . ?city :zip ?zip .`), the SPARQL processor would discard any city that did not have <em>both</em> a name and a zip code,.
+- <b>OPTIONAL Behavior:</b> The `OPTIONAL` clause prevents this data loss. It allows the query to return information found in the main pattern even if the pattern inside the `OPTIONAL` block fails to match.
+    
+### 2. Analyzing Your Query
+
+Your specific query is structured to retrieve a list of city names and, if available, their zip codes.
+
+```text
+SELECT ?name ?zip WHERE {
+   ?city :name ?name .        # Mandatory Pattern
+   OPTIONAL {
+      ?city :zip ?zip         # Optional Pattern
+   }
+}
+```
+
+#### Mechanism of Evaluation
+
+1. <b>Mandatory Matching:</b> The processor first evaluates the pattern outside the `OPTIONAL` block (`?city :name ?name`). It finds all resources that have a `:name` and binds the variables `?city` and `?name`. If a resource does not have a name, it is excluded entirely.
+2. <b>Optional Matching:</b> For every solution found in step 1, the processor attempts to match the pattern inside the curly braces of the `OPTIONAL` clause (`?city :zip ?zip`).
+3. <b>Result Generation:</b>
+    - <b>Case A (Match Found):</b> If the city has a zip code, the variable `?zip` is <b>bound</b> to that value. The result row will contain both the name and the zip code.
+    - <b>Case B (No Match Found):</b> If the city does <em>not</em> have a zip code, the solution is <b>retained</b>. However, the variable `?zip` remains <b>unbound</b> (empty or null) for that specific row,.
+        
+### 3. Algebraic Definition (LeftJoin)
+
+From a formal theoretical perspective (Source 6), the `OPTIONAL` clause corresponds to the <b>LeftJoin</b> operator in relational algebra.
+
+- The algebra expression for `P1 OPTIONAL P2` is defined as `LeftJoin(eval(P1), eval(P2))`.
+- The `LeftJoin` is defined as the union of two sets:
+    1. The <b>Join</b> of $P1$ and $P2$ (where the data exists in both).
+    2. The <b>Minus</b> of $P1$ and $P2$ (rows from $P1$ that are incompatible with $P2$, keeping the $P1$ variables bound and $P2$ variables unbound).
+        
+### 4. Advanced Application: Checking for Missing Data
+
+You can combine `OPTIONAL` with the `FILTER` and `BOUND()` functions to specifically find items where data is <em>missing</em> (Negation as Failure).
+
+For example, to find cities that have a name but <b>no</b> zip code, you would check if the `?zip` variable was left unbound:
+
+```text
+SELECT ?name WHERE {
+   ?city :name ?name .
+   OPTIONAL { ?city :zip ?zip }
+   FILTER (!BOUND(?zip))
+}
+```
+
+This pattern keeps only the solutions where the optional matching failed.
+
+## Use BIND ... AS and FILTER in conjuction with expression involving functions (filters, functions and modifiers)  
+
+Based on the provided lecture materials, here is a detailed explanation of using <b>BIND</b> and <b>FILTER</b> in conjunction with functions, corresponding to Learning Goal 3.5.
+
+### 1. restricting Results with FILTER
+
+The <b>FILTER</b> clause is used to restrict the solutions generated by a graph pattern. It evaluates a boolean condition for every potential solution; if the condition evaluates to `true`, the solution is kept; if `false` or an error occurs, the solution is discarded.
+
+#### A. Comparison and Arithmetic Operators
+
+Filters operate on graph patterns and restrict values using standard operators.
+
+- <b>Numeric Comparisons:</b> You can compare numeric types (integers, decimals, floats) using operators such as `=`, `!=`, `<`, `>`, `<=`, and `>=`.
+    - <i>Example:</i> `FILTER (?population > 350000)` ensures only entities with a population greater than 350,000 are returned.
+
+- <b>String Comparisons:</b> These operators also apply to strings based on lexicographic order. By default, string comparisons are case-sensitive.
+- <b>Datatypes:</b> Comparison logic respects XML Schema Datatypes (XSD). For example, `xsd:integer`, `xsd:dateTime`, and `xsd:boolean`.
+    
+#### B. Logical Connectives
+
+You can combine multiple conditions into a single complex expression using logical operators:
+
+- <b>AND (</b><b>&&</b><b>):</b> Both conditions must be true.
+- <b>OR (</b><b>||</b><b>):</b> At least one condition must be true.
+- <b>NOT (</b><b>!</b><b>):</b> Inverts the boolean result.
+    
+<i>User Example Context:</i>
+
+The query `FILTER (str(?n)="Aachen" && ?p>500000)` combines a string equality check with a numeric comparison. Both must be satisfied for the result to appear.
+
+#### C. Functions in Filters
+
+SPARQL allows the use of functions within `FILTER` clauses to perform complex checks:
+
+- <b>String Functions:</b>
+    - `REGEX(?var, "pattern", "flags")`: Checks if a string matches a regular expression (e.g., using flag "i" for case-insensitivity).
+    - `STRSTARTS` / `STRENDS`: Checks if a string starts or ends with a specific sequence.
+    - `CONTAINS`: Checks if a string contains a substring.
+    - `LCASE` / `UCASE`: Converts strings to lower or upper case to facilitate case-insensitive comparisons.
+
+- <b>Language Functions:</b> `LANGMATCHES(LANG(?v), "en")` checks if a literal is tagged with a specific language.
+- <b>Datatype Functions:</b> `DATATYPE(?v)` retrieves the datatype IRI of a literal.
+    
+---
+
+### 2. Handling Negation: OPTIONAL and !BOUND
+
+One of the most common patterns for checking that something <em>does not</em> exist (Negation as Failure) involves combining `OPTIONAL` with `FILTER` and the `BOUND()` function.
+
+- <b>BOUND(?x)</b>: Returns `true` if variable `?x` is bound to a value in the current solution, and `false` otherwise.
+- <b>The Pattern:</b>
+    1. Match the main pattern (e.g., find a city).
+    2. Use `OPTIONAL` to attempt matching extra data (e.g., find the city's state).
+    3. Use `FILTER (!BOUND(?state))` to keep only the solutions where the optional match <b>failed</b>.
+        
+<i>User Example Context:</i>
+
+```text
+SELECT ?city WHERE {
+  ?city :name ?name .
+  OPTIONAL { ?city :state ?state }
+  FILTER (!bound(?state))
+}
+```
+
+This query returns cities that do <b>not</b> have a recorded state property. If the optional block finds a state, `?state` becomes bound, `!bound(?state)` becomes false, and the city is filtered out.
+
+---
+
+### 3. Assigning Values with BIND ... AS
+
+While `FILTER` removes solutions, <b>BIND</b> is used to compute new values or modify existing ones and assign them to a variable.
+
+- <b>Syntax:</b> `BIND (expression AS ?newVariable)`.
+- <b>Scope:</b> The new variable is available in the subsequent graph patterns, filters, and the `SELECT` clause.
+    
+#### A. Arithmetic Calculations
+
+You can perform mathematical operations (`+`, `-`, `*`, `/`) on numeric variables.
+
+- <i>Source Example:</i> `BIND ((6 - ?currentSemester) AS ?remainingSemesters)` calculates the difference between a standard duration and the current semester count.
+- <i>User Example:</i> `BIND ( abs(?pPop - ?nPop) AS ?diffPop )` computes the absolute difference between two population variables.
+    
+#### B. String and Logical Manipulation
+
+`BIND` is also used for string concatenation or conditional logic.
+
+- <b>Concatenation:</b> `BIND (CONCAT("Prof. ", ?name) AS ?formalName)` combines strings.
+- <b>Conditional Assignment:</b> `BIND (IF(condition, value_true, value_false) AS ?var)` allows conditional value assignment.
+    
+---
+
+### 4. Theoretical Context: Value Space
+
+It is important to note from the query evaluation perspective that `FILTER` operations often work on the <b>Value Space</b> of literals rather than the lexical string.
+
+- For example, `"01"^^xsd:integer` and `"1"^^xsd:integer` are distinct strings, but in the value space, they are identical. A filter `FILTER (?x = 1)` would evaluate to `true` for both.
+
+## Addionally 
+
+Based on the provided lecture materials, here is a detailed explanation of additional filter functions and aggregation measures in SPARQL (Learning Goal 3.6).
+
+### 1. Advanced FILTER Functions
+
+Beyond basic comparison operators, SPARQL provides specific functions to inspect and filter literals based on their string content, language tags, or data types.
+
+#### String Manipulation and Matching
+
+String filters determine if a text literal matches a specific pattern.
+
+- <b>REGEX(?variable, "pattern", "flags")</b>: This function uses regular expressions to match string values. It allows for complex pattern matching. You can add flags, such as `"i"`, to make the search <b>case-insensitive</b>.
+    - <i>Example:</i> `FILTER (REGEX(?name, "^S", "i"))` matches names starting with "S" or "s".
+
+- <b>CONTAINS(string, substring)</b>: Checks if a string contains a specific substring. This is often used with `LCASE()` (lowercase conversion) to ensure case-insensitive matching, as `CONTAINS` is case-sensitive by default,.
+    - <i>User Query Context:</i> `FILTER (CONTAINS(?name, "erlin"))` would match "Berlin" or "Merlin".
+
+- <b>STR(?variable)</b>: Converts a resource (IRI or Literal) into its simple string form.
+    - <i>Correction:</i> Your example `FILTER (STR(?n ="Aachen")` suggests checking if the string value equals "Aachen". The correct syntax typically separates the extraction and the comparison: `FILTER (STR(?n) = "Aachen")`.
+
+- <b>STRSTARTS</b><b> / </b><b>STRENDS</b>: These functions check if a string starts or ends with a specific sequence.
+    
+#### Language Tags
+
+RDF literals may contain language tags (e.g., `"München"@de`). SPARQL provides functions to filter based on these tags.
+
+- <b>LANG(?variable)</b>: Extracts the language tag of a literal (e.g., returns "en" or "de").
+- <b>LANGMATCHES(tag, range)</b>: Checks if a language tag matches a specific language range.
+    - <i>User Query Context:</i> To check for English labels, the pattern is: `FILTER (LANGMATCHES(LANG(?name), "en"))`.
+        
+#### Datatypes
+
+You can ensure a variable matches a specific XML Schema Datatype (XSD).
+
+- <b>DATATYPE(?variable)</b>: Returns the IRI of the literal's datatype.
+    - <i>User Query Context:</i> `FILTER (DATATYPE(?shoeSize) = xsd:integer)` ensures that the variable `?shoeSize` is treated strictly as an integer, which is important because real-world data can be heterogeneous,.
+        
+---
+
+### 2. Aggregations in the SELECT Clause
+
+SPARQL allows you to compute summarized values (aggregates) directly in the `SELECT` line. This is distinct from using `BIND`, which calculates values for individual solutions.
+
+#### Common Aggregate Functions
+
+These functions compute a single value from a set (or group) of solutions.
+
+- <b>COUNT(?var)</b>: Counts the number of times a variable is bound. You can use `COUNT(DISTINCT ?var)` to count only unique values, or `COUNT(*)` to count total solution rows,.
+- <b>AVG(?var)</b>: Calculates the arithmetic mean of numeric values.
+- <b>MIN(?var)</b><b> / </b><b>MAX(?var)</b>: Finds the smallest or largest value (numeric or lexicographic).
+- <b>SUM(?var)</b>: Adds up numeric values.
+    
+#### Grouping Results (`GROUP BY`)
+
+When you mix a specific variable (like `?state`) with an aggregate function (like `MIN(?population)`) in the `SELECT` line, you <b>must</b> group the results.
+
+- <b>GROUP BY ?variable</b>: This groups the solution sets by the specified variable. Aggregates are then calculated <em>per group</em> rather than over the entire dataset,.
+- <b>Example Logic:</b>
+    - To get the average population of <em>all</em> cities:
+    `SELECT (AVG(?population) AS ?avgPop) WHERE ...`.
+    - To get the minimum population <em>per state</em> (as in your query):
+        ```text
+SELECT ?state (MIN(?population) AS ?minPop)
+WHERE { ... }
+GROUP BY ?state
+```
+        This ensures the `MIN` function calculates the minimum population separately for every unique `?state` found.
+        
+#### Filtering Groups (`HAVING`)
+
+If you want to filter results <em>after</em> aggregation (e.g., "show only states with more than 5 cities"), you cannot use `FILTER`. You must use the <b>HAVING</b> clause.
+
+- <i>Example:</i> `HAVING (COUNT(?city) > 5)`.
+
+# SPARQL Query Evaluation
+
+## Explain basic graph pattern matching based on the formal definition 
+
+Based on the provided lecture materials, here is a detailed explanation of basic graph pattern matching based on the formal definition.
+
+As you noted, the computation of SPARQL solutions follows a three-step process: translating the query into algebra, evaluating the graph patterns, and evaluating the query form. <b>Basic Graph Pattern (BGP) matching</b> is the fundamental mechanism used during the second step—evaluating the algebra expression for graph patterns.
+
+### 1. Formal Components of Pattern Matching
+
+To understand the formal definition, we must first define the mappings used to transform abstract query patterns into concrete data.
+
+- <b>Triple Pattern:</b> A tuple $(s, p, o)$ where each element can be a URI, a Blank Node, a Literal, or a <b>Variable</b>. A Basic Graph Pattern (BGP) is a set of these triple patterns.
+- <b>Solution Mapping (</b>$\mu$<b>):</b> This is a partial function that maps <b>variables</b> in the query to RDF terms (URIs, Blank Nodes, or Literals). A solution sequence $\Omega$ is an ordered list of these solution mappings.
+- <b>RDF Instance Mapping (</b>$\sigma$<b>):</b> This is a mapping from <b>blank nodes</b> in the query pattern to RDF terms in the dataset. This handles the existential quantification of blank nodes (i.e., "something exists").
+    
+### 2. The Formal Definition of Matching
+
+Formally, a solution mapping $\mu$ is considered a solution to a Basic Graph Pattern $P$ over an RDF graph $G$ if specific conditions regarding the variables and blank nodes are met.
+
+The definition states that $\mu$ is a solution if:
+
+1. <b>Domain Definition:</b> $\mu$ is defined exactly on the variable names present in $P$.
+2. <b>Blank Node Mapping:</b> There exists a mapping $\sigma$ from the blank nodes in $P$ to RDF terms.
+3. <b>Subgraph Condition:</b> The set of triples obtained by applying these mappings to the pattern is a <b>subgraph</b> of the active graph $G$.
+    
+Mathematically, this is expressed as:
+
+$$\mu(\sigma(P)) \subseteq G$$
+
+Here, $\mu(\sigma(P))$ represents the graph obtained by first replacing the blank nodes in $P$ according to $\sigma$, and then replacing the variables according to $\mu$.
+
+### 3. Evaluation Function (`eval`)
+
+In the context of SPARQL algebra, the evaluation function `eval(D(G), tp)` calculates the result of a triple pattern `tp` against a graph `D(G)`. It is defined strictly by the pattern matching criteria above:
+
+$$eval(D(G), tp) := \{ \mu \mid dom(\mu) = vars(tp) \text{ and } dom(\sigma) = bn(tp) \text{ and } \mu(\sigma(tp)) \in D(G) \}$$
+
+This means the evaluation returns the set of all solution mappings $\mu$ where valid mappings for variables and blank nodes result in a triple that actually exists in the dataset.
+
+### 4. Illustrative Example
+
+To visualize this formal process, consider the following example provided in the lecture,:
+
+- <b>RDF Graph (</b>$G$<b>):</b> Contains the triple `:Neukoelln :name "Neukoelln"@en` .
+- <b>Triple Pattern (</b>$tp1$<b>):</b> `_:x :name ?y` .
+    - This pattern contains one blank node (`_:x`) and one variable (`?y`).
+        
+To determine if there is a match, we look for mappings $\sigma$ and $\mu$:
+
+1. <b>Apply </b>$\sigma$<b>:</b> We map the blank node `_:x` to the URI `:Neukoelln`.
+    - $\sigma(\text{tp1}) = \text{:Neukoelln :name ?y}$ .
+
+2. <b>Apply </b>$\mu$<b>:</b> We map the variable `?y` to the literal `"Neukoelln"@en`.
+    - $\mu(\sigma(\text{tp1})) = \text{:Neukoelln :name "Neukoelln"@en}$ .
+
+3. <b>Check Subgraph:</b> Does `:Neukoelln :name "Neukoelln"@en` exist in $G$? Yes.
+    
+Therefore, the pattern matches, and $\mu = \{?y \rightarrow \text{"Neukoelln"@en}\}$ is a valid solution.
+
+## Given a SPARQL query, generate a SPARQL algebra expression of the query 
+
+Based on the provided lecture materials (Source "SemanticWebLecture5-SPARQL Query Evaluation.pdf"), here is a detailed explanation of how to generate SPARQL algebra expressions from a query.
+
+This process involves two distinct steps: translating the <b>Graph Patterns</b> (the logic inside the `WHERE` clause) and translating the <b>Query Form</b> (e.g., `SELECT`, `CONSTRUCT`).
+
+### 1. Understanding the Building Blocks ($V$, $U$, $B$, $L$)
+
+Before building the algebra, it is necessary to define the terms used in the expressions. You asked specifically about $V$:
+
+- $V$<b> (or </b>$\mathcal{V}$<b>):</b> This represents the infinite set of <b>Variables</b> (e.g., `?x`, `?y`, `?city`). Variables are placeholders and are disjoint from specific RDF data.
+- $U$<b>:</b> The set of <b>URIs</b> (globally unique identifiers).
+- $B$<b>:</b> The set of <b>Blank Nodes</b> (local identifiers).
+- $L$<b>:</b> The set of <b>Literals</b> (data values like strings or integers).
+    
+Therefore, when the notation mentions $g \in (U \cup V)$, it means the graph $g$ can be identified either by a specific URI (a named graph) or by a variable that will be bound during the query execution.
+
+### 2. Algebra Expressions for Graph Patterns (The `WHERE` Clause)
+
+The core logic of a SPARQL query lies in the Basic Graph Pattern (BGP). The algebra is built recursively using specific operators. If we take $P_1$ and $P_2$ as graph patterns, the translation rules are:
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>SPARQL Syntax</p></td><td><p>Algebra Operation</p></td><td><p>Description</p></td></tr>
+<tr><td><p><code>tp1 . tp2</code></p></td><td><p>$$P_1 \text{ JOIN } P_2$$</p></td><td><p>Both patterns must match (Conjunction).</p></td></tr>
+<tr><td><p><code>P1 UNION P2</code></p></td><td><p>$$P_1 \text{ UNION } P_2$$</p></td><td><p>Either pattern can match (Disjunction).</p></td></tr>
+<tr><td><p><code>P1 OPTIONAL P2</code></p></td><td><p>$$P_1 \text{ OPTIONAL } P_2$$</p></td><td><p>Matches $P_1$, and $P_2$ if possible (evaluated as <code>LeftJoin</code>).</p></td></tr>
+<tr><td><p><code>P FILTER R</code></p></td><td><p>$$P \text{ FILTER } R$$</p></td><td><p>Restricts solutions in $P$ based on condition $R$.</p></td></tr>
+<tr><td><p><code>GRAPH g { P }</code></p></td><td><p>$$g \text{ GRAPH } P$$</p></td><td><p>Matches pattern $P$ within the named graph $g$.</p></td></tr>
+</tbody>
+</table>
+
+### 3. Step-by-Step Generation: The SELECT Example
+
+Let us break down the specific `SELECT` example provided in your query, which aligns with the lecture slides.
+
+<b>The Query:</b>
+
+```text
+SELECT ?y
+WHERE {
+   _:x :borough :Berlin .                       # (tp1)
+   { _:x :name ?y . }                           # (tp2)
+   UNION
+   { _:x :population ?z . FILTER (?z > 350000) } # (tp3 + Filter)
+}
+```
+
+<b>Step A: Identify Triple Patterns</b>
+
+First, define the atomic triple patterns ($tp$):
+
+- $$tp_1 = \_:x \text{ :borough :Berlin}$$
+- $$tp_2 = \_:x \text{ :name ?y}$$
+- $$tp_3 = \_:x \text{ :population ?z}$$
+    
+<b>Step B: Build the Inner Expressions (Bottom-Up)</b>
+
+1. <b>Filter:</b> The second part of the union applies a filter to $tp_3$.
+    - Algebra: $(tp_3 \text{ FILTER } (?z > 350000))$
+
+2. <b>Union:</b> This filtered group is united with $tp_2$.
+    - Algebra: $(tp_2 \text{ UNION } (tp_3 \text{ FILTER } (?z > 350000)))$
+
+3. <b>Join:</b> The result of the union is joined with the first pattern $tp_1$ (because they are listed sequentially in the `WHERE` clause, implying an AND relationship).
+    - Algebra: $(tp_1 \text{ JOIN } (tp_2 \text{ UNION } (tp_3 \text{ FILTER } (?z > 350000))))$
+        
+<b>Step C: Apply the Query Form (SELECT)</b>
+
+A `SELECT` query is defined algebraically as an expression of the form $SELECT_S(P)$, where $S$ is the set of variables to return and $P$ is the pattern derived above.
+
+- <b>Final Expression:</b>
+    $$SELECT_{\{?y\}}(tp_1 \text{ JOIN } (tp_2 \text{ UNION } (tp_3 \text{ FILTER } (?z > 350000))))$$
+    
+<em>(Note: During evaluation, the </em><em>SELECT</em> operator corresponds to a <b>Projection</b>, discarding all variables except <em>?y</em><em> .)</em>
+
+### 4. Step-by-Step Generation: The CONSTRUCT Example
+
+`CONSTRUCT` queries are different because they use a template to build a <em>new</em> graph rather than just returning a table of variables.
+
+<b>The Query:</b>
+
+```text
+CONSTRUCT { ?b :country :Germany . } # Template (Q)
+WHERE {
+  ?b :borough :Berlin .              # Pattern (P)
+}
+```
+
+<b>Step A: Identify Components</b>
+
+- <b>Graph Pattern (</b>$P$<b>):</b> The `WHERE` clause contains a single triple pattern.
+    - $$tp_1 = ?b \text{ :borough :Berlin}$$
+
+- <b>Template (</b>$Q$<b>):</b> The `CONSTRUCT` clause contains the target triples.
+    - $tp_2 = ?b \text{ :country :Germany}$ (Note: In your query text you labelled this $tp2$, effectively treating it as a pattern template).
+        
+<b>Step B: Build the Expression</b>
+
+A `CONSTRUCT` query is defined as an expression of the form $CONSTRUCT(P, Q)$, where $P$ is the graph pattern for matching and $Q$ is the set of triple templates for generating data.
+
+- <b>Final Expression:</b>
+    $$CONSTRUCT(tp_1, \{tp_2\})$$
+    
+<em>(Note: During evaluation, the system finds all mappings </em>$\mu$ that match *$tp_1$*, and for each match, it instantiates the template $tp_2$<em> using those variables .)</em>
+
+### 5. Summary of Query Forms
+
+Based on the lecture definitions, here is how the four main query forms translate to algebra:
+
+1. <b>SELECT:</b> $SELECT_S(P)$
+2. <b>ASK:</b> $ASK(P)$ (Returns true if the solution set is not empty).
+3. <b>CONSTRUCT:</b> $CONSTRUCT(P, Q)$
+4. <b>DESCRIBE:</b> (Usually implementation specific, but generally acts as a $CONSTRUCT$ with a system-defined template based on the resources found in $P$).
+
+## Given solution mappings, decide which pairs of them are compatible  
+
+Based on the provided lecture materials, here is a detailed explanation of solution mapping compatibility, its role in SPARQL evaluation, and the related concept of instance mappings (Learning Goal 4.3).
+
+### 1. Solution Mappings ($\mu$)
+
+A <b>solution mapping</b> is defined as a partial function $\mu: V \rightarrow (U \cup B \cup L)$ that assigns SPARQL variables ($V$) to RDF terms (URIs, Blank Nodes, or Literals).
+
+- <b>Domain:</b> The set of variables defined in a mapping is called its domain, denoted as $dom(\mu)$.
+- <b>Example:</b> In your prompt, $\mu_1 = \{?borough \rightarrow :Pankow, ?berlin \rightarrow :Berlin\}$ is a solution mapping where the domain is $\{?borough, ?berlin\}$.
+    
+### 2. Defining Compatibility
+
+The concept of compatibility is crucial for operations like `JOIN`. Two solution mappings $\mu_1$ and $\mu_2$ are <b>compatible</b> (written as $\mu_1 \sim \mu_2$) if, for every variable shared between them, they map to the exact same RDF term.
+
+<b>Formal Condition:</b>
+
+$\mu_1 \sim \mu_2$ if $\forall x \in dom(\mu_1) \cap dom(\mu_2) : \mu_1(x) = \mu_2(x)$.
+
+#### Analysis of Examples
+
+Based on the logic provided in the lecture slides, we can evaluate the pairs you listed:
+
+- <b>Compatible Pair:</b>
+    - Mapping A: $\{?x \rightarrow :Sun, \mathbf{?y \rightarrow :Earth}\}$
+    - Mapping B: $\{\mathbf{?y \rightarrow :Earth}, ?z \rightarrow :Moon\}$
+    - <b>Reasoning:</b> The intersection of the domains is $\{?y\}$. In both mappings, $?y$ is assigned the value $:Earth$. Because they agree on the overlapping variable, they are <b>compatible</b>.
+        
+- <b>Incompatible Pair:</b>
+    - Mapping A: $\{?x \rightarrow :Sun, \mathbf{?y \rightarrow :Earth}\}$
+    - Mapping B: $\{\mathbf{?y \rightarrow :Mars}, ?z \rightarrow :Deimos\}$
+    - <b>Reasoning:</b> The intersection of the domains is $\{?y\}$. However, Mapping A assigns $:Earth$ while Mapping B assigns $:Mars$. Since $:Earth \neq :Mars$, they are <b>not compatible</b>.
+        
+- <b>Disjoint Domains (Always Compatible):</b>
+    - Mapping A: $\{?s1 \rightarrow :Mars\}$
+    - Mapping B: $\{?s2 \rightarrow :Venus\}$
+    - <b>Reasoning:</b> The intersection of the domains is empty ($\emptyset$). There are no shared variables to cause a conflict. Therefore, solution mappings with disjoint domains are <b>always compatible</b>.
+        
+- <b>The Empty Mapping (</b>$\mu_\emptyset$<b>):</b>
+    - The empty solution mapping has an empty domain ($dom(\mu_\emptyset) = \emptyset$). By definition, it is compatible with <b>all</b> other solution mappings because the intersection of domains will always be empty.
+        
+### 3. Application: The JOIN Operator
+
+Compatibility is the filter used by the SPARQL `Join` operator. When joining two sets of results ($\Omega_l$ and $\Omega_r$), the algebra operator produces a new set containing the union of mappings $\mu_l \cup \mu_r$ <b>only</b> for pairs where $\mu_l \sim \mu_r$.
+
+If $\mu_l$ and $\mu_r$ are not compatible, they cannot be merged into a single solution row, and that combination is discarded.
+
+### 4. Instance Mappings ($\sigma$)
+
+Your query also references <b>instance mappings</b>, which are distinct from solution mappings but essential for <b>Basic Graph Pattern matching</b>.
+
+- <b>Definition:</b> An instance mapping $\sigma$ is a partial function from a subset of <b>blank nodes</b> to RDF terms.
+- <b>Purpose:</b> It handles the "existential quantification" of blank nodes. While $\mu$ finds values for variables (e.g., `?y`), $\sigma$ assigns concrete values to the blank nodes (e.g., `_:x`) present in the query pattern to see if that structure exists in the graph.
+    
+<b>Example from Source:</b>
+
+- <b>Triple Pattern (</b>$tp$<b>):</b> `_:x :name ?y`
+- <b>Instance Mapping (</b>$\sigma_1$<b>):</b> $\{_:x \rightarrow :Neukoelln\}$
+- <b>Solution Mapping (</b>$\mu_1$<b>):</b> $\{?y \rightarrow "Neukoelln"@en\}$
+    
+To check if this matches the graph, the system applies both mappings:
+
+1. Apply $\sigma$: `_:x` becomes `:Neukoelln`. Pattern becomes `:Neukoelln :name ?y`.
+2. Apply $\mu$: `?y` becomes `"Neukoelln"@en`.
+3. <b>Result:</b> `:Neukoelln :name "Neukoelln"@en`.
+
+If this triple exists in the graph $G$, then the pattern matches.
+
+## Pattern Matching  
+
+Based on the detailed query evaluation logic provided in the lecture materials, here is an explanation of <b>Basic Graph Pattern (BGP) Matching</b>. This process is the fundamental step where the SPARQL engine identifies which parts of the dataset match the criteria defined in the `WHERE` clause.
+
+### 1. The Core Concept
+
+A <b>Basic Graph Pattern (BGP)</b> consists of a set of triple patterns. A BGP $P$ matches an RDF Graph $G$ if the engine can find specific substitutions for the <b>Blank Nodes</b> and <b>Variables</b> in the pattern such that the resulting triples actually exist in the graph $G$.
+
+To formalize this, two distinct mapping functions are required:
+
+1. $\sigma$<b> (Sigma):</b> An <b>RDF Instance Mapping</b>. It maps <b>Blank Nodes</b> in the query to RDF terms (URIs, Literals, or Blank Nodes) in the dataset.
+2. $\mu$<b> (Mu):</b> A <b>Solution Mapping</b>. It maps <b>Variables</b> in the query to RDF terms.
+    
+### 2. The Three Conditions of Matching
+
+For a solution to be valid, it must satisfy three specific conditions regarding domains and graph structure. Let us analyze these using your specific example:
+
+- <b>The Pattern (</b>$tp_1$<b>):</b> `_:x :name ?y`
+- <b>The Graph (</b>$G$<b>):</b> Contains `:Neukoelln :name "Neukoelln"@en`
+    
+#### Condition 1: Blank Node Domain Coverage
+
+The domain of the instance mapping $\sigma$ must exactly match the set of blank nodes in the triple pattern ($bn(tp)$),.
+
+- <b>Requirement:</b> The pattern `_:x :name ?y` contains one blank node: `_:x`. Therefore, $\sigma$ must provide a mapping for `_:x`.
+- <b>Your Example:</b> $\sigma_1 = \{ \_:x \rightarrow :Neukoelln \}$.
+- <b>Result:</b> `dom(σ1) = { _:x }`. The condition is met.
+    
+#### Condition 2: Variable Domain Coverage
+
+The domain of the solution mapping $\mu$ must exactly match the set of variables in the triple pattern ($vars(tp)$),.
+
+- <b>Requirement:</b> The pattern contains one variable: `?y`. Therefore, $\mu$ must provide a binding for `?y`.
+- <b>Your Example:</b> $\mu_1 = \{ ?y \rightarrow "Neukoelln"@en \}$.
+- <b>Result:</b> `dom(µ1) = { ?y }`. The condition is met.
+    
+#### Condition 3: Subgraph Verification
+
+This is the most critical step. If we apply the blank node mapping $\sigma$ to the pattern, and then apply the solution mapping $\mu$ to that result, the final set of triples must exist within the dataset $G$,.
+
+Mathematically: $\mu(\sigma(tp)) \subseteq G$.
+
+- <b>Step A (Apply </b>$\sigma$<b>):</b>
+
+Replace `_:x` with `:Neukoelln`.
+
+$$\sigma_1(tp_1) = :Neukoelln :name ?y$$
+
+- <b>Step B (Apply </b>$\mu$<b>):</b>
+
+Replace `?y` with `"Neukoelln"@en`.
+
+$$\mu_1(\sigma_1(tp_1)) = :Neukoelln :name "Neukoelln"@en$$
+
+- <b>Step C (Check Graph):</b>
+
+Does the triple `:Neukoelln :name "Neukoelln"@en` exist in the graph $G$?
+
+<b>Yes.</b> Therefore, the pattern matches.
+
+### 3. Exactness of Matching (Lexical vs. Value Space)
+
+It is crucial to note your comment: <em>"Subgraph is taken literally."</em>
+
+In SPARQL <b>Pattern Matching</b>, comparisons are performed in the <b>Lexical Space</b>. The terms must be identical character-for-character to match. This is distinct from <b>FILTER</b> evaluation, which often operates in the <b>Value Space</b>,.
+
+- <b>Pattern Matching Example:</b> If the graph contains the integer `"01"^^xsd:integer` and you query for `"1"^^xsd:integer`, <b>pattern matching will fail</b> because the strings "01" and "1" are not lexically identical.
+- <b>Filter Example:</b> If you use a `FILTER(?x = 1)`, it will succeed because the filter evaluates the numeric <em>value</em> (where $1 = 01$).
+
+## Evaluate a SPARQL algebra expression on a given RDF datasets 
+
+Based on the lecture content, here is a detailed explanation of evaluating SPARQL algebra expressions on RDF datasets, specifically focusing on `JOIN`, `FILTER`, `SELECT`, and `CONSTRUCT` operations (Learning Goal 5.4).
+
+### 1. General Evaluation Logic
+
+The evaluation of a SPARQL query is handled by the `eval()` function. This function takes an algebra expression and recursively translates it into operations on <b>solution mappings</b> with respect to a dataset $D$ and an active graph $G$.
+
+- <b>Input:</b> An algebra expression.
+- <b>Output:</b> A set of solution mappings (or an RDF graph in the case of `CONSTRUCT`).
+    
+### 2. Evaluating Graph Patterns (WHERE Clause)
+
+#### A. The JOIN Expression
+
+To evaluate an expression like `P1 JOIN P2`, the system follows these steps:
+
+1. <b>Evaluate P1:</b> Compute $\Omega_1 = eval(D(G), P1)$.
+2. <b>Evaluate P2:</b> Compute $\Omega_2 = eval(D(G), P2)$.
+3. <b>Merge Compatible Mappings:</b> The result is the set of all mappings $\mu_1 \cup \mu_2$ where $\mu_1 \in \Omega_1$ and $\mu_2 \in \Omega_2$ are <b>compatible</b>.
+    - <i>Compatibility:</i> Two mappings are compatible if they share the same value for every variable they have in common (e.g., if both define `?p`, `?p` must match).
+        
+<b>Example:</b>
+
+Using the satellite data from the sources:
+
+- $\Omega_1$ (from `?p :satellite ?s1`) yields `{?p->:Earth, ?s1->:Moon}`.
+- $\Omega_2$ (from `?p :satellite ?s2`) yields `{?p->:Earth, ?s2->:Moon}`.
+- Since `?p` matches (`:Earth`), these join to form `{?p->:Earth, ?s1->:Moon, ?s2->:Moon}`.
+    
+#### B. The FILTER Expression
+
+To evaluate `Filter(R, Ω)`, the system takes the set of solution mappings $\Omega$ (produced by a JOIN or a pattern match) and applies the boolean condition $R$.
+
+- <b>Process:</b> For every mapping $\mu \in \Omega$, the condition $R(\mu)$ is evaluated.
+- <b>Result:</b> Only those mappings where $R(\mu)$ evaluates to <b>TRUE</b> are retained.
+    
+<b>Example:</b>
+
+If the condition is `?s1 != ?s2` and we have a mapping `{?s1->:Moon, ?s2->:Moon}`, the condition is FALSE. This mapping is discarded. However, `{?s1->:Phobos, ?s2->:Deimos}` evaluates to TRUE and is kept.
+
+---
+
+### 3. Evaluating Query Forms
+
+#### A. SELECT Expression
+
+A `SELECT` query is evaluated as a <b>Projection</b>.
+
+- <b>Definition:</b> $eval(D(G), SELECT_S(P)) := Projection(S, eval(D(G), P))$.
+- <b>Process:</b> After evaluating the graph pattern $P$ to get $\Omega$, the system projects out only the variables specified in the set $S$ (the variables in the `SELECT` line).
+- <b>Semantics:</b> If processed as a set, duplicates are automatically removed. If processed as a bag (multiset), duplicates persist unless `DISTINCT` is specified.
+    
+#### B. ASK Expression
+
+An `ASK` query returns a boolean.
+
+- <b>Process:</b> It checks if the set of solution mappings resulting from the graph pattern is empty.
+- <b>Result:</b> Returns `true` if $\Omega \neq \emptyset$, otherwise `false`.
+    
+---
+
+### 4. Evaluating a CONSTRUCT Expression
+
+The `CONSTRUCT` form is unique because it generates a new <b>RDF Graph</b> rather than a table of solutions.
+
+<b>Formula:</b> $eval(D(G), CONSTRUCT(P, Q)) := \bigcup \{ Inst(\mu, Q) \mid \forall \mu \in eval(D(G), P) \}$.
+
+This involves two phases:
+
+1. <b>Pattern Matching:</b> Evaluate the `WHERE` clause ($P$) to get solution mappings $\Omega$.
+2. <b>Template Instantiation:</b> For <b>each</b> solution mapping $\mu$ in $\Omega$, apply the values to the template $Q$.
+    
+#### Detailed Walkthrough of Your Satellite Example
+
+<b>The Query:</b>
+
+- <b>Pattern (</b>$P_1$<b>):</b> `?p :satellite ?s1`
+- <b>Template (</b>$Q_1$<b>):</b> `{ ?s1 rdf:type :Satellite . ?s1 :orbitAround _:x }`
+    
+<b>Step 1: Compute solutions for P1 (</b>$\Omega_1$<b>)</b>
+
+Based on the dataset $D(G)$, the solutions are:
+
+- $\mu_1$: `{?p -> :Earth, ?s1 -> :Moon}`
+- $\mu_2$: `{?p -> :Mars, ?s1 -> :Phobos}`
+- $\mu_3$: `{?p -> :Mars, ?s1 -> :Deimos}`.
+    
+<b>Step 2: Instantiate the Template (</b>$G'$<b>)</b>
+
+The system iterates through $\Omega_1$ and fills in $Q_1$. A critical rule for `CONSTRUCT` is that <b>blank nodes in the template generate fresh blank nodes for each solution mapping</b>.
+
+- <b>Processing </b>$\mu_1$<b> (:Moon):</b>
+    - Replace `?s1` with `:Moon`.
+    - Replace `_:x` with a fresh blank node `_:x1`.
+    - <i>Triples:</i> `:Moon rdf:type :Satellite . :Moon :orbitAround _:x1 .`
+
+- <b>Processing </b>$\mu_2$<b> (:Phobos):</b>
+    - Replace `?s1` with `:Phobos`.
+    - Replace `_:x` with a fresh blank node `_:x2`.
+    - <i>Triples:</i> `:Phobos rdf:type :Satellite . :Phobos :orbitAround _:x2 .`
+
+- <b>Processing </b>$\mu_3$<b> (:Deimos):</b>
+    - Replace `?s1` with `:Deimos`.
+    - Replace `_:x` with a fresh blank node `_:x3`.
+    - <i>Triples:</i> `:Deimos rdf:type :Satellite . :Deimos :orbitAround _:x3 .`
+        
+<b>Final Result (</b>$G'$<b>):</b>
+
+The union of these triples forms the resulting graph, where each satellite orbits a unique, newly generated blank node entity.
+
+# Vocabularies and Data Modeling
+
+# Semantics of RDF and RDF Schema
+
+# Data Modelling with OWL LD
+
+# SHACL (and ShEx) 
+
+# PROV - The Provenance W3C Standard 
+
 # Chapter 2
 
 Here is the review for <b>Chapter 2: Linked Data Basics</b>. As before, I have kept your text exactly as provided, followed by an <b>English Expansion & Explanation</b> derived from standard Semantic Web and Linked Data principles (which align with your lecture notes).
@@ -1035,3 +2215,5 @@ This addresses the "HTTP Range 14" problem: <b>How do we distinguish a real-worl
 We have covered Chapter 2. <b>Would you like to do a quick practice exercise on transforming an English sentence into Turtle syntax (Triples), or are you ready for Chapter 3?</b>
 
 # 
+# [中文版](/X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/H4iRwSI2EiFpszkRPBfcwEian4b)
+

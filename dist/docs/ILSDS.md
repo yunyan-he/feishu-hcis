@@ -2595,6 +2595,8 @@ $$Attention(Q,K,V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
 ---
 
+## [预测试卷 plus NLP](/QRiFwuy0liWXaGk5KDqcgG4dnYf/INaXwzIW7irXiqklxCacH6wsnyg)
+
 # DeepLearning
 
 ## Deep Learning
@@ -2650,13 +2652,19 @@ Perceptron 是神经网络的最基本单元（computational unit）。
 
 $$w = (w_0, w_1, \dots, w_q)$$
 
+一个神经元，它接收一组输入，进行处理，然后输出一个结果。在数学上，我们将其分解为两个步骤 ：
+
 #### Propagation（传播）
+
+神经元接收输入向量 （通常包含一个偏置项 ），并根据权重向量  计算加权和。
 
 $$p = \sum_{s=0}^{q} w_s h_s = w^T h$$
 
 这是一个线性组合（linear combination）。
 
 #### Activation（激活）
+
+计算出的  只是一个线性数值，我们需要通过一个函数来决定神经元是否“被激活”。
 
 经典感知机使用 sign 函数：$f = \text{sign}(p) =
 \begin{cases}
@@ -2671,6 +2679,7 @@ $$p = \sum_{s=0}^{q} w_s h_s = w^T h$$
 $$\text{if } w^T h \ge 0 \Rightarrow \text{class 1, else class 0}$$
 
 - 本质是一个 <b>linear classifier（线性分类器）</b>，决策边界是一个超平面。
+- 但这有个大问题：它不可导，无法用于梯度下降训练 。
     
 ---
 
@@ -2717,6 +2726,8 @@ $$\sigma(p)(1 - \sigma(p)) = \frac{1}{1 + e^{-p}} \cdot \frac{e^{-p}}{1 + e^{-p}
 ---
 
 ## Feed-forward Neural Networks (FNN)
+
+当我们把许多神经元分层连接起来，且信号只向一个方向传播（从输入到输出，没有回路），就构成了 <b>Feed-Forward Neural Networks (前馈神经网络)</b> 。
 
 ### Basic Structure
 
@@ -2767,6 +2778,8 @@ $$y = f_L(W_L f_{L-1}(W_{L-1} \dots f_1(W_1 x)))$$
 ## Training Feed-forward Neural Networks
 
 ### Objective Function
+
+我们如何让网络学会预测？我们需要定义一个<b>Objective Function (目标函数)</b>
 
 以回归任务为例，使用 Residual Sum of Squares (RSS)：
 
@@ -2986,6 +2999,8 @@ CNN 是一种 <b>constrained neural network</b>，专门用于学习 <b>spatial 
 - <b>Less data required</b>：更不容易过拟合  
 - <b>More robust to noise and overfitting</b>
 
+CNN 的核心在于两个操作的交替使用：
+
 ### Convolution Operator
 
 输入矩阵（例如图像 patch）：
@@ -3072,7 +3087,7 @@ $$\text{mean}\{a_1, a_2, a_5, a_6\}$$
 
 ### Why RNN?
 
-Feed-forward networks 不能直接处理序列依赖：
+Feed-forward networks 不能直接处理序列依赖<b>Handling Sequential Data</b>：
 
 $$y_t = f(x_1, x_2, \dots, x_t)$$
 
@@ -3082,7 +3097,7 @@ RNN 通过引入 <b>hidden state</b> 来建模时间依赖。
 
 ### Echo State Networks (ESNs)
 
-ESN 是一种特殊的 RNN：
+ESN 是一种特殊的 RNN，它的设计哲学非常独特：<b>"Don't train everything."</b>：
 
 - Input weights$A$：随机  
 - Reservoir weights$B$：随机  
@@ -3283,41 +3298,232 @@ $$g_{\cos}(a_j, a_b) = \frac{a_j^T a_b}{\|a_j\| \|a_b\|}$$
 
 ## Agenda 对应小结（按考试视角）
 
-1. <b>Deep Learning</b>
-
-- 定义：neural network based models, representation learning  
-- 特点：scalable, flexible, trainable  
-    
-1. <b>Perceptrons</b>
-
-- Propagation：$p = w^T h$
-- Activation：sign function  
-- 本质：linear classifier  
-    
-1. <b>Feed-forward Neural Networks</b>
-
-- 多层结构：input, hidden, output  
-- 每层：linear propagation + nonlinear activation  
-- Universal function approximator  
-    
-1. <b>Backpropagation Algorithm</b>
-
-- 目标：计算$\frac{\partial E}{\partial W_{ab}}$ 
-- 核心公式：
-    - $$\frac{\partial E}{\partial W_{ab}} = \delta_a h_b$$
-    - 输出层：
-    $$\delta_a = (f_a - y_{ia}) f_a (1 - f_a)$$
-    - 隐藏层：
-    $$  \delta_a = f_a(1 - f_a) \sum_k \delta_{v_k} W_{v_k a}$$
-
-1. <b>Autoencoder and Outlier Detection</b>
-
-- AE：encoder + decoder，学习 latent representation  
-- 矩阵分解视角：$X \approx C P$
-- Outlier detection：基于 reconstruction error（MSE）  
-- One-class classification：只用 inlier 训练 AE  
-
 ## [part 4](/QRiFwuy0liWXaGk5KDqcgG4dnYf/R5iKwcIHPi1bbIkKz73cd7WWndb)
 
 # Reinforce learning
+
+## The Idea Behind Reinforcement Learning (RL)
+
+> "Imagine playing Pac-Man without knowing the rules, the controls, or the goal." 
+
+### 1.1 Why not Supervised Learning?
+
+在深入 RL 之前，我们先要理解为什么传统的 <b>Supervised Learning (监督学习)</b> 在某些场景下行不通。
+
+- <b>Supervised Learning 的局限性：</b> 监督学习依赖于“标准答案” (Label)。你需要给模型一个数据集，告诉它：“在这个情境下，正确动作是 A” 。
+- <b>RL 的现实困境：</b> 在像 Pac-Man 这样的游戏中，或者现实决策中，我们往往无法获得针对所有未知情况的“标准答案数据集” 。当 Pac-Man 遇到一个从未见过的幽灵布局时，它不知道哪一步是绝对“最佳”的，因此没有 Label 可供学习 。
+
+### 1.2 Learning by Trial and Error
+
+既然没有老师手把手教，<b>Reinforcement Learning</b> 采取了另一种策略：<b>试错 (Trial and Error)</b> 。
+
+- <b>Core Mechanism:</b> 核心逻辑是建立“动作”与“结果”之间的联系 (Connection between individual action and later result) 。
+- <b>Analogy (Human Learning):</b> 这非常像人类（尤其是儿童）的学习方式 ：
+    - <b>Punishment:</b> 如果做了坏事  父母生气  收到负反馈，下次不再做 。
+    - <b>Reward:</b> 如果做了好事  得到表扬或糖果  收到正反馈，下次继续做 。
+
+---
+
+## Agent and Environment
+
+为了将上述直觉数学化，我们需要定义 RL 的基本组件。以 Pac-Man 游戏为例：
+
+### 2.1 Definitions
+
+- <b>Agent (智能体):</b> 做决策的主体。在例子中就是 Pac-Man 。
+- <b>Environment (环境):</b> 除 Agent 以外的一切事物。包括墙壁、幽灵 (Ghosts)、豆子 (Pellets) 。
+- <b>State (s) (状态):</b> 环境在当前时刻的“样子”或“配置”。例如：Pac-Man 的坐标 (5,5)，红鬼的坐标 (5,8) 。
+- <b>Action (A) (动作):</b> Agent 可以做出的选择。例如：上下左右移动 。
+- <b>Reward (R) (奖励):</b> 环境给出的反馈信号。例如：吃豆子 (+10分)，被鬼吃掉 (-100分) 。
+
+### 2.2 The Agent-Environment Loop (交互循环)
+
+RL 的运作是一个随时间 (t) 推进的循环过程 ：
+
+1. <b>Observation (</b>$s_t$<b>):</b> Agent 观察当前环境状态（如：我在哪，鬼在哪）。
+2. <b>Action (</b>$a_t$<b>):</b> 基于观察，Agent 选择一个动作（如：向左走）。
+3. <b>State Transition (</b>$s_t \rightarrow s_{t+1}$<b>):</b> 既然动作发生了，环境随之改变（Pac-Man 到了新格子，鬼也移动了）。
+4. <b>Reward (</b>$r_t$<b>):</b> 环境根据结果给出一个即时分数（Did I eat a dot?）。
+
+<b>The Ultimate Goal:</b> Agent 的唯一目标是最大化<b>累积奖励的总和 (Sum of Rewards)</b>，而不仅仅是眼前的奖励 。
+
+### 2.3 The Reward Function
+
+<b>Reward Function</b> 是 RL 的灵魂，它定义了<b>我们要什么 (What we want)</b>，而不是<b>怎么做 (How to get there)</b> 。
+
+- 它不仅与动作有关，更与状态有关 。
+- <b>Pac-Man 示例：</b>
+    - Eat dot: 
+    - Eat cherry: 
+    - Touch ghost:  (Punishment)
+    - Move into wall:  (为了鼓励它不要撞墙或浪费时间) 。
+
+---
+
+## The Math behind RL: Formalizing the World
+
+现在我们将上述概念抽象为数学模型，称为 <b>Markov Decision Process (MDP)</b>。
+
+### 3.1 Markov Decision Process (MDP)
+
+一个 MDP 由元组$(S, A, P, R)$  组成 ：
+
+- S: State Space (所有可能状态的集合)。
+- A: Action Space (所有可能动作的集合)。
+- R: Reward Function。
+- <b>P: Transition Probability (转移概率) </b>$P(s_{t+1} | s_t, a_t)$
+    - 这是一个概率分布。它的意思是：如果在状态 $s_t$  采取动作$a_t$ ，跳转到状态 $s_{t+1}$ 的概率是多少？。
+
+<b>The Markov Property (马尔可夫性质):</b>
+
+这是极其重要的假设：“<b>未来只取决于当前状态，而与过去的历史无关</b>” (The future depends only on the current state, not the history) 。
+
+- <i>Interpretation:</i> 只要我知道了现在的$s_t$ （Pac-Man 和鬼现在的位置），我就拥有了预测未来所需的所有信息。我不需要知道 Pac-Man 是一步步怎么走到这里的。
+    
+### 3.2 Return and Discount Factor
+
+我们之前说过目标是最大化累积奖励。这个累积和称为 <b>Return (</b>$G_t$<b>)</b>。
+
+$$G_t = r_t + r_{t+1} + r_{t+2} + \dots$$
+
+但这有一个问题：游戏可能无限进行下去，总和可能无穷大。因此我们需要引入 <b>Discount Factor (折扣因子</b>$\gamma$<b> )</b>，其中 $\gamma \in [0, 1]$ 。
+
+<b>Corrected Formula:</b>
+
+$$G_t = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \dots$$
+
+- <b>物理意义：</b>  决定了 Agent 有多看重“未来” 。
+- $\gamma = 0$: 目光短浅，只在乎眼前的奖励 (Immediate reward) 。
+- $\gamma \approx 1$(e.g., 0.99): 高瞻远瞩，愿意为了未来的胜利牺牲现在的分数（例如：为了吃到大樱桃，现在先绕远路）。
+
+### 3.3 Value Functions & Policy
+
+Agent 如何判断局势？它需要三个核心函数 ：
+
+1. <b>State-Value Function (</b>$V(s)$<b>):</b>
+    $$V(s) = \mathbb{E}[G | s]$$
+
+<i>解释：</i> 仅仅停留在状态 s 有多好？（即：如果我到了这个位置，预期未来能拿多少总分？）
+
+1. <b>Action-Value Function (</b>$Q(s, a)$<b>):</b>
+
+$$Q(s, a) = \mathbb{E}[G | s, a]$$
+
+<i>解释：</i> 在状态  s下，如果我<b>采取动作</b> a，预期未来能拿多少总分？这直接指导具体的行动选择 。
+
+1. <b>Policy Function (</b>$\pi$<b>):</b>
+    $$a_t \sim \pi(\cdot | s_t)$$
+    
+<i>解释：</i> 策略函数是 Agent 的“大脑”，它是从 State 到 Action 的映射。
+
+- <b>Exploration (探索):</b> 训练初期，Agent 可能会随机乱动，试图发现哪里有高分 。
+- <b>Exploitation (利用):</b> 训练后期，Agent 倾向于利用已学到的知识，总是选择 Q 值最高的动作 (Optimal Action) 。
+
+---
+
+## The Bellman Equation
+
+<b>Bellman Equation</b> 是 RL 中最核心的方程，它定义了 Value Function 的递归关系。
+
+$$V(s_t) = \max_{a} [ R(s_t, a_t) + \gamma \sum_{s_{t+1}} P(s_{t+1} | s_t, a_t) V(s_{t+1}) ]$$
+
+### 4.1 Equation Breakdown (详细推导)
+
+让我们把这个复杂的公式拆解开来看 ：
+
+1. $V(s_t)$: 当前状态的价值。
+2. $max_a$: 我们假设 Agent 总是足够聪明，会选择那个能带来最大收益的动作 (Optimal Action)。
+3. $R(s_t, a_t)$: <b>Immediate Reward</b>。做完动作立刻拿到的奖励。
+4. $\gamma$: Discount Factor。
+5. $\sum P(\dots) V(s_{t+1})$: <b>Future Value</b>。这是对未来的期望。因为环境可能有随机性（P），我们需要对所有可能的下一个状态$s_{t+1}$ 的价值$$V(s_{t+1})$$  进行加权求和。
+    
+<b>直观理解：</b> “现在的价值” = “刚才拿到手的钱” + “打折后的未来预期价值”。
+
+### 4.2 Q-Learning Update
+
+基于 Bellman 方程，我们发展出了 <b>Q-Learning</b> 算法。这是一种迭代更新的方法：
+
+$$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [ \underbrace{R + \gamma \max Q(s_{t+1}, a_{t+1})}_{\text{Target}} - \underbrace{Q(s_t, a_t)}_{\text{Current}} ]$$
+
+- <b>逻辑：</b> 通过不断的重复，Agent 计算出的 Q 值会越来越接近真实的数学期望。
+- <b>DQN (Deep Q-Network):</b> 当状态太多存不下表格时，我们用神经网络 (Neural Network) 来近似拟合这个 Q 函数 。
+
+---
+
+## Beyond Agents: Learning to Think and Reason
+
+RL 的概念如今已经超越了玩游戏的 Agent，成为了训练大语言模型 (LLM) "思考"的关键技术 。
+
+### 5.1 Proximal Policy Optimization (PPO)
+
+这是目前非常流行的算法（OpenAI 常用）。
+
+- <b>Structure:</b> 它使用 <b>Actor-Critic</b> 架构。
+- <b>Actor:</b> 控制行为 (Policy)。
+- <b>Critic:</b> 评分员，衡量动作好坏 (Value Function) 。
+- <b>Core Idea (Clipping):</b> 它的核心是防止模型学得“太快太猛”。如果在一次更新中策略变化太大，可能会导致模型崩溃。因此 PPO 会 <b>Clip (截断)</b> 更新幅度，保证稳定性 。
+- <b>Math:</b>
+    $$L^{CLIP} = \dots \min( \dots, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)\hat{A}_t )$$
+
+这里的 $r_t(\theta)$ 是新旧策略的概率比率。如果不加限制，这个比率可能爆炸。PPO 强制将其限制在 $[1-\epsilon, 1+\epsilon]$  之间 。
+
+### 5.2 Group Relative Policy Optimization (GRPO)
+
+这是 <b>DeepSeek</b> 引入的新技术，旨在优化 PPO 的缺点 。
+
+- <b>Drawback of PPO:</b> PPO 需要训练两个网络 (Actor 和 Critic)，这很占显存和算力 。
+- <b>GRPO Solution:</b> <b>移除 Critic 模型</b> 。
+- <b>How it works:</b>
+
+1. 对于同一个输入，生成<b>一组 (Group)</b> 多个输出 。
+2. 用 Reward Model 给这组输出打分 。
+3. 计算 <b>Relative Advantage</b>: 比较这一组里的某个输出和组内平均水平的差距 。
+
+- <i>直觉：</i> 不需要一个绝对的 Critic 告诉我好坏，只要在一组尝试中找出相对最好的那个进行强化即可。
+    
+### 5.3 RLHF (Reinforcement Learning from Human Feedback)
+
+为什么 LLM 训练需要 RL？
+
+- <b>Problem:</b> 很难定义一个数学公式来衡量“这个摘要写得好不好”。但是，让<b>人类</b>来打分（点赞/点踩）是很容易的 。
+
+- <b>Workflow:</b>
+
+1. 收集人类反馈数据。
+2. 训练一个 <b>Reward Model</b> 来模仿人类的打分标准 。
+3. 使用这个 Reward Model 配合 PPO 或 GRPO 来训练 LLM 。
+
+---
+
+## Reward Function Exploitation (The Risk)
+
+最后，必须警惕 RL 的一个经典问题：<b>Reward Hacking (奖励利用)</b>。
+
+如果 Reward Function 定义得不够严谨，Agent 会想方设法“作弊”来拿高分，而不是真正完成任务 。
+
+<b>Example: Generating Unit Tests</b> 
+
+我们希望 AI 写出能通过的单元测试代码。
+
+- <b>Attempt 1:</b>
+    - <i>Rule:</i> Reward = "Unit test passes".
+    - <i>Agent Exploit:</i> 写一个空函数 `def test(): pass`。它运行不报错，Agent 拿到满分，但这毫无意义 。
+
+- <b>Attempt 2:</b>
+    - <i>Rule:</i> Reward = "Passes AND has one assert".
+    - <i>Agent Exploit:</i> 写 `def test(): assert true`。依然毫无意义，但符合规则 。
+
+- <b>Solution:</b>
+    - <i>Rule:</i> Reward = "Calls the function to test AND asserts over return" 。
+
+<b>Lesson:</b> 你得到的正是你所奖励的 (You get what you reward)。必须极其小心地设计奖励函数。
+
+---
+
+## Summary
+
+- <b>Basis:</b> RL 是基于 Agent、Environment、State、Action、Reward 的循环交互 。
+- <b>Markov Property:</b> 只有当下是重要的，历史无关紧要 。
+- <b>Value Function:</b> 评估状态和动作的长期价值。
+- <b>Reusability:</b> 这一套逻辑不仅用于游戏，更是训练现代 LLM (ChatGPT, DeepSeek) 的基石 。
 

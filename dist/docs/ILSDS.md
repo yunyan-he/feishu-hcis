@@ -1727,7 +1727,873 @@ $$w \leftarrow w - \eta g$$
 ## 
 # Plus Advanced Optimization
 
+下面给你整理一份<b>极其详细、考试可直接使用、按 PPT agenda 组织、英文术语 + 大量中文解释</b>的完整文稿。  
+
+内容覆盖所有知识点，不遗漏，重点难点会特别展开，推导会补充到可考试使用的深度。
+
+## <b>Agenda</b>
+
+1. Loss Landscapes as 2D Surfaces  
+2. Improving Gradient Descent: Momentum & Adaptive Learning Rate  
+3. Heavy Ball Method  
+4. RMSProp  
+5. Adam  
+6. Simulated Annealing  
+    
+---
+
+## <b>Loss Landscapes as 2D Surfaces</b>
+
+### <b>核心概念：Loss Landscape（损失地形）</b>
+
+PPT 将优化过程类比为在二维高度图（2D height map）上移动。
+
+#### <b>两类地形：</b>
+
+##### <b>Smooth landscapes（平滑地形）</b>
+
+- 表面光滑、梯度变化平稳  
+- 优化路径较可预测  
+- 但如果遇到 <b>flat regions（平坦区域）</b>，梯度接近 0，下降速度极慢
+
+→ 典型例子：深度网络中的 plateau、vanishing gradient 区域
+
+##### <b>Rugged landscapes（崎岖地形）</b>
+
+- 含大量 <b>local minima（局部最小值）</b>  
+- <b>saddle points（鞍点）</b>  
+- <b>plateaus（平台区）</b>  
+- 优化容易卡住或震荡
+    
+#### <b>关键问题：</b>
+
+> <b>How to find the global minimum?</b>
+> 非常困难，尤其在高维非凸优化中（deep learning）。
+
+---
+
+## <b>Improving Gradient Descent: Momentum & Adaptive Learning Rate</b>
+
+### <b>Vanilla Gradient Descent 的主要问题</b>
+
+#### <b>Slow in long, narrow valleys（在狭长谷底下降很慢）</b>
+
+- 梯度方向不断左右摆动  
+- 沿主方向下降速度慢
+
+### <b>High curvature regions cause oscillations（高曲率区域导致震荡）</b>
+
+- 在陡峭方向 overshoot  
+- 在平坦方向又太慢
+    
+---
+
+### <b>解决方案：</b>
+
+#### <b>Momentum（动量）</b>
+
+- 引入惯性项  
+- 累积过去的梯度方向  
+- 使下降更稳定、更快
+
+#### <b>Adaptive Learning Rate（自适应学习率）</b>
+
+- 在陡峭方向减小步长  
+- 在平坦方向增大步长  
+- 提升收敛速度
+    
+---
+
+### <b>三种改进方法：</b>
+
+1. <b>Heavy Ball Method（动量法）</b> → Momentum  
+2. <b>RMSProp</b> → Adaptive learning rate  
+3. <b>Adam</b> → Momentum + Adaptive learning rate（现代默认优化器）
+    
+---
+
+## <b>Heavy Ball Method (Momentum Gradient Descent)</b>
+
+### <b>Vanilla GD 更新：</b>
+
+$$x_{t+1} = x_t - \eta \nabla f(x_t)$$
+
+### <b>Heavy Ball Method 更新：</b>
+
+#### <b>Velocity update（速度更新）</b>
+
+$$v_{t+1} = \beta v_t + (1-\beta)\nabla f(x_t)$$
+
+其中：
+
+- $\beta$ 通常取 <b>0.8–0.99</b>
+- $$v_0 = 0$$
+    
+#### <b>Parameter update（参数更新）</b>
+
+就是真正的梯度变化吗？
+
+$$x_{t+1} = x_t - \eta v_{t+1}$$
+
+---
+
+### <b>Momentum 的数学展开（PPT 给出）</b>
+
+$$v_{t+1} = (1-\beta)(\nabla f(x_t) + \beta \nabla f(x_{t-1}) + \cdots + \beta^{t}\nabla f(x_0))$$
+
+<b>解释：</b>
+
+- 这是 <b>exponential moving average（指数滑动平均）</b>  
+- 过去的梯度越久远，权重越小  
+- 优化器“记住”过去的方向，使下降更稳定
+    
+---
+
+### <b>物理类比（PPT 强调）</b>
+
+像一个球在地形中滚动：
+
+- 梯度 = 重力  
+- $\beta$ = 摩擦  
+- $v_t$ = 速度（动量）  
+- 球会积累惯性 → 加速下降
+    
+---
+
+### <b>Heavy Ball Method 的优势（PPT 列表）</b>
+
+#### <b>Faster convergence in flat regions（平坦区更快）</b>
+
+- 梯度小但方向一致  
+- 动量累积后加速前进
+    
+#### <b>Escapes local minima & saddle points（更容易逃离局部极小 & 鞍点）</b>
+
+- 动量帮助“冲出去”
+    
+#### <b>Reduces oscillations（减少震荡）</b>
+
+- 在高曲率方向震荡减少  
+- 在主下降方向加速
+    
+#### <b>Smooths noisy gradients（平滑随机梯度）</b>
+
+- 对 SGD 特别有效
+    
+---
+
+## <b>RMSProp (2012)</b>
+
+RMSProp 是一种 <b>adaptive learning rate method（自适应学习率方法）</b>。
+
+### <b>核心思想：</b>
+
+维护 <b>squared gradients（梯度平方）</b> 的指数滑动平均：
+
+$$s_{t+1} = \rho s_t + (1-\rho)(\nabla f(x_t))^2$$
+
+其中：
+
+- $$\rho \approx 0.9$$
+    
+---
+
+### <b>Adaptive learning rate（自适应学习率）</b>
+
+学习率变为：
+
+$$\frac{\eta}{\sqrt{s_{t+1}} + \epsilon}$$
+
+#### <b>更新：</b>
+
+$$x_{t+1} = x_t - \frac{\eta}{\sqrt{s_{t+1}}+\epsilon}\nabla f(x_t)$$
+
+---
+
+### <b>RMSProp 的动机（PPT）</b>
+
+#### <b>Steep directions → smaller steps（陡峭方向 → 小步长）</b>
+
+- 梯度平方大 → $s_t$ 大 → 学习率变小  
+- 避免 overshoot
+    
+#### <b>Flat directions → larger steps（平坦方向 → 大步长）</b>
+
+- 梯度平方小 → $s_t$ 小 → 学习率变大  
+- 加速收敛
+    
+---
+
+## <b>Adam (2015)</b>
+
+Adam = <b>Momentum + RMSProp</b>
+
+是深度学习默认优化器。
+
+---
+
+### <b>Adam 的两个 moving averages：</b>
+
+#### <b>First moment（动量项）</b>
+
+$$m_{t+1} = \beta_1 m_t + (1-\beta_1)\nabla f(x_t)$$
+
+#### <b>Second moment（平方梯度项）</b>
+
+$$v_{t+1} = \beta_2 v_t + (1-\beta_2)(\nabla f(x_t))^2$$
+
+典型参数：
+
+- $\beta_1 = 0.9$  
+- $\beta_2 = 0.999$  
+- $$\epsilon = 10^{-8}$$
+    
+---
+
+### <b>Bias correction（偏差校正）</b>
+
+因为 $m_0 = 0, v_0 = 0$，初期会偏小，因此需要校正：
+
+$$\hat{m}_{t+1} = \frac{m_{t+1}}{1-\beta_1^{t+1}}$$
+
+$$\hat{v}_{t+1} = \frac{v_{t+1}}{1-\beta_2^{t+1}}$$
+
+---
+
+### <b>Adam 更新：</b>
+
+$$x_{t+1} = x_t - \frac{\eta}{\sqrt{\hat{v}_{t+1}} + \epsilon}\hat{m}_{t+1}$$
+
+---
+
+## <b>Adam 的优点（PPT 总结）</b>
+
+- Adaptive（自适应）  
+- Robust（鲁棒）  
+- Minimal tuning（几乎不用调参）  
+- 默认选择（deep learning standard）
+    
+---
+
+## <b>Simulated Annealing（模拟退火）</b>
+
+### <b>物理类比：Annealing（退火）</b>
+
+- 金属加热 → 原子自由移动  
+- 缓慢冷却 → 形成低能量晶体结构  
+- 慢冷 → 更接近 global minimum
+    
+---
+
+### <b>Simulated Annealing 的核心思想</b>
+
+#### <b>Energy function（能量函数）</b>
+
+目标函数 $E(x)$
+
+#### <b>Temperature </b>$T$
+
+- 初始温度高  
+- 随时间逐渐降低
+    
+#### <b>Sampling distribution</b>
+
+$$p(x) \propto e^{-E(x)/T}$$
+
+#### <b>关键特性：</b>
+
+- 允许 uphill moves（上坡移动）  
+- 随着温度降低，接受概率下降  
+- 最终集中在 global minima 附近
+    
+---
+
+### <b>算法步骤（PPT 给出）</b>
+
+1. 初始化：  
+    - 初始状态 $x_0$  
+    - 初始温度 $T_0$
+        
+2. 重复：
+    - 采样候选 $x'$
+    - 若 $E(x') < E(x_k)$，接受  
+    - 否则以概率$  \exp\left(-\frac{E(x') - E(x_k)}{T_k}\right)$接受
+
+1. 降温：
+
+$$T_{k+1} < T_k$$
+
+---
+
+### <b>Cooling Schedules（降温策略）</b>
+
+#### <b>(1) Exponential（指数）</b>
+
+$$T_{k+1} = \alpha T_k$$
+
+#### <b>(2) Logarithmic（对数）</b>
+
+$$T_k = \frac{T_0}{\log(k+c)}$$
+
+#### <b>(3) Adaptive（自适应）</b>
+
+#### <b>理论保证：</b>
+
+- 若降温足够慢 → 保证收敛到 global minimum
+    
+---
+
+### <b>Simulated Annealing Example: Traveling Salesman Problem (TSP)</b>
+
+#### <b>State（状态）</b>
+
+一个城市的 tour（循环）
+
+#### <b>Energy function</b>
+
+$$E(T) = \sum_i \|T_i - T_{i+1}\|$$
+
+#### <b>Moves</b>
+
+- 2-opt  
+- 3-opt
+    
+#### <b>SA step</b>
+
+- 若 $\Delta E \le 0$，接受  
+- 否则以 $\exp(-\Delta E/T)$ 接受
+    
+---
+
+### <b>Simulated Annealing 的适用场景</b>
+
+#### <b>适合：</b>
+
+- 极其 rugged 的 loss landscape  
+- 离散优化（如 TSP）
+    
+#### <b>不适合：</b>
+
+- deep learning（太慢，不如 Adam）
+    
+---
+
+## <b>Minimum Takeaway（PPT 总结）</b>
+
+<table>
+<colgroup>
+<col width="200"/>
+<col width="200"/>
+</colgroup>
+<tbody>
+<tr><td><p>Method</p></td><td><p>Key Idea</p></td></tr>
+<tr><td><p>Heavy Ball</p></td><td><p>Gradient descent + momentum</p></td></tr>
+<tr><td><p>RMSProp</p></td><td><p>Gradient descent + adaptive learning rate</p></td></tr>
+<tr><td><p>Adam</p></td><td><p>Momentum + adaptive learning rate</p></td></tr>
+</tbody>
+</table>
+
+<b>Be smart, be lazy, just use Adam.</b>
+
+## [预测试卷](/QRiFwuy0liWXaGk5KDqcgG4dnYf/Lilkw2LlGi74XTkpdKQcukGcnFg)
+
 # Plus NLP core
+
+当然可以，云雁。我会按照你的要求，把整份 <b>Introduction to NLP</b> PPT 内容整理成一份 <b>极其详细、考试可直接使用、英文术语 + 大量中文解释、重点难点突出、结构完全按 PPT agenda</b> 的文稿。
+
+内容会做到：
+
+- <b>不遗漏任何知识点</b>
+- <b>所有术语用英文</b>
+- <b>中文解释深入、清晰、可考试使用</b>
+- <b>重点内容（如 embedding、Transformer、RNN/LSTM/GRU、TF-IDF、NLU/NLG）会特别展开</b>
+- <b>细枝末节不堆砌，但重要概念会补充背景、推导、例子</b>
+    
+下面开始正文。
+
+---
+
+## <b>NLP Definition（自然语言处理的定义）</b>
+
+<b>What is NLP?</b>
+
+Natural Language Processing (NLP) 是人工智能（AI）的一个核心分支，目标是让机器能够理解、处理、生成自然语言（human language）。
+
+<b>核心要点：</b>
+
+- <b>Input modalities（输入形式）</b>：text（文本）与 audio（语音）
+- <b>Interdisciplinary（跨学科）</b>：computer science、AI、computational linguistics、cognitive science
+- <b>Goal（目标）</b>：将非结构化语言数据 → 可计算、可分析、可推理的机器输入
+    
+<b>中文解释：</b>
+
+NLP 的本质是让机器“读懂”语言。人类语言是模糊的、上下文依赖的、结构复杂的，而机器需要结构化、明确的输入。NLP 就是解决这个鸿沟的技术。
+
+---
+
+## <b>Two Core Components of NLP</b>
+
+NLP 的两大核心组成部分：
+
+### <b> Natural Language Understanding (NLU)</b>
+
+机器对语言的理解能力。
+
+<b>NLU 任务：</b>
+
+- <b>Sentiment analysis（情感分析）</b>
+- <b>Named Entity Recognition (NER)（命名实体识别）</b>
+- <b>Key phrase extraction（关键短语抽取）</b>
+- <b>Intent detection（意图识别）</b>
+    
+<b>本质：</b>
+
+从文本中提取 meaning（语义）、intent（意图）、entities（实体）、relations（关系）。
+
+---
+
+### <b>Natural Language Generation (NLG)</b>
+
+机器生成自然语言的能力。
+
+<b>NLG 任务：</b>
+
+- Machine translation（机器翻译）
+- Text summarization（文本摘要）
+- Dialogue generation（对话生成）
+- Content creation（内容生成）
+    
+<b>中文解释：</b>
+
+NLU 是“读懂”，NLG 是“写出来”。现代大模型（如 GPT）就是 NLG 的典型代表。
+
+---
+
+## <b>Natural Language Understanding (NLU)</b>
+
+### <b>NLU 的核心挑战：</b>
+
+- 人类语言 <b>ambiguous（歧义）</b>
+- 依赖 <b>context（上下文）</b>
+- 机器无法直接理解 raw text → 必须转换成 computable structure
+    
+### <b>NLU 处理内容：</b>
+
+- Intent recognition（意图识别）
+- Entity extraction（实体抽取）
+- Sentiment understanding（情感理解）
+- Semantic parsing（语义解析）
+    
+<b>示例：</b>
+
+“Can you book me a table near the window?”
+
+NLU 输出：
+
+- Intent: make a reservation  
+- Entity: location = “near the window”  
+- Sentiment: neutral  
+- Semantic meaning: restaurant booking request  
+    
+---
+
+## <b>Rule-based NLU</b>
+
+<b>特点：</b>
+
+- 基于 predefined grammar（预定义语法）和 linguistic rules（语言规则）
+- 在 <b>受控领域</b>（medical、legal、banking）表现极好
+- 可解释性强、错误率低
+    
+<b>适用场景：</b>
+
+- 医疗文本分类  
+- 法律条款识别  
+- 银行合规检测  
+    
+<b>缺点：</b>
+
+- 不适合 open-domain（开放领域）  
+- 无法处理语言的复杂性和多样性  
+    
+---
+
+## <b>Statistical NLU: Conditional Random Fields (CRFs)</b>
+
+CRF 是一种 <b>statistical sequence model（统计序列模型）</b>。
+
+<b>应用：</b>
+
+- POS tagging（词性标注）
+- NER（命名实体识别）
+    
+<b>优势：</b>
+
+- 考虑 <b>label dependencies（标签之间的依赖）</b>
+- 比逐词独立预测更准确
+    
+<b>示例：</b>
+
+“Apple ships phones Friday.”
+
+CRF 会同时考虑上下文，判断：
+
+- Apple → ORGANIZATION  
+- phones → PRODUCT  
+- Friday → DATE  
+    
+---
+
+## <b>Natural Language Generation (NLG)</b>
+
+### <b>NLG 的六个步骤（经典 pipeline）：</b>
+
+1. <b>Content Determination</b>
+
+选择要表达的内容
+
+1. <b>Document Structuring</b>
+
+决定内容顺序
+
+1. <b>Aggregation</b>
+
+合并相关信息，避免重复
+
+1. <b>Lexicalization</b>
+
+选择具体词语表达
+
+1. <b>Referring Expression Generation</b>
+
+处理代词（it, they）
+
+1. <b>Linguistic Realization</b>
+
+生成符合语法的句子
+
+---
+
+## <b>Preprocessing Techniques（预处理技术）</b>
+
+预处理是 NLP pipeline 的基础。
+
+---
+
+### <b>Text Normalization（文本规范化）</b>
+
+<b>目的：</b>
+
+将文本转换为统一、标准化形式，使后续算法更稳定。
+
+<b>常见操作：</b>
+
+- lowercasing（转小写）
+- removing punctuation（去标点）
+- expanding contractions（如 don’t → do not）
+- removing special characters
+    
+---
+
+### <b>Tokenization（分词）</b>
+
+<b>类型：</b>
+
+1. <b>Word Tokenization</b>
+
+“I love Python” → ["I", "love", "Python"]
+
+1. <b>Rule-based Tokenization</b>
+
+基于规则处理标点、大小写等
+
+1. <b>Whitespace Tokenization</b>
+
+按空格切分（简单但粗糙）
+
+1. <b>Dictionary-based Tokenization</b>
+
+适用于中文、日文等无空格语言
+
+1. <b>Subword Tokenization（子词分词）</b>
+
+现代 NLP 模型常用  
+
+如 BPE、WordPiece  
+
+解决 rare words 问题
+
+---
+
+### <b>Stemming（词干提取）</b>
+
+<b>特点：</b>
+
+- 通过去掉后缀得到词干  
+- 不保证是合法单词  
+- 快速但粗糙
+    
+<b>例子：</b>
+
+- chocolates → chocolate  
+- running → run（可能变成 runn）
+    
+---
+
+### <b>Lemmatization（词形还原）</b>
+
+<b>特点：</b>
+
+- 基于词典或规则  
+- 考虑 POS（词性）  
+- 输出合法单词  
+- 比 stemming 更准确
+    
+<b>例子：</b>
+
+- better → good  
+- went → go  
+- running → run  
+    
+---
+
+### <b>Stopword Removal（停用词去除）</b>
+
+<b>常见停用词：</b>
+
+the, is, in, and
+
+<b>适用场景：</b>
+
+- text classification  
+- sentiment analysis  
+- topic modeling  
+    
+<b>不适用：</b>
+
+- translation  
+- summarization  
+- grammar checking  
+    
+因为这些任务需要完整句子结构。
+
+---
+
+### <b>POS Tagging（词性标注）</b>
+
+<b>作用：</b>
+
+- 理解句法结构  
+- 辅助 NER、情感分析、翻译等任务  
+    
+<b>例子：</b>
+
+“The quick brown fox jumps over the lazy dog”
+
+quick → adjective  
+
+fox → noun  
+
+jumps → verb  
+
+---
+
+## <b>Text Representation & Embedding Techniques</b>
+
+文本必须转换为 numerical vectors 才能被模型处理。
+
+---
+
+### <b>Traditional Representations</b>
+
+###### <b>One-Hot Encoding</b>
+
+- 高维稀疏  
+- 无语义信息
+    
+###### <b>Bag of Words (BoW)</b>
+
+- 统计词频  
+- 无序、无上下文
+    
+###### <b>TF-IDF</b>
+
+- 强调 rare but important words  
+- 仍然不捕捉语义
+    
+---
+
+#### <b>8.2 TF-IDF 公式</b>
+
+###### <b>Term Frequency (TF):</b>
+
+\[
+
+TF(w,d) = \frac{\text{count of w in d}}{\text{total words in d}}
+
+\]
+
+###### <b>Inverse Document Frequency (IDF):</b>
+
+\[
+
+IDF(w) = \log\frac{N}{df(w)}
+
+\]
+
+###### <b>TF-IDF = TF × IDF</b>
+
+###### <b>意义：</b>
+
+- 高频但无意义的词 → 权重低  
+- 罕见但重要的词 → 权重高  
+    
+---
+
+### <b>Word Embedding: GloVe</b>
+
+GloVe = Global Vectors
+
+<b>核心思想：</b>
+
+- 基于 <b>global co-occurrence matrix（全局共现矩阵）</b>
+- factorization（矩阵分解）得到 dense vectors
+- dot product ≈ log(co-occurrence count)
+    
+<b>优点：</b>
+
+- 捕捉语义关系  
+- 例如：king - man + woman ≈ queen  
+    
+---
+
+## <b>Neural Networks</b>
+
+### <b>Feedforward Neural Networks</b>
+
+<b>结构：</b>
+
+- Input layer  
+- Hidden layers  
+- Output layer  
+    
+<b>神经元计算：</b>
+
+$$z = f(Wa + b)$$
+
+---
+
+### <b>Backpropagation（反向传播）</b>
+
+<b>步骤：</b>
+
+1. <b>Forward pass</b>
+
+计算输出
+
+1. <b>Compute loss</b>
+
+$$C = C(a^L, y)$$
+
+1. <b>Backward pass</b>
+
+使用 chain rule 计算梯度
+
+1. <b>Update parameters</b>
+
+$$W = W - \eta \frac{\partial C}{\partial W}$$
+
+---
+
+## <b>Contextual Embeddings（上下文嵌入）</b>
+
+传统 embedding（如 Word2Vec、GloVe）是 <b>static embeddings</b>，无法处理多义词。
+
+深度学习引入 <b>contextual embeddings</b>。
+
+---
+
+### <b>RNN</b>
+
+<b>特点：</b>
+
+- sequential processing  
+- hidden state 记忆前文  
+- 适合短期依赖  
+- 缺点：vanishing gradient（梯度消失）
+    
+---
+
+### <b>LSTM</b>
+
+<b>特点：</b>
+
+- 使用 gates（forget, input, output）  
+- 解决 long-term dependency  
+- 更准确但更慢  
+    
+---
+
+### <b>GRU</b>
+
+<b>特点：</b>
+
+- 比 LSTM 简化  
+- 更快  
+- 性能接近 LSTM  
+    
+---
+
+## <b>Transformers</b>
+
+Transformer 解决了 RNN 的所有核心问题。
+
+<b>核心优势：</b>
+
+- parallel processing（并行处理）  
+- self-attention 捕捉 long-range dependencies  
+- 上下文理解更强  
+    
+<b>例子：</b>
+
+句子中 “it” 指代 “jacket”  
+
+RNN 可能忘记  
+
+Transformer 不会
+
+---
+
+## <b>Transformer-based Embeddings</b>
+
+<b>代表模型：</b>
+
+- <b>BERT</b>：bidirectional context  
+- <b>GPT</b>：generative, conversational  
+- <b>T5</b>：text-to-text framework  
+    
+---
+
+## <b>Transformer Architecture</b>
+
+<b>包含：</b>
+
+- Encoder stack  
+- Decoder stack  
+    
+<b>核心组件：</b>
+
+- Multi-head self-attention  
+- Feed-forward network  
+- Residual connections  
+- LayerNorm  
+- Positional encoding  
+    
+###### <b>Attention 公式：</b>
+
+$$Attention(Q,K,V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+---
 
 # DeepLearning
 

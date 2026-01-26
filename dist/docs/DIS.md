@@ -224,7 +224,7 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
     - Intentional设计师有意安排的 vs unintentional 不是设计师放置的 但是用户<b>依旧会把它当做强烈的线索</b>
         
 2. <b>Signifiers:</b>
-    - <b>Definition:</b> The <em>signaling </em><b>component</b><b> of an affordance</b>.
+    - <b>Definition:</b> The <b>signaling component</b><b> of an affordance</b>.
     - <b>Function:</b> Signifiers tell you <em>where</em> the action can take place. They are crucial if the affordance is not perceivable. 告诉用户 <b>在哪里 / 如何操作</b>
     - 比affordance重要 可感知的affordance本身就是最强的signifier，好的设计不用额外的文字
     - <b>Types:</b> Can be intentional (a "PUSH" sign) or unintentional (footprints in snow) .
@@ -248,6 +248,8 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 
 理解系统难用的根本原因
 
+<b>Good Conceptual Models are a principle of good design</b>
+
 - <b>Definition:</b> Humans form a conceptual (mental) model of how something works when they encounter it. A good model allows users to predict the effects of their actions.
 - <b>The Three Models:</b>
     1. <b>Design Model:</b> The designer's conceptual model (their intention).设计师心中的系统运作方式
@@ -259,9 +261,11 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
     - 设计师无法直接与用户沟通
     - 如果system image不清晰 → user's mental model偏离design model → bad system
 
+<img src="/assets/BmkgbZaOtoyEfcxC5QjcZjS2nng.png" src-width="728" src-height="412" align="center"/>
+
 # Lecture 3
 
-<b>考试重点自测</b>：
+## <b>考试重点自测</b>：
 
 1. <b>Mappings</b>：区分自然映射Spatial / Perceptual / Biological / Cultural. Natural mappings reduce cognitive load
 2. <b>Constraints</b>：给出每种约束（Physical, Semantic, Logical, Cultural）的实例。Forcing functions

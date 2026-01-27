@@ -33,6 +33,8 @@ sidebar_position: 3
 
 ## 人类处理器模型：CMN 模型 (Model Human Processor: CMN Model)
 
+Estimate execution time, error rates and training effects for simple  input/output events
+
 > <b>考试重点 (Exam Focus)</b>: 理解并记住CMN模型的主要component和关键时间常数及其存储特性。
 
 ### 感知系统 (Perceptual System)
@@ -70,7 +72,7 @@ sidebar_position: 3
 
 ## 菲茨定律 (Fitts’ Law)
 
-> <b>计算重点</b>: 预测移动到目标位置（如按钮）的时间。 Predict time to press buttons (physical or on-screen) as function of  distance and size
+> <b>计算重点</b>: 预测移动到目标位置（如按钮）的时间。<b> Predict time to press buttons (physical or on-screen) </b>as function of  distance and size
 
 ### 核心公式
 
@@ -95,7 +97,8 @@ $$T_{pos} = I_M \cdot \log_2\left(\frac{2D}{W}\right)$$
 ### 数学推导与公式变体
 
 - <b>CMN 推导常数</b>: 运动精度比例 $\epsilon \approx 0.07$。
-- <b>Shannon 公式 (ISO 标准)</b>: $T_{pos} = a + b \cdot \log_2\left(\frac{D}{W} + 1\right)$ 。
+- Welford’s formulation (1968)  $T_{pos} = I_M \times log_2(D/W + ½)$
+- <b>Shannon 公式 (ISO 标准)</b>: $T_{pos} = a + b \cdot \log_2\left(\frac{D}{W} + 1\right)$ 。Improved curve fit, no negative times for infinite size targets
 - 其中 $a, b$取决于设备，估算时常取 $a = 0, b = 100$
 
 ### 实例：手机按钮优化 (Mobile Exercise) 
@@ -141,18 +144,18 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 
 ## Gestalt Laws (Perceptual Organization)
 
-- <b>Definition:</b> Rules developed by the "Berliner Schule" (Köhler, Koffka, Wertheimer) that describe how humans spatially or temporally perceive items as a group 解释人类如何将视觉元素组织成整体. They are simple rules for good UI design.
+- <b>Definition:</b> Rules developed by the "Berliner Schule" (Köhler, Koffka, Wertheimer) that <b>describe how humans spatially or temporally perceive items as a group</b> 解释人类如何将视觉元素组织成整体. They are simple rules for good UI design.
 
 1. <b>Law 1: Good Shape:</b> Perception tends toward remembering things as simple, clear shapes.像一种 cognitive compression algorithm（认知压缩算法）
 2. <b>Law 2: Proximity:</b> Objects near each other are perceived as a group. 
     - This allows for order by position only.
     - UI 应用：仅靠位置即可分组，无需额外线条
 
-3. <b>Law 3: Closure:</b> Closed lines appear as shapes and thus as belonging together. 大脑会自动把不完整的图形补成完整的形状。
+3. <b>Law 3: Closure:</b> Closed shapes appear as belonging together.. 大脑会自动把不完整的图形补成完整的形状。<b>无框无界，靠线条 / 轮廓的「不完整趋势」脑补闭合</b>
     - This is a foundation of the "window metaphor".
     - UI 应用：窗口（window）隐喻的基础
 
-4. <b>Law 4: Common Region:</b> Objects within a bounded area (region) appear to belong together. (Note: The slides warn "Don't overdo it" .过度使用边框会导致界面杂乱
+4. <b>Law 4: Common Region:</b> Objects within a bounded area (region) appear to belong together. (Note: The slides warn "Don't overdo it" .过度使用边框会导致界面杂乱 <b>有框有界，靠「同一封闭区域 / 容器框定」归类。被实际的框、色块、背景区隔框定，是「物理上的同区」，而非大脑脑补的「知觉上的闭合」。</b>
     - basic element of window metaphor
 
 5. <b>Law 5: Similarity:</b> Similar shapes (or colors, sizes) appear as belonging together.
@@ -170,6 +173,7 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 
 8. <b>Law 8 (Common Fate):</b> Also "Law of Common Movement". Animated objects moving together (synchronously) within a static environment appear as a group.在静止背景中一起移动的对象，会被自动看成一组。
     - 动画（animation）是强大的 UI 引导工具Synchronous animation groups the item 同步动画会把元素自动分组。
+    - Blinking text 
 
 > Closure（闭合原则）：
 👉 <em>大脑会自动把“未闭合的形状”补成完整的形状。</em>  
@@ -198,10 +202,10 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 #### <b>Visibility:</b>
 
 - One of the <b>most important </b>aspects of design.
-- <b>Core Idea:</b> Much everyday knowledge is "in the world, not in the head".
+- <b>Core Idea: Much everyday knowledge is "in the world, not in the head".</b>
 - <b>Natural Design:</b> Aims to make natural clues visible, requiring no conscious thought.
 - <b>Balance:</b> "Just the right things have to be visible." Too many clues are as bad as too few.
-- <b>Lack of Visibility:</b> Can cause "false causalities" (thinking your action had no effect) and superstition (e.g., multiple clicks).
+- <b>Lack of Visibility:</b> Can cause "<b>false causalities</b>" (thinking your action had no effect) and <b>superstition</b> (e.g., multiple clicks).
 
 <b>典型错误：</b>
 
@@ -216,18 +220,22 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 #### <b>Affordances and Signifiers</b>
 
 1. <b>Affordances</b>
-    1. Definition
-    - The actions that an object <em>allows</em> a user to do with it. 物体允许用户执行的动作
+    1. <b>Definition</b>
+    - <b>The actions that an object </b><b>allows</b><b> a user to do with it. </b>物体允许用户执行的动作
     - It's a relationship between an object's properties and an agent's capabilities (e.g., a chair affords sitting).是 <b>物体属性 + 用户能力</b> 的关系 depand on both the object and the user
-    - Affordances can be visible or hidden.
+    - Affordances can be visible or hidden. Perceived affordances often act as signifiers
     - 例：玻璃可被打破；木板可被涂写
-    - Intentional设计师有意安排的 vs unintentional 不是设计师放置的 但是用户<b>依旧会把它当做强烈的线索</b>
+    - Intentional设计师有意安排的 vs accident 不是设计师放置的 但是用户<b>依旧会把它当做强烈的线索</b>
+    - <b>False affordances suggest actions that are not actually possible or the right ones</b>
         
 2. <b>Signifiers:</b>
     - <b>Definition:</b> The <b>signaling component</b><b> of an affordance</b>.
     - <b>Function:</b> Signifiers tell you <em>where</em> the action can take place. They are crucial if the affordance is not perceivable. 告诉用户 <b>在哪里 / 如何操作</b>
     - 比affordance重要 可感知的affordance本身就是最强的signifier，好的设计不用额外的文字
-    - <b>Types:</b> Can be intentional (a "PUSH" sign) or unintentional (footprints in snow) .
+    - <b>Types:</b> 
+        - Can be intentional 人为设计、意图明确、服务于信息传递 / 行为引导。(a "PUSH" sign)  
+        - unintentional/accidental 由自然现象、客观行为或环境变化自然形成，却能被人感知并解读出潜在信息(footprints in snow,wind direction from flag) .
+        - Misleading Signifiers:其传递的信息与实际情况、预期行为或客观事实不符，会引导人做出错误判断  People sitting on staircase (helpful), Empty bottles on railings (not helpful) 
 
 3. <b>核心区别</b>
 
@@ -237,7 +245,7 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 1. <b>Bad Design:</b>
     - <b>False Affordance:</b> Suggests an action that is not possible.👉 <b>视觉暗示了一个动作，但动作不存在。</b>
     - <b>Accidental Affordance:</b> An unintended affordance (e.g., a railing that affords sitting).👉 <b>不是设计目的，但用户发现了额外用途。</b>
-    - <b>Misleading Signifier:</b> A signifier that suggests the wrong action (e.g., a flat plate that implies "push" has a "PULL" label).
+    - <b>Misleading Signifier:</b> <b>A signifier that suggests the wrong action </b>(e.g., a flat plate that implies "push" has a "PULL" label).
 
 2. Good design：
 
@@ -250,7 +258,7 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 
 <b>Good Conceptual Models are a principle of good design</b>
 
-- <b>Definition:</b> Humans form a conceptual (mental) model of how something works when they encounter it. A good model allows users to predict the effects of their actions.
+- <b>Definition:</b> <b>Humans form a conceptual (mental) model of how something works when they encounter it. A good model allows users to predict the effects of their actions.</b>
 - <b>The Three Models:</b>
     1. <b>Design Model:</b> The designer's conceptual model (their intention).设计师心中的系统运作方式
     2. <b>System Image:</b> The system itself (the UI, the device, its labels). This is the only thing the user interacts with.用户能看到的界面、说明书、反馈
@@ -263,7 +271,9 @@ https://gemini.google.com/app/59a2aee14b52683e?hl=zh-cn
 
 <img src="/assets/BmkgbZaOtoyEfcxC5QjcZjS2nng.png" src-width="728" src-height="412" align="center"/>
 
-# Lecture 3
+<img src="/assets/ITTHbT1b2o6TjhxW6hsc5Ufkn3c.png" src-width="1054" src-height="228" align="center"/>
+
+# Mappings, Constraints, Seven Stages of Action
 
 ## <b>考试重点自测</b>：
 
@@ -280,7 +290,7 @@ mapping = 控制装置、操作行为与预期结果之间的关系。
 
 <b>Why important?</b>
 
-- Connect UI to real world 将用户界面（UI）元素与现实世界连接起来 
+- <b>Connect UI to real world</b> 将用户界面（UI）元素与现实世界连接起来 
 - Reduce cognitive load
 - Make systems intuitive
 
@@ -295,7 +305,7 @@ Good mappings rely on <b>natural analogies</b>
     - <b>例子</b>：房间灯光开关的排列应与灯的位置对应 。
 
 - <b>感知类比 (Perceptual Analogies)</b>：又称“巫术原则”(Voodoo Principle)。
-    - <b>规则</b>：UI 元素（输入或输出）是对设备本身的模仿 。
+    - <b>规则</b>：<b>The UI element is an imitation of the device  itself </b>UI 元素（输入或输出）是对设备本身的模仿 。
     - <b>例子</b>：奔驰汽车座椅调节按钮的形状就是座椅本身的缩影 。
 
 - <b>物理测量类比 (Analogies for physical measurements)</b>：有些“量”的变化，人类天生就能直觉理解；但有些“量”的变化，人类无法自然理解。
@@ -303,13 +313,13 @@ Good mappings rely on <b>natural analogies</b>
     - <b>替代维度 (Substitutive dimensions)</b>：<b>不适用</b>于自然映射，例如颜色、音频音调、味道或位置 。<b>这些维度没有“自然方向”</b>，所以不能用自然映射。
 
 - <b>生物与文化类比 (Biological and Cultural Analogies)</b>：
-    - <b>例子</b>：Top → bottom = more → less；Left → right depends on reading direction
+    - <b>例子</b>：Rising level = more, falling level = less ；Left → right depends on reading direction
     - Cultural differences matter (Hebrew, Arabic, Chinese）
 
-1. Advantage: 快速理解，容易记忆，更方便使用easy of use
+1. Advantage: 快速理解，容易记忆，更方便使用easy of use <b>understood</b><b> immediately, easier to </b><b>remember</b><b> and enable better  </b><b>ease-of-use</b><b> </b>
 2. Result — Some Design Principles
 
-- Discoverability: current states, available states, and actions easy to determine
+- Discoverability: state and actions are easy to determine
 - Good conceptual model 
     - System image presents operations and results consistently（系统形象必须一致地呈现操作与结果）
     - User gets a coherent conceptual model（用户获得连贯的心理模型）allows users to predict the effects of their actions
@@ -321,71 +331,80 @@ Good mappings rely on <b>natural analogies</b>
 
 ## 约束 (Constraints)
 
-> 定义 (Definition)： Limit possible actions to prevent errors 限制对象的使用方式，并为新情境下的正确行动提供线索。
-> 目标 (Goals)：避免操作错误，并将需要记忆的信息最小化。
+> <b>定义 (Definition)： Limit the ways in which an object can be used</b> to prevent errors 限制对象的使用方式，并为新情境下的正确行动提供线索。
+> 目标 (Goals)：避免操作错误，并将需要记忆的信息最小化。<b>Avoid usage errors , Minimize the information to be remembered</b>
 
 ### 四种约束类型 (Types of Constraints)
 
-1. <b>物理约束 (Physical Constraints)</b>：依靠物理属性（形状、大小等）来限制行动  Based on shape, size, physical properties。Visible constraints are best. 如果约束提前可见则更有效。
+1. <b>物理约束 (Physical Constraints)</b>：<b>Rely upon the physical properties (shape,  size, etc.) to constraint possible actions </b>依靠物理属性（形状、大小等）来限制行动 Visible constraints are best. 如果约束提前可见则更有效。
     - <b>例子</b>：传统钥匙只能插入匹配的锁芯 。
     - 物理约束必须 可见、可感知、可预测 才是好设计。
 
-2. <b>语义约束 (Semantic Constraints)</b>：Based on meaning & real-world knowledge 依靠我们对当前情境和现实世界的知识来限制行动。
+2. <b>语义约束 (Semantic Constraints)</b>：依靠我们对当前情境和现实世界的知识来限制行动。<b>Rely upon our knowledge of the current  situation and of the world to constrain possible  actions </b>
     - <b>例子</b>：拼装模型飞机时，飞行员小人只能面向前方坐在挡风玻璃后面 。
     - Must match user’s cultural background
 
-3. <b>逻辑约束 (Logical Constraints)</b>：Based on reasoning. 依靠逻辑推断来限制行动 。不依赖文化或物理结构
+3. <b>逻辑约束 (Logical Constraints)</b>： 依靠逻辑推断来限制行动 。不依赖文化或物理结构<b>Rely upon logical conclusions to constraint possible  actions </b>
     - <b>例子</b>：All parts must be used (completeness) 拼装结束时不应剩下任何零件（完整性）；
     - Steps must follow sequence (1 → 2 → 3) 按照 1, 2, 3 的顺序执行任务 。
-    - 自然映射（natural mapping）通常依赖逻辑约束。
+    - <b>自然映射（natural mapping）通常依赖逻辑约束</b>。
 
-4. <b>文化约束 (Cultural Constraints)</b>：Based on cultural conventions 依靠普遍接受的文化标准（如红灯停） 
+4. <b>文化约束 (Cultural Constraints)</b>：<b>Rely upon generally accepted cultural standards to constrain possible actions </b>依靠普遍接受的文化标准（如红灯停） 
     - Examples: Red = stop
     Text orientation indicates “up
     - <b>注意</b>：Not universal → challenge for universal design 仅适用于特定的文化群体，这是通用设计的核心问题 。
 
 ### 强迫功能 (Forcing Functions)
 
-一种极端的物理约束，用于确保操作顺序或防止错误。
+<b>extreme physical constraints Can help to avoid errors</b>一种极端的物理约束，用于确保操作顺序或防止错误。
 
-- <b>互锁 (Interlock)</b>：强制顺序（microwave door）。例如：微波炉门打开时自动断电。
-- <b>锁定 (Lock-in)</b>：防止过早停止某项行动。例如：计算机的软件关机提示，防止数据丢失。
-- <b>隔绝 (Lock-out)</b>：防止某项行动发生。例如：通往地下室的楼梯门，防止火灾时误入。
+- <b>互锁 (Interlock)</b>：<b>enforces correct sequence</b>强制顺序（microwave door）。例如：微波炉门打开时自动断电。
+- <b>锁定 (Lock-in)</b>：<b>prevents prematurely stopping an cation</b>防止过早停止某项行动。例如：计算机的软件关机提示，防止数据丢失。
+- <b>隔绝 (Lock-out)</b>： <b>prevents an action</b>防止某项行动发生。例如：通往地下室的楼梯门，防止火灾时误入。
 
 ---
 
 ## 行动的七个阶段 (The Seven Stages of Action)
 
-> 这是理解用户如何与系统交互的工程模型。
+> <b>这是理解用户如何与系统交互的工程模型。</b>
 
 一个action的Two phases:
 
 - <b>Execution（执行）</b>
 - <b>Evaluation（评估）</b>
 
+<img src="/assets/MhPGbdOlUoG2UdxNkkncjLHRneh.png" src-width="734" src-height="622" align="center"/>
+
 ### Execution（执行阶段）
 
-1. <b>形成目标 (Form the goal)</b>：通常是模糊的、基于问题的（例如“我需要更多光”）。
+1. <b>形成目标 (Form the goal)</b>：vague and problem-oriented通常是模糊的、基于问题的（例如“我需要更多光”）。
 2. <b>规划 (Plan)</b>：将模糊目标转化为导向性计划goal-oriented plan（例如“操作灯开关”）。
-3. <b>细化 (Specify)</b>：制定具体的行动序列action sequence（例如“转身，伸出手臂，手指按开关”）。
+3. <b>细化 (Specify)</b>：制定具体的行动序列<b>action sequence</b>（例如“转身，伸出手臂，手指按开关”）。
 4. <b>执行 (Perform)</b>：物理上执行行动序列 。
 
 ### Evaluation（评估阶段）
 
 1. <b>感知 (Perceive)</b>：感知外部世界的状态 。
-2. <b>解释 (Interpret)</b>：解释所感知的现象。
+2. <b>解释 (Interpret)</b>：解释所感知的现象。the perception
 3. <b>比较 (Compare)</b>：将结果与原始目标进行对比 。
 
-<img src="/assets/WDbtbVclPomCQYxceMpcYr5CnJc.png" src-width="518" src-height="444" align="center"/>
+In reality, steps are hard to distinguish 
+
+- Complex tasks include sequences or hierarchies of goals (feedback loop) 
+- Goals are forgotten, discarded and changed 
+- Many actions are opportunistic, not planned (Meeting leads to talk) 
+- Cycle can be event-driven (world) or goal-driven
 
 ### 行动鸿沟 (The Gulfs)
 
+<b>Helps designers to detect where things  could breakdown </b>
+
 设计师的任务是架起桥梁连接这两道鸿沟 ：
 
-- <b>执行隔阂 (Gulf of Execution)</b>：User → how to operate system? 用户想知道“如何操作设备？” 。
+- <b>执行隔阂 (Gulf of Execution)</b>：User → <b>how to operate system</b>? 想知道“如何操作设备？” 。
     - Bridged by: <b>signifiers, mappings, constraints, conceptual models </b>通过<b>意符、约束、映射和概念模型</b>来解决。
 
-- <b>评估隔阂 (Gulf of Evaluation)</b>：User → how to understand system state? 用户想知道“发生了什么？是否成功？” 
+- <b>评估隔阂 (Gulf of Evaluation)</b>：User → <b>how to understand system state?</b> 想知道“发生了什么？是否成功？” 
     - Bridged by: <b>feedback, conceptual models </b>通过<b>反馈和概念模型</b>来解决 。
 
 ---

@@ -839,12 +839,16 @@ $$TWU(B) = \sum_{T_i \supseteq B} w_i$$
 ### Neighborhood-oriented CF（邻域式）
 
 - 构建 item-user 矩阵 $F \in \mathbb{R}^{m \times n}$
+- B(u): indices of the r most similar (neighbor) users to user u. 
+- $f_u$: : column u of F (all items for user u). 
+- $f_b$: : column b of F (all items for neighbor user b).
+- $f_{jb}$: observed signal for item j and neighbor user b (rating, play, click, etc.). Estimate association between user u and item j (kNN):
 - 对用户 u，找出最相似的邻居用户集合 B(u)
 - 使用加权平均预测用户对 item j 的偏好：
     
 $$f_{ju} = \frac{\sum_{b \in B(u)} \text{sim}(f_u, f_b) \cdot f_{jb}}{\sum_{b \in B(u)} \text{sim}(f_u, f_b)}$$
 
-- 相似度常用 cosine similarity：
+- 相似度$sim$常用 cosine similarity：
 
 $$\text{cos}(a, b) = \frac{a^T b}{\|a\| \cdot \|b\|}$$
 
@@ -867,6 +871,10 @@ $$\hat{f}_{ju} = C_j \cdot P_u$$
 - 可选：在 latent space 中做 user-kNN
     
 ---
+
+### Composite CF
+
+Latent pattern mining plays an important role in Model-based and Composite CF method
 
 ## Evaluating Recommender Systems（推荐系统评估）
 
@@ -918,6 +926,10 @@ $$X \approx CP^T$$
     - 压缩：存储从 O(mn) 降为 O(k(m+n))
         
 ---
+
+Finding reasonable factors C and P: $min_{C,P} ||X−CP^T||^   2$ 
+
+No close form solution! 
 
 ### Alternating Least Squares（ALS）
 

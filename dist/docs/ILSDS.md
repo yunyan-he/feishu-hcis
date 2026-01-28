@@ -210,7 +210,7 @@ $$\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}
 
 - <b>单次</b>二元试验（成功/失败）。随机变量 K 只能取 0 或 1，取 1 的概率是 θ，取 0 的概率是 1−θ。
 - 记：$K \sim \text{Bernoulli}(\theta),\quad \theta \in [0,1]$ 
-- PMF：$p(k) = \theta^k (1-\theta)^{1-k},\quad k \in {0,1}$ 
+- PMF：$p(k) = \theta^k (1-\theta)^{1-k},\quad k \in {0,1}$  【k只能取0或1 用这个公式表示 x=0和1是 概率的通解】
 - 矩 (Moments)：$E[K] = \theta,\quad \operatorname{Var}(K) = \theta(1-\theta)$ 
     > $Var(K) = E[K^2]-(E[K])^2, k \in {0,1}$  
 > 对于这两个取值 $K^2 = K$ 所以$E(K^2) = E(K) = \theta$
@@ -224,9 +224,9 @@ $$\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}
 
 - 表示随机符号 {-1, 1}。
 - 记：$R \sim \text{Rademacher}$ 
-- PMF： $p(r) = \frac{1}{2},\quad r \in {-1, 1}$ 
+- PMF： $p(r) = \frac{1}{2},\quad r \in {-1, 1}$  意思是 r不管是-1,1 概率都是0.5
 - 矩：$E[R] = 0,\quad \operatorname{Var}(R) = 1$ 
-- 与 Bernoulli 的关系：$R = 2B - 1,\quad B \sim \text{Bernoulli}(0.5)$ 
+- 与 Bernoulli 的关系：$R = 2B - 1,\quad B \sim \text{Bernoulli}(0.5)$<b> </b>
 
 ---
 
@@ -246,9 +246,9 @@ $$\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}
 ### Gaussian (Normal) Distribution 高斯分布
 
 - 记：$L \sim \mathcal{N}(\mu, \sigma^2)$ 
-- PDF： $f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$
+- PDF： $f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$ 
 - 参数：$\mu \in \mathbb{R}$（均值），$\sigma^2 > 0$（方差）。
-- 性质： $E[L] = \mu,\quad \operatorname{Var}(L) = \sigma^2$
+- 性质： $E[L] = \mu,\quad \operatorname{Var}(L) = \sigma^2$ 
 - <b>Three-sigma rule (68-95-99.7 rule)</b>： 
     - ($\mu \pm 1\sigma$)：约 68%
     - ($\mu \pm 2\sigma$)：约 95%
@@ -267,7 +267,7 @@ $$\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}
 
 #### 向量范数 Norm
 
-- 二范数L2 norm/Euclidean norm/length：$|\mathbf{x}| = \sqrt{\mathbf{x}^T \mathbf{x}}$  它就是欧几里得空间里“向量的长度”。
+- 二范数L2 norm/<b>Euclidean norm</b>/length：$|\mathbf{x}| = \sqrt{\mathbf{x}^T \mathbf{x}}$  它就是欧几里得空间里“向量的长度”。
 
 > 在 n 维：$\sqrt{∑x_i^2}$
 

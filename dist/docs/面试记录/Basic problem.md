@@ -1,11 +1,11 @@
 ---
-title: interview
+title: Basic problem
 slug: GzC3wLxQeiAc7Ukf1WGcl4kzndb/UPgbwFzCAiYbQmksdS2cCTOBnrh
 sidebar_position: 0
 ---
 
 
-# interview
+# Basic problem
 
 > My name is He Yunyan. You can just call me Yann.
 > I majored in Computer Science during my undergraduate studies. For my master's, I chose Human-Centered Intelligent Systems, which is closely aligned with my interests. I want to study Artificial Intelligence with a strong focus on Human-Centered applications. That’s why I see Mixed Reality as an exciting direction — it’s a way to bring AI into immersive, human-centered environments.

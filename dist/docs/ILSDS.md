@@ -486,7 +486,7 @@ PPT 中给出了表格，展示：
 
 <b>Distributional Hypothesis</b>：
 
-> A word’s meaning is decided by its context.
+> <b>A word’s meaning is decided by its context.</b>
 
 例子：
  “In 2000 Mustermann founded The Mustermann Foundation.”
@@ -551,7 +551,7 @@ PPT 强调：trace 的性质可以把矩阵误差转化为所有样本误差的�
 
 ### SVD 定义 Singular Value Decomposition
 
-对任意 $\mathbf{X} \in \mathbb{R}^{m \times n}$，存在唯一分解：$\mathbf{X} = \mathbf{U}\mathbf{S}\mathbf{V}^T$ 
+<b>对任意 </b>$\mathbf{X} \in \mathbb{R}^{m \times n}$<b>，存在唯一分解：</b>$\mathbf{X} = \mathbf{U}\mathbf{S}\mathbf{V}^T$<b> </b>
 
 - $\mathbf{U} \in \mathbb{R}^{m \times m}$：左奇异向量 (left singular vectors)，$\mathbf{U}^T \mathbf{U} = \mathbf{I}_m$正交矩阵
 - $\mathbf{V} \in \mathbb{R}^{n \times n}$：右奇异向量 (right singular vectors)，$\mathbf{V}^T \mathbf{V} = \mathbf{I}_n$正交矩阵
@@ -632,6 +632,8 @@ $$\mathbf{X} \approx \sum_{i=1}^k s_i \mathbf{u}_i \mathbf{v}_i^T$$
 所以：$\mathbf{v}_q = \hat{\mathbf{S}}^{-1} \hat{\mathbf{U}}^T \mathbf{x}_q$
 
 这就是<b>固定因子下对新样本进行嵌入 (embedding)</b> 的公式。
+
+> $\hat{\mathbf{U}}$能<b>只转置不逆</b>的关键 ——<b>正交矩阵的转置 = 其逆矩阵</b>，
 
 ---
 

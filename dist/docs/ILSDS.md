@@ -91,7 +91,7 @@ PPT 特别提醒：文献中符号经常不统一，要靠上下文判断。
 
 ### 和规则 Sum Rule / Marginalization
 
-<b>目的</b>：从联合分布得到边缘分布 (marginal distribution)。
+<b>目的</b>：<b>从联合分布得到边缘分布 (Convert a joint distribution to a marginal)。</b>
 
 - <b>离散情形</b>：  $p(l) = \sum_m p(l, m)$ 
 - <b>连续情形</b>：  $f(x) = \int f(x, y)dy$ 
@@ -104,7 +104,7 @@ $$P(\text{Rain}) = P(\text{Rain, Cloudy}) + P(\text{Rain, not Cloudy})$$
 
 ### 乘规则 Product Rule
 
-<b>目的</b>：把联合分布分解为条件分布与边缘分布。
+<b>目的</b>：把联合分布分解为条件分布与边缘分布。<b>Decompose a joint distribution</b>
 
 - <b>离散</b>： $p(l, m) = p(l \mid m)p(m)$ 
 - <b>连续</b>： $f(x, y) = f(x \mid y)f(y)$ 
@@ -153,7 +153,7 @@ $$P(\text{Rain}) = P(\text{Rain, Cloudy}) + P(\text{Rain, not Cloudy})$$
 
 ### 方差 Variance 与标准差 Standard Deviation
 
-<b>方差</b>：$\operatorname{Var}(L)= E[(L - E[L])^2] = E[L^2] - (E[L])^2$  (直接展开平方差公式，利用E(L)是常数和期望的Linearity)
+<b>方差measures the spread around the mean</b>：$\operatorname{Var}(L)= E[(L - E[L])^2] = E[L^2] - (E[L])^2$  (直接展开平方差公式，利用E(L)是常数和期望的Linearity)
 
 <b>标准差</b>：$\sigma_L = \sqrt{\operatorname{Var}(L)}$ 
 
@@ -167,7 +167,7 @@ $$P(\text{Rain}) = P(\text{Rain, Cloudy}) + P(\text{Rain, not Cloudy})$$
 
 它衡量的是：
 
-> X 偏离均值的方向与 Y 偏离均值的方向是否一致。
+> measures joint deviation from the expected valuesX 偏离均值的方向与 Y 偏离均值的方向是否一致。
 
 给定 (X, Y)，记 ($\mu_X = E[X], \mu_Y = E[Y]$)：
 
@@ -190,7 +190,7 @@ $$\operatorname{Cov}(X, Y)= E[XY - X\mu_Y - \mu_X Y + \mu_X \mu_Y] \
 
 ### 相关系数 Correlation (Pearson)
 
-它把协方差做了一个“标准化”，让结果不依赖单位、不依赖尺度。
+它把协方差做了一个“标准化”，让结果不依赖单位、不依赖尺度。normalizes the covariance to the range [−1,1] 
 
 <b>Pearson correlation</b> 定义为：
 
@@ -254,7 +254,7 @@ $$\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}
     - ($\mu \pm 2\sigma$)：约 95%
     - ($\mu \pm 3\sigma$)：约 99.7%
 
-- 是 <b>Central Limit Theorem (CLT)</b> 的核心：在温和条件下，和/平均值趋向于正态分布。
+- 是 <b>Central Limit Theorem (CLT)</b> 的核心：在温和条件下，和/平均值趋向于正态分布。<b>Forms the foundation to Central Limit Theorem highlighting that sums/averages tend to normality under mild conditions</b>
 
 ---
 
@@ -334,10 +334,10 @@ $$\operatorname{Corr}(L, M) = \frac{\operatorname{Cov}(L, M)}{\sigma_L \sigma_M}
 目标：将矩阵 $\mathbf{U}$ 分解为两个因子矩阵：$\mathbf{U} = \mathbf{J}\mathbf{O}^T$
 
 - $\mathbf{J}, \mathbf{O}$称为 <b>factor matrices</b>。
-- 在学习系统与数据科学中用途极广： 
-    - 简化方程
-    - 挖掘隐藏模式 (hidden patterns)
-    - 构建推荐系统 (recommender systems)
+- <b>在学习系统与数据科学中用途极广： </b>
+    - <b>简化方程</b>
+    - <b>挖掘隐藏模式 (hidden patterns)</b>
+    - <b>构建推荐系统 (recommender systems)</b>
 
 ---
 
@@ -1613,11 +1613,7 @@ $$F = \frac{(K^2 + 1) · P · R}{K^2P + R}$$
 
 ### <b>Logistic Regression（逻辑回归）</b>
 
-A very popular probabilistic
-
-classification model to map
-
-datapoints into discrete
+A very popular probabilistic classification model to map datapoints into discrete
 
 classes
 
@@ -1862,7 +1858,7 @@ $$v_{t+1} = (1-\beta)(\nabla f(x_t) + \beta \nabla f(x_{t-1}) + \cdots + \beta^{
     
 ---
 
-### <b>Heavy Ball Method 的优势（PPT 列表）</b>
+### <b>Heavy Ball Method 的优势</b><b>（PPT 列表）</b>
 
 #### <b>Faster convergence in flat regions（平坦区更快）</b>
 

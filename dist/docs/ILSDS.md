@@ -2605,6 +2605,10 @@ $$Attention(Q,K,V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
 ### Definition & Core Idea
 
+<b>Why Representation Matters:</b>
+
+传统的机器学习往往依赖手工设计的特征（Feature Engineering）。而 Deep Learning 的特殊之处在于，它通过构建多层的 <b>Neural Networks (神经网络)</b>，自动从原始数据中学习出复杂的、分层的特征表示（<b>Representations</b>）。
+
 <b>Deep Learning</b>：  
 
 A subfield of machine learning that focuses on <b>learning complex representations</b> from data <b>using neural network based models</b>.
@@ -2623,7 +2627,7 @@ A subfield of machine learning that focuses on <b>learning complex representatio
     
 ### Neural Networks Landscape
 
-PPT 提到的神经网络类型：
+PPT 提到的神经网络类型从通用的函数逼近器（Universal Function Approximators）到各类专用网络：
 
 - <b>Feed-Forward Neural Networks (FNN)</b>：前馈神经网络，最基础的结构，用于一般的回归/分类  
 - <b>Recurrent Neural Networks (RNN)</b>：处理序列数据（时间序列、文本等）  
@@ -2687,15 +2691,19 @@ $$\text{if } w^T h \ge 0 \Rightarrow \text{class 1, else class 0}$$
 
 ## Differentiable Activations（可微激活函数）
 
-为了使用 gradient descent（梯度下降）训练网络，我们需要激活函数是可微的。
+为了使用 gradient descent（梯度下降）训练网络，我们需要激活函数是可微的。符号函数在0处不可导，因此现代神经网络通常使用 <b>Sigmoid</b> 或 <b>Tanh</b> 函数 。
 
 ### Sigmoid Activation
 
 定义：$f(p) = \sigma(p) = \frac{1}{1 + e^{-p}}$
 
+Sigmoid 函数有一个非常漂亮的导数性质，这在后续推导反向传播时非常关键.
+
 导数：
 
 $$\sigma'(p) = \sigma(p)(1 - \sigma(p))$$
+
+<em>这意味着我们可以仅用函数的值来计算其导数，极大地简化了计算。</em>
 
 <b>推导解释：</b>
 
@@ -2830,6 +2838,8 @@ $$\frac{\partial E_i}{\partial W_{ab}}$$
 
 $$W_{ab} \leftarrow W_{ab} - \eta \frac{\partial E_i}{\partial W_{ab}}$$
 
+权重更新规则基于 Stochastic Gradient Descent (SGD) 
+
 ### Propagation Value of Neuron a
 
 对 neuron a：
@@ -2862,7 +2872,7 @@ $$\frac{\partial E_i}{\partial W_{ab}} = \delta_a h_b$$
 
 其中：
 
-$$\delta_a = \frac{\partial E_i}{\partial p_a}$$
+$\delta_a = \frac{\partial E_i}{\partial p_a}$(Error Term) 
 
 <b>这一步非常关键：</b>  
 
@@ -2910,6 +2920,8 @@ $$\delta_a = (f_a - y_{ia}) f_a (1 - f_a)$$
 ---
 
 ### Hidden Neuron Case
+
+如果 $a$是内部神经元，它的误差来源于它所连接的所有下一层神经元（记为集合 $\mathcal{V}$）。我们需要将误差“反向传播”回来 
 
 现在 neuron a 是隐藏层 neuron，它不会直接出现在误差表达式中，而是通过后续 neuron 影响误差。
 
@@ -2991,6 +3003,10 @@ $$\delta_a = f_a(1 - f_a) \sum_k \delta_{v_k} W_{v_k a}$$
 虽然不在 agenda 标题里，但 PPT 有一大块内容，考试肯定可能考。
 
 ### Motivation
+
+<b>FFNN 的局限性：</b> 参数过多，忽略了空间结构。 
+
+CNN 的优势： 针对图像等具有空间特征（Spatial Features）的数据。通过参数共享 (Parameter Sharing)，CNN 参数更少，训练更快，且抗噪能力更强 。
 
 CNN 是一种 <b>constrained neural network</b>，专门用于学习 <b>spatial features（空间特征）</b>。
 
@@ -3077,7 +3093,7 @@ $$\text{mean}\{a_1, a_2, a_5, a_6\}$$
 典型结构：
 
 1. Convolution  
-2. Activation  
+2. Activation  引入非线性
 3. Pooling  
 4. 重复多层  
 5. Vectorization（展平）  
@@ -3086,6 +3102,10 @@ $$\text{mean}\{a_1, a_2, a_5, a_6\}$$
 ---
 
 ## Recurrent Neural Networks (RNNs) & Echo State Networks (ESNs)
+
+<b>FFNN 的局限性：</b> 无法处理序列数据的依赖关系（如时间序列、文本）。 
+
+RNN 的核心： 引入了 System State (系统状态) 这一概念，使得当前的输出不仅取决于当前输入，还取决于之前的状态。
 
 ### Why RNN?
 
@@ -3098,6 +3118,15 @@ RNN 通过引入 <b>hidden state</b> 来建模时间依赖。
 ---
 
 ### Echo State Networks (ESNs)
+
+ESN 是一种特殊的 RNN，其特点是训练极其简单高效 。
+
+- <b>Reservoir (储备池):</b> 包含输入权重 A 和内部连接权重 B。<b>关键点：A 和 B 是随机初始化且固定的，不需要训练</b> 。
+- <b>State Update:</b> $h_t = f^r(B h_{t-1} + A x_t)$ 。
+- <b>Readout (读出层):</b> 只有输出权重 C 需要训练。
+- <b>Training Solution:</b> 这是一个简单的线性回归问题，有闭式解：
+    - $$C = (G^T G)^{-1} G^T y$$
+    - 其中 $G$ 是所有时刻状态的矩阵 。
 
 ESN 是一种特殊的 RNN，它的设计哲学非常独特：<b>"Don't train everything."</b>：
 
@@ -3233,7 +3262,7 @@ $$f_1(q) = q,\quad f_2(q) = q$$
 
 这是 PPT agenda 中明确提到的重点。
 
-<b>One-class classification setting：</b>
+<b>One-class classification setting/Outlier Detection：</b>
 
 - 用 AE 在单一“正常类”（inlier class）上训练  
 - 目标：让 AE 对 inlier 数据重构误差尽可能小  
@@ -3297,6 +3326,55 @@ $$\hat{f}_{ju} =
 $$g_{\cos}(a_j, a_b) = \frac{a_j^T a_b}{\|a_j\| \|a_b\|}$$
 
 ---
+
+## Word Embeddings: From LSI to GloVe
+
+<b>(词嵌入技术：从 LSI 到 GloVe)</b>
+
+在 NLP 中，我们需要将词语转化为向量。
+
+### The Limitation of LSI/SVD
+
+回顾之前的 <b>LSI (Latent Semantic Indexing)</b>，它基于 SVD 分解 。虽然能捕捉主题相似性，但存在问题 ：
+
+1. 基于 Bag-of-Words，丢失了词序信息。
+2. <b>缺乏向量运算能力 (Vector Arithmetic):</b> 例如，我们希望向量空间满足 "King - Man + Woman = Queen"，但 LSI 做不到。
+    
+### GloVe (Global Vectors)
+
+<b>GloVe</b>  旨在结合统计矩阵分解（如 LSI）和局部上下文窗口（如 Word2Vec）的优点。
+
+The Derivation (核心推导) 
+
+1. <b>Co-occurrence Probabilities:</b> 定义$P_{ij}$  为词 $j$ 出现在词 $i$ 上下文的概率。
+2. <b>Ratio of Probabilities:</b> 关注比率 $r = P_{ik} / P_{jk}$ 。这比单纯的概率更能区分词义关联。
+3. <b>Modeling:</b> 我们寻找一个函数 ，使得词向量的差能预测这个比率：
+    $$g((w_i - w_j)^T \tilde{w}_k) = \frac{P_{ik}}{P_{jk}}$$
+
+4. <b>Enforcing Homomorphism:</b> 为了满足向量加法与概率乘法的转换，假设 $g(x) = e^x$。
+
+这导出了线性关系：
+
+$$w_i^T \tilde{w}_k = \log(P_{ik}) = \log(X_{ik}) - \log(X_i)$$
+
+1. <b>Final Objective:</b> 引入偏置项  吸收常数项，得到目标：
+    $$w_i^T \tilde{w}_k + b_i + \tilde{b}_k = \log(X_{ik})$$
+    
+#### The Weighted Cost Function
+
+为了避免常见的停用词（如 "the", "and"）主导损失函数，GloVe 引入了一个加权项  ：
+
+$$J = \sum_{i,j} a(X_{ij}) (w_i^T \tilde{w}_j + b_i + \tilde{b}_j - \log X_{ij})^2$$
+
+- 权重函数 $a(c)$ 在$c < c_{max}$  时平滑增长，之后截断为 1。这保证了稀有词和高频词都能被合理学习。
+    
+#### Result
+
+训练后的 GloVe 向量具有惊人的线性子结构（Linear Substructures）。例如，通过计算向量距离，我们可以发现：
+
+$$w_{Rome} + w_{Germany} - w_{Berlin} \approx w_{Italy}$$
+
+这证明了模型不仅学到了共现，还学到了语义类比关系 。
 
 ## Agenda 对应小结（按考试视角）
 

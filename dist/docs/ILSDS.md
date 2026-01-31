@@ -1746,6 +1746,8 @@ $$w \leftarrow w - \eta g$$
 
 PPT 将优化过程类比为在二维高度图（2D height map）上移动。
 
+Optimization can be visualized as moving on a 2D height map.
+
 #### <b>两类地形：</b>
 
 ##### <b>Smooth landscapes（平滑地形）</b>
@@ -1788,13 +1790,13 @@ PPT 将优化过程类比为在二维高度图（2D height map）上移动。
 
 ### <b>解决方案：</b>
 
-#### <b>Momentum（动量）</b>
+#### <b>Momentum（动量）adds an inertial term and accumulates directions</b>
 
 - 引入惯性项  
 - 累积过去的梯度方向  
 - 使下降更稳定、更快
 
-#### <b>Adaptive Learning Rate（自适应学习率）</b>
+#### <b>Adaptive Learning Rate（自适应学习率）enables larger steps in shallow directions and smaller steps in steeper directions.</b>
 
 - 在陡峭方向减小步长  
 - 在平坦方向增大步长  
@@ -1812,10 +1814,14 @@ PPT 将优化过程类比为在二维高度图（2D height map）上移动。
 
 ## <b>Heavy Ball Method (Momentum Gradient Descent)</b>
 
-### <b>Vanilla GD 更新：</b>
+### <b>Standard GD 更新：</b>
 
 $$x_{t+1} = x_t - \eta \nabla f(x_t)$$
 
+$x_{t+1} = x_t − ηv_{t+1}$ $ v_{t+1} = −∇f (x_t)$.
+
+> vt+1 本质上是“下降方向向量”。梯度+负号
+> 
 ### <b>Heavy Ball Method 更新：</b>
 
 #### <b>Velocity update（速度更新）</b>

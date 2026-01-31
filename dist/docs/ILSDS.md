@@ -1648,9 +1648,9 @@ belonging to class 0 is $1 − p_i$
 
 单样本似然：
 
-$q_i = p_i^{y_i} (1 - p_i)^{1 - y_i}$ 意思是 pi是sigmoid函数输出值。如果y是1 就保留pi y是0就保留1-pi。相相当一个选择器
+$q_i = p_i^{y_i} (1 - p_i)^{1 - y_i}$ 意思是 pi是sigmoid函数输出值 是xi类别是1的probability 1-pi是xi属于class 0 的probability。<b>depicts how well </b>yi<b> is described given </b>w<b> (and of course </b>xi<b>)</b>
 
-整体似然：
+<b>likelihood</b>：（<b>Assuming independence between the datapoints in X,a quality measure for the representation</b>）
 
 $$Q = \prod_i q_i$$
 

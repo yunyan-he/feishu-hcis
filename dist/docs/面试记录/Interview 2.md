@@ -34,7 +34,7 @@ sidebar_position: 2
 - <b>Q1: "Tell me a bit about yourself and your background."</b>
 - <b>策略：</b> 这里的重点不是背诵简历，而是<b>串联故事</b>。
 - <b>你的回答方向：</b> "我是 CS 背景，目前在 RWTH 读研。我有比较扎实的工程落地经验（Android 实习 + 毕设的模型部署），但我现在的热情完全被 LLM 点燃了。我是一个喜欢用技术解决自己生活问题的人（这里可以抛出那个<b>小说插件</b>的故事作为钩子），所以我非常渴望参与到 Agentic RAG 的研究中。"
-            
+    
 #### B. 考察技术与工程能力 (Engineering Capability)
 
 Moritz 需要找人干活（Build systems），所以他会确认你的代码能力。

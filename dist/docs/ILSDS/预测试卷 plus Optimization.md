@@ -52,7 +52,8 @@ sidebar_position: 3
 - 在狭长谷底中，主下降方向梯度小 → 步长小 → 下降慢  
 - 垂直方向梯度大 → 震荡严重  
 - 结果：<b>zig-zag behavior</b>，效率极低
-    
+    Keeps overshooting and oscillating back and forth.
+
 ---
 
 ## <b>Part 2 — Momentum（Heavy Ball Method）考点</b>
@@ -63,21 +64,11 @@ sidebar_position: 3
 
 #### <b>Standard Answer</b>
 
-Velocity update:
-
-\[
-
-v_{t+1} = \beta v_t + (1-\beta)\nabla f(x_t)
-
-\]
+Velocity update: $v_{t+1} = \beta v_t + (1-\beta)\nabla f(x_t)$
 
 Parameter update:
 
-\[
-
-x_{t+1} = x_t - \eta v_{t+1}
-
-\]
+$$x_{t+1} = x_t - \eta v_{t+1}$$
 
 <b>Role of β:</b>  
 
@@ -91,7 +82,7 @@ x_{t+1} = x_t - \eta v_{t+1}
 
 #### <b>Standard Answer</b>
 
-在 saddle point 附近，梯度接近 0，但动量项 \(v_t\) 仍然保留之前的方向信息，因此优化器不会停下来，而是继续向前冲，从而更容易离开鞍点。
+在 saddle point 附近，梯度接近 0，但动量项 $v_t$ 仍然保留之前的方向信息，因此优化器不会停下来，而是继续向前冲，从而更容易离开鞍点。
 
 ---
 
@@ -101,11 +92,7 @@ x_{t+1} = x_t - \eta v_{t+1}
 
 展开：
 
-\[
-
-v_{t+1} = (1-\beta)(\nabla f(x_t) + \beta \nabla f(x_{t-1}) + \beta^2 \nabla f(x_{t-2}) + \cdots)
-
-\]
+$$v_{t+1} = (1-\beta)(\nabla f(x_t) + \beta \nabla f(x_{t-1}) + \beta^2 \nabla f(x_{t-2}) + \cdots)$$
 
 解释：  
 
@@ -131,11 +118,7 @@ v_{t+1} = (1-\beta)(\nabla f(x_t) + \beta \nabla f(x_{t-1}) + \beta^2 \nabla f(x
     
 <b>Why squared gradients?</b>  
 
-\[
-
-s_{t+1} = \rho s_t + (1-\rho)(\nabla f(x_t))^2
-
-\]
+$$s_{t+1} = \rho s_t + (1-\rho)(\nabla f(x_t))^2$$
 
 梯度平方反映“最近是否陡峭”  
 
@@ -148,17 +131,9 @@ s_{t+1} = \rho s_t + (1-\rho)(\nabla f(x_t))^2
 
 #### <b>Standard Answer</b>
 
-\[
+$$s_{t+1} = \rho s_t + (1-\rho)(\nabla f(x_t))^2$$
 
-s_{t+1} = \rho s_t + (1-\rho)(\nabla f(x_t))^2
-
-\]
-
-\[
-
-x_{t+1} = x_t - \frac{\eta}{\sqrt{s_{t+1}}+\epsilon}\nabla f(x_t)
-
-\]
+$$x_{t+1} = x_t - \frac{\eta}{\sqrt{s_{t+1}}+\epsilon}\nabla f(x_t)$$
 
 ---
 
@@ -172,21 +147,13 @@ x_{t+1} = x_t - \frac{\eta}{\sqrt{s_{t+1}}+\epsilon}\nabla f(x_t)
 
 1. <b>First moment (m)</b>
 
-\[
-
-m_{t+1} = \beta_1 m_t + (1-\beta_1)\nabla f(x_t)
-
-\]
+$$m_{t+1} = \beta_1 m_t + (1-\beta_1)\nabla f(x_t)$$
 
 → 动量（类似 Heavy Ball）
 
 1. <b>Second moment (v)</b>
 
-\[
-
-v_{t+1} = \beta_2 v_t + (1-\beta_2)(\nabla f(x_t))^2
-
-\]
+$$v_{t+1} = \beta_2 v_t + (1-\beta_2)(\nabla f(x_t))^2$$
 
 → 自适应学习率（类似 RMSProp）
 
@@ -196,9 +163,9 @@ v_{t+1} = \beta_2 v_t + (1-\beta_2)(\nabla f(x_t))^2
 
 #### <b>Standard Answer</b>
 
-因为初始时 \(m_0 = 0\), \(v_0 = 0\)，导致前几步的 moving averages 偏小。  
+因为初始时 $m_0 = 0$, $v_0 = 0$，导致前几步的 moving averages 偏小。  
 
-因此需要除以 \(1-\beta^t\) 来校正。
+因此需要除以 $1-\beta^t$ 来校正。
 
 ---
 
@@ -208,25 +175,13 @@ v_{t+1} = \beta_2 v_t + (1-\beta_2)(\nabla f(x_t))^2
 
 Bias-corrected moments:
 
-\[
+$$\hat{m}_{t+1} = \frac{m_{t+1}}{1-\beta_1^{t+1}}$$
 
-\hat{m}_{t+1} = \frac{m_{t+1}}{1-\beta_1^{t+1}}
-
-\]
-
-\[
-
-\hat{v}_{t+1} = \frac{v_{t+1}}{1-\beta_2^{t+1}}
-
-\]
+$$\hat{v}_{t+1} = \frac{v_{t+1}}{1-\beta_2^{t+1}}$$
 
 Update:
 
-\[
-
-x_{t+1} = x_t - \frac{\eta}{\sqrt{\hat{v}_{t+1}}+\epsilon}\hat{m}_{t+1}
-
-\]
+$$x_{t+1} = x_t - \frac{\eta}{\sqrt{\hat{v}_{t+1}}+\epsilon}\hat{m}_{t+1}$$
 
 ---
 
@@ -266,11 +221,7 @@ x_{t+1} = x_t - \frac{\eta}{\sqrt{\hat{v}_{t+1}}+\epsilon}\hat{m}_{t+1}
 
 接受概率：
 
-\[
-
-\exp\left(-\frac{E(x') - E(x)}{T}\right)
-
-\]
+$$\exp\left(-\frac{E(x') - E(x)}{T}\right)$$
 
 温度高时 → 更容易接受上坡  
 
@@ -284,19 +235,11 @@ x_{t+1} = x_t - \frac{\eta}{\sqrt{\hat{v}_{t+1}}+\epsilon}\hat{m}_{t+1}
 
 - Exponential:
 
-\[
-
-T_{k+1} = \alpha T_k
-
-\]
+$$T_{k+1} = \alpha T_k$$
 
 - Logarithmic:
 
-\[
-
-T_k = \frac{T_0}{\log(k+c)}
-
-\]
+$$T_k = \frac{T_0}{\log(k+c)}$$
 
 ---
 

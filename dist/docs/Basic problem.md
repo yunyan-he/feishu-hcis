@@ -1,7 +1,7 @@
 ---
 title: Basic problem
-slug: GzC3wLxQeiAc7Ukf1WGcl4kzndb/UPgbwFzCAiYbQmksdS2cCTOBnrh
-sidebar_position: 0
+slug: UPgbwFzCAiYbQmksdS2cCTOBnrh
+sidebar_position: 7
 ---
 
 

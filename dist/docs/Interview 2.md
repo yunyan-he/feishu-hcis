@@ -1,7 +1,7 @@
 ---
 title: Interview 2
-slug: GzC3wLxQeiAc7Ukf1WGcl4kzndb/Kl2iwwBmbidWrpkKbhicIMednsh
-sidebar_position: 2
+slug: Kl2iwwBmbidWrpkKbhicIMednsh
+sidebar_position: 9
 ---
 
 
@@ -159,4 +159,12 @@ Moritz 需要找人干活（Build systems），所以他会确认你的代码能
 > (我不仅把 AI 当工具，更当伙伴。我想从这些工具的“使用者”转变为系统的“构建者”。)
 
 只要你把那个“写插件”的故事和“为了 ChatGPT 翻墙”的热情讲出来，这个面试大概率就稳了。加油！
+
+想要问的问题
+
+私人一点的 你是怎么在工业界和学业界做出选择的？
+
+我们要做的这个agentic rag 和普通rag相比 和别人做的agentic rag 有没有什么不同 或者是更加侧重哪个方面
+
+等我开始工作之后，可能的第一个任务会是什么 团队之间用什么样的方式进行工作？
 

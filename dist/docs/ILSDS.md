@@ -1,7 +1,7 @@
 ---
 title: ILSDS
 slug: QRiFwuy0liWXaGk5KDqcgG4dnYf
-sidebar_position: 6
+sidebar_position: 5
 ---
 
 
@@ -1804,7 +1804,7 @@ Optimization can be visualized as moving on a 2D height map.
     
 ---
 
-### <b>三种改进方法：</b>
+### <b>三种改进方法based GD：</b>
 
 1. <b>Heavy Ball Method（动量法）</b> → Momentum  
 2. <b>RMSProp</b> → Adaptive learning rate  
@@ -3621,4 +3621,6 @@ RL 的概念如今已经超越了玩游戏的 Agent，成为了训练大语言�
 - <b>Markov Property:</b> 只有当下是重要的，历史无关紧要 。
 - <b>Value Function:</b> 评估状态和动作的长期价值。
 - <b>Reusability:</b> 这一套逻辑不仅用于游戏，更是训练现代 LLM (ChatGPT, DeepSeek) 的基石 。
+
+## [预测试题 Plus RL](/QRiFwuy0liWXaGk5KDqcgG4dnYf/RMIWw2d51iMGqXkeMCZcq0mrnvh)
 

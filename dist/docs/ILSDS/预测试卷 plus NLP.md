@@ -362,12 +362,3 @@ Unlike stemming.
 
 ---
 
-# <b>如果你愿意，我可以继续为你做：</b>
-
-- <b>一页 A4 的 NLP 考试速记版（最强 cheat sheet）</b>  
-- <b>20 道高难度推理题（Transformer、embedding、RNN）</b>  
-- <b>模拟考试卷（含评分标准）</b>  
-- <b>你需要重点复习的知识点清单</b>
-    
-你想要哪一个？
-

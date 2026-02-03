@@ -364,7 +364,7 @@ c & d
 $$\mathbf{A} = \mathbf{V}\Lambda \mathbf{V}^{-1}$$
 
 - $\mathbf{V} = [\mathbf{v}_1, \dots, \mathbf{v}_n]$ A的n行的特征向量
-- $\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$[特征值可以重复]
+- $\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$[特征分解需要 n 个特征值（按代数重数），但不要求它们都不同。]
 
 > $diag(λ₁, λ₂, …, λₙ)$ 表示一个对角矩阵：
 > $$\operatorname{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)
@@ -2439,19 +2439,11 @@ jumps → verb
 
 ###### <b>Term Frequency (TF):</b>
 
-\[
-
-TF(w,d) = \frac{\text{count of w in d}}{\text{total words in d}}
-
-\]
+$$TF(w,d) = \frac{\text{count of w in d}}{\text{total words in d}}$$
 
 ###### <b>Inverse Document Frequency (IDF):</b>
 
-\[
-
-IDF(w) = \log\frac{N}{df(w)}
-
-\]
+$$IDF(w) = \log\frac{N}{df(w)}$$
 
 ###### <b>TF-IDF = TF × IDF</b>
 

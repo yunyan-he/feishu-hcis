@@ -256,6 +256,8 @@ To "Identify and name resources" means assigning a <b>URI</b> to a concept. To "
 
 # Linked Data Basics
 
+## Agency
+
 1. <b>RDF 基础 (01-RDF-Intro)</b>
 
 - <b>背景与动机</b>：介绍了从 Web 1.0（只读）到 Web 2.0（读写）再到 Web 3.0（语义网/数据网）的演变，强调了机器可理解数据的重要性。

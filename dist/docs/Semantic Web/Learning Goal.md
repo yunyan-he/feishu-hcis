@@ -254,6 +254,8 @@ This section typically begins with `//` and is divided into the <b>Authority</b>
 
 To "Identify and name resources" means assigning a <b>URI</b> to a concept. To "tell them apart" is to recognize that while a URI like `http://example.org/my-photo.jpg` identifies a file (Information Resource), a URI like `http://example.org/person/Einstein` identifies a human being (Non-information Resource), even though both look like web addresses.
 
+# [linked data basics](/X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/PUoIw8e2xi7oG3klHZec3pptnAp)
+
 # Linked Data Basics
 
 ## Agency
@@ -289,6 +291,502 @@ To "Identify and name resources" means assigning a <b>URI</b> to a concept. To "
     - <b>@type</b>：定义资源的类型。
 
 - <b>使用方式</b>：上下文可以内嵌在文档中，也可以通过外部文件引用，甚至可以通过 HTTP Link Header 提供。
+
+## Example and exercise 1
+
+### 第一部分：教学示例 (Detailed Examples)
+
+课件中通过这几个核心示例来解释 RDF 的基本概念。
+
+#### 示例 1：Natural Language to RDF Triples (Aachen)
+
+- <b>示例内容：</b>
+
+how to convert sentences into the Subject-Predicate-Object structure.：
+- 句子："Aachen is a city." (亚琛是一座城市)
+- 句子："Aachen is located in Germany." (亚琛位于德国)
+- 句子："Aachen has a population of 247,380." (亚琛人口为 247,380)
+
+- <b>转化结果 (RDF结构)：</b>
+    - `<Aachen> ---isType---> <City>`
+    - `<Aachen> ---isLocatedIn---> <Germany>`
+    - `<Aachen> ---hasPopulation---> "247,380"`
+
+- <b>考察知识点：</b>
+    1. <b>RDF 三元组结构</b>：理解所有 RDF 语句都由“主语 (Subject) - 谓语 (Predicate) - 宾语 (Object)”构成。
+    2. <b>资源与字面量的区别</b>：
+        - 主语（如 Aachen）和谓语（如 isLocatedIn）必须是资源（IRI）。
+        - 宾语可以是另一个资源（如 Germany），也可以是具体的数值/文本（如 "247,380"，即字面量 Literal）。
+            
+#### 示例 2：Data Integration (Global Identifiers) 
+
+- <b>示例内容：</b>
+
+how two different graphs can be merged if they use shared IRIs：
+1. <b>Source 1 (DBpedia)</b>: Contains general info about Aachen (Population, Label)
+2. <b>Source 2 (Local Open Data):</b> Contains local info (Mayor Sibylle Keupen, Departments)。
+
+- <b>合并逻辑：</b>
+
+两个图都使用了相同的全局唯一标识符（IRI）`db:Aachen` 来指代“亚琛”这个实体。
+
+- <b>考察知识点：</b>
+    1. <b>IRI 的核心作用</b>：IRI (国际化资源标识符) 充当“锚点 (Anchor)”。只要不同系统使用相同的 IRI 指代同一个事物，数据就可以自动合并，无需复杂的映射表,。
+    2. <b>图数据模型 (Graph Model)</b>：RDF 本质上是一个图，节点是资源或字面量，边是关系。合并数据就是合并节点和边。
+        
+#### 示例 3：Blank Nodes (Anonymous Resources)
+
+- <b>示例内容：</b>
+
+描述：Hans Müller has an address at "Melatener Straße 111, 52072 Aachen."
+- 虽然 Hans Müller 是一个明确的资源（有 IRI），但“地址”本身是一个复合概念，不需要全球唯一的 IRI，只需要存在即可。
+
+- <b>RDF 建模：</b>
+    - `Hans` ---hasAddress---&gt; `_:adr` (空白节点)
+    - `_:adr` ---street---&gt; "Melatener Straße 111"
+    - `_:adr` ---city---&gt; "Aachen"
+
+- <b>考察知识点：</b>
+    1. <b>存在量化 (Existential Quantification)</b>：空白节点表示“存在某物具有这些属性”，但不需要给它命名。
+    2. <b>聚合属性</b>：当一个属性（如地址）包含多个子属性（街名、城市、邮编）时，使用空白节点作为中间节点来组织这些数据。
+        
+---
+
+### 第二部分：练习题与解析 (Exercises & Answers)
+
+课件最后提供了 5 个练习题用于自测，以下是详细整理、参考答案及知识点解析。
+
+#### 练习 1：识别三元组 (Identifying Triples)
+
+- <b>题目内容：</b>
+
+分析语句："The city of Aachen is located in the federal state of North Rhine-Westphalia and has approximately 250,000 inhabitants."
+1. 将其分解为 RDF 三元组。
+2. 识别主语、谓语、宾语。
+3. 哪些宾语是字面量？建议使用什么 XSD 数据类型？
+
+- <b>参考答案：</b>
+    - <b>分解：</b>
+        1. (Aachen, isLocatedIn, North Rhine-Westphalia)
+        2. (Aachen, hasPopulation, 250,000)
+    - <b>识别：</b>
+        - <b>主语 (Subject)</b>: `ex:Aachen` (IRI)
+        - <b>谓语 (Predicate)</b>: `ex:isLocatedIn`, `ex:hasPopulation` (IRI)
+        - <b>宾语 (Object)</b>: `ex:NorthRhineWestphalia` (IRI, 实体), `"250,000"` (Literal, 数值)
+    - <b>数据类型：</b> `"250,000"` 是字面量。适合的数据类型是 `xsd:integer` (整数)。
+
+- <b>考察知识点：</b>
+    - 从非结构化文本提取结构化信息的能力。
+    - <b>Literals (字面量)</b> 的概念及其数据类型（如 `xsd:integer` 用于数字，`xsd:string` 用于文本）的应用。
+        
+#### 练习 2：构建自己的 RDF 语句 (Formulating Your Own RDF Statements)
+
+- <b>题目内容：</b>
+
+关于一个主题（如大学或名人）写出三个相关语句。
+1. 表达为 RDF 三元组。
+2. 使用合理的（虚构）IRI 和字面量。
+3. 解释设计选择（何时用 IRI，何时用字面量）。
+
+- <b>参考答案 (示例)：</b>
+    - <b>三元组：</b>
+        1. `<http://ex.org/Einstein> <http://ex.org/taught> <http://ex.org/Physics101> .`
+        2. `<http://ex.org/Einstein> <http://foaf.org/name> "Albert Einstein"^^xsd:string .`
+        3. `<http://ex.org/Einstein> <http://ex.org/birthYear> "1879"^^xsd:integer .`
+    - <b>解释：</b>
+        - 使用 IRI (如 `Physics101`) 当对象是另一个实体（课程），因为该实体可能被其他数据引用。
+        - 使用 Literal (如 "Albert Einstein") 当对象是具体数值或名称字符串，不需要进一步描述。
+
+- <b>考察知识点：</b>
+    - <b>建模能力</b>：区分“事物 (Thing/Resource)”和“值 (Value/Literal)”。
+    - <b>IRI 语法</b>：理解 IRI 是用于唯一标识的（如 http://...）。
+        
+#### 练习 3：设计小型的 RDF 图 (Designing a Small RDF Graph)
+
+- <b>题目内容：</b>
+
+基于以下事实建模：
+- 课程 `:WebTech` 由教授 `:Einstein` 讲授。
+- 教授 `:Einstein` 属于研究所 `:ComputerScience`。
+- 课程 `:WebTech` 的主题是 `"Semantic Web"`。
+- 课程 `:WebTech` 有 `3` 个 ECTS 学分。
+- <b>任务</b>：画出图，区分椭圆（IRI）和矩形（字面量）。
+
+- <b>参考答案：</b>
+    - <b>三元组列表：</b>
+        1. `:WebTech :taughtBy :Einstein`
+        2. `:Einstein :belongsTo :ComputerScience`
+        3. `:WebTech :hasTopic "Semantic Web"^^xsd:string`
+        4. `:WebTech :hasCredits "3"^^xsd:integer`
+    - <b>图结构描述：</b>
+        - <b>节点 (椭圆/IRI)</b>: `:WebTech`, `:Einstein`, `:ComputerScience`
+        - <b>节点 (矩形/Literal)</b>: `"Semantic Web"`, `"3"`
+        - <b>边 (有向箭头)</b>: `:taughtBy`, `:belongsTo`, `:hasTopic`, `:hasCredits` 从主语指向宾语。
+
+- <b>考察知识点：</b>
+    - <b>RDF 图的可视化规范</b>：资源用椭圆，字面量用矩形,。
+    - <b>链式关系</b>：`:WebTech` 连向 `:Einstein`，`:Einstein` 再连向 `:ComputerScience`，展示了图的连接性。
+        
+#### 练习 4：空白节点应用场景 (Blank Nodes Scenario)
+
+- <b>题目内容：</b>
+
+场景：项目 "Future of Mobility" 有一个合作伙伴是一个<b>没有官方名称或网站的研究小组</b>，该小组由三名研究员（Schmidt, Meier, Huber）组成。
+1. 如何在 RDF 图中表示这个未命名的小组？
+2. 写出三元组，表示项目拥有该伙伴，且 Schmidt 是该小组成员。
+
+- <b>参考答案：</b>
+    1. <b>表示方法</b>：使用 <b>空白节点 (Blank Node)</b>。因为该小组是一个存在的实体，但没有全局标识符（IRI）。
+    2. <b>三元组：</b>
+        - `proj:FutureMobility proj:hasPartner _:researchGroup .` (使用 `_:researchGroup` 代表空白节点)
+        - `_:researchGroup rdf:type org:Group .` (可选，定义类型)
+        - `_:researchGroup group:hasMember pers:Schmidt .`
+        - `_:researchGroup group:hasMember pers:Meier .`
+
+- <b>考察知识点：</b>
+    - <b>空白节点 (Blank Node) 的使用场景</b>：用于表示不需要全局 ID 或 ID 未知的资源，或者是作为聚合其他资源的容器。
+        
+#### 练习 5：RDF 的优势 (RDF in Context)
+
+- <b>题目内容：</b>
+    1. 举例说明 RDF 的“模式灵活性 (Schema Flexibility)”相比关系型数据库的优势。
+    2. 是什么特性使 RDF 能够实现“全球范围内的数据集成”？
+
+- <b>参考答案：</b>
+    1. <b>灵活性</b>：在关系型数据库中，如果我们要给某个员工增加一个“业余爱好”字段，通常需要修改表结构（ALTER TABLE）。在 RDF 中，我们只需直接添加一条新三元组 `<EmployeeX> :hasHobby "Chess"`，不需要预先修改任何 Schema（Schema-later 方法）,。
+    2. <b>集成关键</b>：是 <b>IRIs (国际化资源标识符)</b>。因为使用了全球唯一的 HTTP IRI，不同组织的数据只要引用相同的 IRI，就能在无需协商的情况下自动链接在一起。
+
+- <b>考察知识点：</b>
+    - <b>RDF vs 关系型数据库</b>：理解 RDF 的“Schema-flexible”（无模式/后模式）特性。
+    - <b>Linked Data 原则</b>：理解全局标识符（Global Identifiers）是 Web of Data 的基石。
+
+## Example and exercise 2
+
+根据提供的课件 "3. 02-RDF-Turtle.pdf"，我为您整理了<b>教学示例 (Instructional Examples)</b> 和 <b>课后练习 (Exercises)</b> 的详细内容。这些内容主要围绕 <b>Turtle (Terse RDF Triple Language)</b> 语法的各个方面展开。
+
+以下是详细的分类整理，包含题目/场景、参考答案以及具体的考察知识点。
+
+---
+
+### 第一部分：教学核心示例 (Instructional Examples)
+
+课件使用“亚琛 (Aachen)”作为贯穿始终的例子，展示了如何利用 Turtle 语法逐步简化代码。
+
+#### 示例 1：字面量与数据类型 (Literals & Datatypes)
+
+- <b>场景</b>：描述亚琛的人口（整数）和评分（小数）。
+- <b>Turtle 代码</b>：
+    ```text
+ex:aachen ex:population 249878 .  # 自动识别为 xsd:integer
+ex:aachen ex:rating 4.5 .         # 自动识别为 xsd:decimal
+```
+
+- <b>考察知识点</b>：
+    - <b>缩写语法</b>：Turtle 会自动识别数字类型。无引号数字识别为 `xsd:integer`，带小数点的识别为 `xsd:decimal`，科学计数法识别为 `xsd:double`，`true/false` 识别为 `xsd:boolean`。无需显式写出 `^^xsd:integer`。
+        
+#### 示例 2：语言标签与前缀 (Language Tags & Prefixes)
+
+- <b>场景</b>：给亚琛定义德语名称和科隆方言名称，并使用前缀缩短 IRI。
+- <b>Turtle 代码</b>：
+    ```text
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+dbr:Aachen rdfs:label "Aachen"@de .
+dbr:Aachen rdfs:label "Oche"@ksh .
+```
+
+- <b>考察知识点</b>：
+    - <b>@prefix 指令</b>：将长命名空间映射为短前缀（如 `dbr:`）。
+    - <b>语言标签</b>：字符串<b>string</b>后加 `@lang`（如 `@de`, `@ksh`）表示语言，数据类型为 `rdf:langString`。
+        
+#### 示例 3：分号与逗号缩写 (Abbreviations: ; and ,)
+
+- <b>场景</b>：合并关于同一个主语（亚琛）的多条陈述。
+- <b>Turtle 代码</b>：
+    ```text
+dbr:Aachen rdfs:label "Aachen"@de, "Oche"@ksh ;  # 逗号：同主语、同谓语
+           dbo:populationTotal 261472 ;          # 分号：同主语、新谓语
+           schema:ratingValue 4.7 .              # 句号：结束
+```
+
+- <b>考察知识点</b>：
+    - <b>逗号comma (,)</b>：用于分隔<b>同一个主语和谓语</b>下的多个宾语。
+    - <b>分号semicolom (;)</b>：用于分隔<b>同一个主语</b>下的不同谓语-宾语对。
+        
+#### 示例 4：空白节点与嵌套 (Blank Nodes & Nesting)
+
+- <b>场景</b>：描述亚琛的地址，地址本身是一个没有全局 IRI 的复杂对象。
+- <b>Turtle 代码</b>：
+    ```text
+<Aachen> schema:address [
+    a schema:PostalAddress ;
+    schema:streetAddress "Markt 39" ;
+    schema:postalCode "52062"
+] .
+```
+
+- <b>考察知识点</b>：
+    - <b>匿名空白节点 </b><b>[]</b>：方括号表示一个匿名的空白节点。
+    - <b>内联属性</b>：在方括号内部直接定义该节点的属性（如街道、邮编），这种结构常用于表示层级数据。
+        
+---
+
+### 第二部分：课后练习与解析 (Exercises & Answers)
+
+课件提供了 8 个练习题和一个 Bonus Project。以下是详细解析：
+
+#### Exercise 1: 基础 (Basics – Triples, IRIs, Literals)
+
+- <b>题目要求</b>：
+
+为一个虚构人物 "Dr. Elara Vance" 和一本书 "Cosmic Journeys" 建模。
+- 属性：职业（天体物理学家），生日（1985-07-22），页数（350），是否精彩（true），多语言标题。
+
+- <b>参考答案 (Turtle)</b>：
+    ```text
+@prefix ex: <http://example.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:ElaraVance ex:profession "Astrophysicist" ;
+              ex:birthDate "1985-07-22"^^xsd:date . # 日期需显式声明类型
+
+ex:CosmicJourneys ex:title "Cosmic Journeys"@en, "Kosmische Reisen"@de ;
+                  ex:numberOfPages 350 ;            # 自动识别为整数
+                  ex:isExciting true .              # 自动识别为布尔值
+```
+
+- <b>考察知识点</b>：
+    1. <b>数据类型</b>：`xsd:date` 不是 Turtle 的自动识别类型，必须显式写出 `^^xsd:date`。
+    2. <b>自动推断</b>：整数和布尔值不需要写类型。
+    3. <b>多语言</b>：使用逗号分隔不同语言的标题。
+        
+#### Exercise 2: 使用前缀 (@prefix and @base)
+
+- <b>题目要求</b>：
+
+给定一段充满长 IRI 的代码（如 `<http://example.org/university/course/Lecture_Logic>`），要求：
+1. 提取公共命名空间并定义 `@prefix`。
+2. 使用 `@base` 处理相对路径。
+3. 重写代码。
+
+- <b>参考答案 (Turtle)</b>：
+    ```text
+@base <http://example.org/university/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix univ: <http://example.org/university/vocabulary#> .
+
+<course/Lecture_Logic> dcterms:title "Logic for Computer Scientists"@en ;
+                       univ:hasECTS 6 .  # "6"^^xsd:integer 简化为 6
+
+<staff/Prof_Curie> a foaf:Person ;
+                   foaf:name "Prof. Dr. Marie Curie" ;
+                   univ:teachesCourse <course/Lecture_Logic> .
+```
+
+- <b>考察知识点</b>：
+    1. <b>@base 的作用</b>：`@base` 定义文档的基准 URI，尖括号内的相对路径（如 `<course/Lecture_Logic>`）会基于它解析。
+    2. <b>常用词汇集</b>：识别 Dublin Core (`dcterms`) 和 FOAF 等常见前缀。
+        
+#### Exercise 3: Turtle 缩写 (; and ,)
+
+- <b>题目要求</b>：
+
+重写一段冗长的代码，其中 `ex:Product001` 作为主语重复出现了 5 次。
+
+- <b>参考答案 (Turtle)</b>：
+    ```text
+ex:Product001 a schema:Product ;
+              schema:name "Super Power Drill"@en ;
+              schema:description "High-performance drill..."@en ;
+              schema:color "red"@en, "black"@en ; # 使用逗号合并同一属性
+              schema:brand ex:BrandXYZ .
+```
+
+- <b>考察知识点</b>：
+    - <b>代码压缩</b>：通过分号避免重复主语，通过逗号避免重复主语和谓语。
+        
+#### Exercise 4: 空白节点 (_: and [ ... ])
+
+- <b>题目要求</b>：
+
+为“2025 夏季音乐节”及其组织委员会建模。
+1. 使用<b>命名空白节点</b> (`_:name`) 表示委员会。
+2. 使用<b>匿名空白节点</b> (`[]`) 表示委员会。
+3. <b>Bonus</b>：在委员会中嵌套一个联系人（Ms. Meier）。
+
+- <b>参考答案 (Task 2 & 3)</b>：
+    ```text
+ex:SummerFest25 ex:organizer [
+    ex:email <mailto:komitee@example.org> ;
+    ex:phone <tel:+49-123...> ;
+    ex:contactPoint [               # 嵌套的第二层空白节点
+         a foaf:Person ;
+         foaf:name "Ms. Meier"
+    ]
+] .
+```
+
+- <b>考察知识点</b>：
+    1. <b>语法选择</b>：当该节点不需要在别处被引用时，使用 `[]` 比 `_:` 更简洁。
+    2. <b>层级建模</b>：如何通过嵌套 `[]` 来表达“实体包含实体”的复杂结构（Event -&gt; Committee -&gt; Person）。
+        
+#### Exercise 5: 列表/集合 (Collections)
+
+- <b>题目要求</b>：
+    1. 创建一个简单的标签列表 `("RDF" "Turtle" ...)`。
+    2. 创建一个嵌套列表用于作者排序 `(AuthorA AuthorB (CoAuthorX CoAuthorY))`。
+    3. 表示一个空列表。
+
+- <b>参考答案</b>：
+    ```text
+blog:Article42 blog:hasTags ( "RDF" "Turtle" "Semantic Web" ) ;
+               blog:authorOrder ( pers:A pers:B ( pers:X pers:Y ) ) ; # 嵌套列表
+               blog:comments ( ) . # 空列表
+```
+
+- <b>考察知识点</b>：
+    1. <b>圆括号语法</b>：Turtle 使用 `( ... )` 表示有序列表（RDF Collection）。
+    2. <b>底层原理</b>：理解空列表 `()` 等同于 `rdf:nil`，而非空列表底层是基于 `rdf:first` 和 `rdf:rest` 的链表结构。
+        
+#### Exercise 6: 阅读与解释 (Reading Turtle)
+
+- <b>题目要求</b>：
+
+分析一段给定的 Turtle 代码（关于 `ex:Document1`），回答问题。
+
+- <b>问题与答案</b>：
+    1. <em>三元组数量？</em> 需要计算展开后的数量（包括列表展开和空白节点展开）。
+    > 每个元素 2 条（first + rest）以及最开始的节点需要挂在属性上。
+> 空白节点就是转为anonymous 节点就是
+    1. <em>ex:revision 的数据类型？</em> 代码中写了 `"1.0"^^xsd:decimal`，所以是 Decimal。
+    2. <em>dc:creator 是谁？</em> 是一个空白节点（匿名资源），属性包含名字 "Dr. Eva Example"。
+    3. <em>列表内容？</em> "RDF", "Semantic Web", "Linked Data"。
+
+- <b>考察知识点</b>：
+    - <b>代码理解能力</b>：理解 Turtle 的缩写形式在逻辑上对应多少条 RDF 陈述。
+        
+#### Exercise 7: 自主建模 (Modeling Your Own Data)
+
+- <b>题目要求</b>：
+
+为 RWTH Aachen 大学建模：包含德语/英语名称、主页、所在城市（及城市名称）、以及一门 6 学分的课程。
+
+- <b>参考答案思路</b>：
+    ```text
+ex:RWTHAachen a dbo:University ;
+              rdfs:label "Rheinisch-Westfälische..."@de, "RWTH Aachen University"@en ;
+              foaf:homepage <http://www.rwth-aachen.de> ;
+              ex:location ex:AachenCity .
+
+ex:AachenCity rdfs:label "Aachen" .
+
+ex:DM_Lecture ex:heldAt ex:RWTHAachen ;
+              ex:credits 6 .
+```
+
+- <b>考察知识点</b>：
+    - <b>综合应用</b>：将前缀、多语言字面量、对象属性（链接两个资源）和数据属性（链接资源和数值）结合使用。
+        
+#### Exercise 8: 图解析 (Graph Analysis)
+
+- <b>题目要求</b>：
+
+给出一个关于 "Advanced Data Analytics" 课程的代码，回答具体问题。
+
+- <b>关键点</b>：
+    - 授课教师 (`ex:taughtBy`) 是一个空白节点，不是 IRI。
+    - 学分 (`ex:credits`) 是 `"7.5"^^xsd:decimal`。
+
+- <b>考察知识点</b>：
+    - 从结构化文本中提取事实信息。
+        
+#### Bonus Project: "Öcher Platt" 语言标签
+
+- <b>内容</b>：
+
+研究并起草一份提案，向 IANA 注册亚琛方言 "Öcher Platt" 的语言子标签。
+
+- <b>考察知识点</b>：
+    - <b>标准化流程</b>：了解 RDF 中使用的语言标签（如 `@en`, `@de`）是基于 BCP 47 标准管理的，以及如何参与这一标准化过程。
+
+## Exercise 2
+
+### Multiple Choice
+
+1. Which statements about the RDF datamodel are correct?
+
+- (a) RDF uses triples to represent data.
+- (b) RDF is a standard model for data interchange on the Web.
+- (c) RDF only supports XML as its serialization format.
+- (d) RDF supports the use of URIs to identify resources.
+- (e) RDF is a relational database model.
+
+{a,b,d}
+
+1. Which statements about the RDF datamodel are correct?
+
+- (a) Turtle is a programming language for creating web applications.
+- (b) Turtle does not support comments in its syntax.
+- (c) In Turtle, it is possible to omit the integer datatype by directly writing numbers instead of using a string.
+- (d) Turtle is a syntax for serializing RDF (Resource Description Framework) graphs.
+- (e) Turtle uses prefixes to shorten URIs, making the syntax more concise.
+
+{c,d,e}
+
+1. Which statements about Blank Nodes (in Turtle) are correct?
+
+- (a) Blank Nodes in Turtle are used to represent resources that do not have a global identifier (URI) or for which an identifier is not needed.
+- (b) Blank Nodes can be linked across different Turtle documents because they have a universal identity.
+- (c) Blank Nodes are always defined with an underscore and a number (e.g., _1) and cannot contain other characters.
+- (d) Blank Nodes can be used as the subject or object in triples.
+- (e) Blank Nodes are only allowed in Turtle and do not exist as a concept in RDF
+
+{a,d}
+
+### Exercise
+
+Consider the following information:
+
+There is a visitor, who has no identifier. She visits a museum with the label "Bundeskunsthalle". Another visitor, who has also no identifier, also visits that museum. The second visitor has an interest in a painting, which has no identifier. The painting is located on the second floor (i.e. floor Number "2"), in room number "5".
+
+Use Turtle to model these information. Note that you need three Blank Nodes and one n-ary relation modeled with a Blank Node. You have to use the following vocabulary and prefixes:
+
+- Type: rdf:type
+- Label: rdfs:label
+- Museum: cl:Museum
+- Bundeskunsthalle: ex:bundeskunsthalle
+- Painting: cl:Painting
+- Visitor: cl:Visitor
+- visits: prop:visits
+- has an interest in: prop:interestedIn
+- located in: prop:hasLocation
+- floorNumber: prop:floor
+- roomNumber: prop:room
+
+注意 在写visitor参观ex:bundeskunsthalle的时候 
+
+in RDF, <b>an identifier alone does not say what the thing </b><b>is</b>.
+
+So you still need to <em>assert</em>:
+
+- what type it has (`rdf:type cl:Museum`)
+- what its human-readable label is (`rdfs:label "Bundeskunsthalle"`)
+
+Identifiers ≠ facts.
+Identifiers are just names.
+You still need to <em>state</em> the facts.
+
+以及空白节点的语法 标点符号！！！
+
+```py
+_:painting rdf:type cl:Painting;
+           prop:hasLocation [
+              prop:floor 2<b>;</b>
+              prop:room 5 
+           ]<b>.</b>
+```
 
 ## Data models
 
@@ -509,6 +1007,8 @@ Based on the provided lecture materials, here is a detailed explanation of <b>Tu
 
 ### Definition and Purpose
 
+<b>It is a file format for serializing RDF graphs. To serialize an RDF triple of the form </b><b>(Subject, Predicate, Object)</b><b> in Turtle, you just write them in that sequence, followed by a period</b>
+
 <b>Turtle</b> is a text-based syntax for RDF that is designed to be <b>compact</b> and <b>human-readable</b>.
 
 - It serves as a middle ground between the verbose <b>RDF/XML</b> format and the very simple but repetitive <b>N-Triples</b> format.
@@ -590,6 +1090,8 @@ To transform a graphical node-and-edge model into Turtle, you break the graph do
 ### Identifiers and Abbreviations (CURIEs)
 
 In a visual graph, nodes are often labeled with short names, but in RDF, they must be global <b>IRIs</b>. Turtle uses <b>Prefixes</b> to keep these IRIs short in the text.
+
+These abbreviated URIs are called <em>Compact URIs</em> or <em>CURIES</em>.
 
 - <b>CURIEs (Compact URIs):</b> Instead of writing a full IRI like `<http://dbpedia.org/resource/Berlin>`, you define a prefix and use a colon separator. The format is `prefix:reference`.
 - <b>Prefix Definition:</b> You must declare the prefix at the top of the document.

@@ -85,7 +85,7 @@
         "node_token": "BBEOwHkYViRIM1kzyxHc8iKgnMc",
         "parent_node_token": "X5HAwhUxHixmzTkqv9BcS22Cn6c",
         "obj_create_time": "1769194894",
-        "obj_edit_time": "1770060453",
+        "obj_edit_time": "1770223581",
         "obj_token": "JAY1dsDCDoJTZExeCdHcZpZJnFG",
         "children": [
           {
@@ -101,6 +101,20 @@
             "slug": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/H4iRwSI2EiFpszkRPBfcwEian4b",
             "position": 0,
             "filename": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/H4iRwSI2EiFpszkRPBfcwEian4b.md"
+          },
+          {
+            "depth": 2,
+            "title": "Linked Data Basics",
+            "node_token": "PUoIw8e2xi7oG3klHZec3pptnAp",
+            "parent_node_token": "BBEOwHkYViRIM1kzyxHc8iKgnMc",
+            "obj_create_time": "1770223580",
+            "obj_edit_time": "1770224627",
+            "obj_token": "BZHydtzUHoVHWYxi278c0LAInNc",
+            "children": [],
+            "has_child": false,
+            "slug": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/PUoIw8e2xi7oG3klHZec3pptnAp",
+            "position": 1,
+            "filename": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/PUoIw8e2xi7oG3klHZec3pptnAp.md"
           }
         ],
         "has_child": true,
@@ -120,7 +134,7 @@
     "node_token": "KtpqwJBThilgLukXLE6cKJKSn2c",
     "parent_node_token": "",
     "obj_create_time": "1762629446",
-    "obj_edit_time": "1770152716",
+    "obj_edit_time": "1770216844",
     "obj_token": "FtttdCeveo6RArx6O9Dc35tNn7b",
     "children": [
       {

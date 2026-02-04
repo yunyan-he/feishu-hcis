@@ -6,6 +6,7 @@
 - [Semantic Web](X5HAwhUxHixmzTkqv9BcS22Cn6c.md)
   - [Learning Goal](X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc.md)
     - [中文版 1-4](X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/H4iRwSI2EiFpszkRPBfcwEian4b.md)
+    - [Linked Data Basics](X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/PUoIw8e2xi7oG3klHZec3pptnAp.md)
 - [DIS](KtpqwJBThilgLukXLE6cKJKSn2c.md)
   - [重构版本](KtpqwJBThilgLukXLE6cKJKSn2c/YYYIwNzSaixmbrkg6E1cPeYhnIh.md)
   - [Exam](KtpqwJBThilgLukXLE6cKJKSn2c/D0mew4MJxiQkaRk5xybcKBlpnvf.md)

@@ -33,7 +33,7 @@ B 公式意义（必考）
 
 C 推导题（高概率）  
 
-D 应用题（压轴）**
+D 应用题（压轴）** 
 
 ---
 
@@ -47,20 +47,12 @@ D 应用题（压轴）**
 
 随机变量是一个从样本空间映射到实数的函数：
 
-$$
+$$L: \Omega \to \mathbb{R}$$
 
-L: \Omega \to \mathbb{R}
-
-$
-
-- <b>离散随机变量</b>：取值集合可数（如 {0,1,2}），用 PMF $$P(L=l)$ 描述。
-- <b>连续随机变量</b>：取值不可数（如实数区间），用 PDF $$f_L(x)$ 描述，满足：
+- <b>离散随机变量</b>：取值集合可数（如 {0,1,2}），用 PMF $P(L=l)$ 描述。
+- <b>连续随机变量</b>：取值不可数（如实数区间），用 PDF $f_L(x)$ 描述，满足：
     
-$$
-
-P(a \le L \le b) = \int_a^b f_L(x)\,dx
-
-$
+$$P(a \le L \le b) = \int_a^b f_L(x)\,dx$$
 
 ### <b>评分点</b>
 
@@ -78,11 +70,7 @@ $
 - <b>PDF</b>：连续随机变量的概率密度函数，不能直接表示概率，概率由积分给出。
 - <b>CDF</b>：累积分布函数，适用于两者：
     
-$$
-
-F_L(l) = P(L \le l)
-
-$
+$$F_L(l) = P(L \le l)$$
 
 联系：
 
@@ -103,22 +91,14 @@ $
 
 贝叶斯公式：
 
-$$
-
-p(l|m) = \frac{p(m|l)p(l)}{p(m)}
-
-$
+$$p(l|m) = \frac{p(m|l)p(l)}{p(m)}$$
 
 - <b>Prior（先验）</b>：观察数据前对 $$l$ 的信念  
 - <b>Likelihood（似然）</b>：假设 $$l$ 为真时，数据 $$m$ 出现的“相容程度”  
 - <b>Posterior（后验）</b>：看到数据后对 $$l$ 的更新信念  
 - <b>Evidence（证据）</b>：数据本身的概率，用于归一化：
     
-$$
-
-p(m) = \sum_l p(m|l)p(l)
-
-$
+$$p(m) = \sum_l p(m|l)p(l)$$
 
 ### <b>评分点</b>
 
@@ -137,11 +117,7 @@ $
 
 期望的线性性：
 
-$$
-
-E[aL + b] = aE[L] + b
-
-$
+$$E[aL + b] = aE[L] + b$$
 
 原因：
 
@@ -164,11 +140,7 @@ $
 
 协方差：
 
-$$
-
-\operatorname{Cov}(X,Y) = E[(X-\mu_X)(Y-\mu_Y)]
-
-$
+$$\operatorname{Cov}(X,Y) = E[(X-\mu_X)(Y-\mu_Y)]$$
 
 含义：
 
@@ -179,11 +151,7 @@ $
     
 相关系数：
 
-$$
-
-\operatorname{Corr}(X,Y) = \frac{\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y}
-
-$
+$$\operatorname{Corr}(X,Y) = \frac{\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y}$$
 
 是协方差的标准化版本，范围 $$[-1,1]$。
 
@@ -199,41 +167,25 @@ $
 
 ---
 
-## <b>题 6：推导协方差公式 $$\operatorname{Cov}(X,Y) = E[XY] - E[X]E[Y]$。</b>
+## <b>题 6：推导协方差公式 </b>$\operatorname{Cov}(X,Y) = E[XY] - E[X]E[Y]$<b>。</b>
 
 ### <b>标准答案（简洁推导）</b>
 
 从定义：
 
-$$
-
-\operatorname{Cov}(X,Y) = E[(X-\mu_X)(Y-\mu_Y)]
-
-$
+$$\operatorname{Cov}(X,Y) = E[(X-\mu_X)(Y-\mu_Y)]$$
 
 展开：
 
-$$
-
-= E[XY - X\mu_Y - \mu_XY + \mu_X\mu_Y]
-
-$
+$$= E[XY - X\mu_Y - \mu_XY + \mu_X\mu_Y]$$
 
 利用期望线性性：
 
-$$
+$$= E[XY] - \mu_YE[X] - \mu_XE[Y] + \mu_X\mu_Y$$
 
-= E[XY] - \mu_YE[X] - \mu_XE[Y] + \mu_X\mu_Y
+因为 $\mu_X = E[X]$，$\mu_Y = E[Y]$，所以：
 
-$
-
-因为 $$\mu_X = E[X]$，$$\mu_Y = E[Y]$，所以：
-
-$$
-
-\operatorname{Cov}(X,Y) = E[XY] - E[X]E[Y]
-
-$
+$$\operatorname{Cov}(X,Y) = E[XY] - E[X]E[Y]$$
 
 ### <b>评分点</b>
 
@@ -247,33 +199,21 @@ $
 
 ### <b>标准答案</b>
 
-Bernoulli 随机变量 $$K \in \{0,1\}$：
+Bernoulli 随机变量 $K \in \{0,1\}$：
 
-$$
+$$E[K] = \theta$$
 
-E[K] = \theta
+因为 $K^2 = K$：
 
-$
-
-因为 $$K^2 = K$：
-
-$$
-
-E[K^2] = E[K] = \theta
-
-$
+$$E[K^2] = E[K] = \theta$$
 
 方差：
 
-$$
-
-\operatorname{Var}(K) = E[K^2] - (E[K])^2 = \theta - \theta^2 = \theta(1-\theta)
-
-$
+$$\operatorname{Var}(K) = E[K^2] - (E[K])^2 = \theta - \theta^2 = \theta(1-\theta)$$
 
 ### <b>评分点</b>
 
-- 使用 $$K^2 = K$（2 分）
+- 使用 $K^2 = K$（2 分）
 - 正确代入（2 分）
 - 最终结果（2 分）
     
@@ -289,11 +229,7 @@ $
 
 点积：
 
-$$
-
-x^T y
-
-$
+$$x^T y$$
 
 问题：
 
@@ -302,11 +238,7 @@ $
     
 余弦相似度：
 
-$$
-
-\frac{x^T y}{|x||y|}
-
-$
+$$\frac{x^T y}{|x||y|}$$
 
 优势：
 
@@ -330,9 +262,9 @@ $
 几何意义：
 
 - SVD 将单位球映射成椭球  
-- 奇异值 $$s_1 \ge s_2 \ge \dots$ 表示各方向的拉伸程度  
-- 左奇异向量 $$u_i$ 是主方向  
-- 右奇异向量 $$v_i$ 是系数方向
+- 奇异值 $s_1 \ge s_2 \ge \dots$ 表示各方向的拉伸程度  
+- 左奇异向量 $u_i$ 是主方向  
+- 右奇异向量 $v_i$ 是系数方向
     
 降维原因：
 
@@ -354,11 +286,7 @@ $
 
 公式：
 
-$$
-
-v_q = \hat{S}^{-1} \hat{U}^T x_q
-
-$
+$$v_q = \hat{S}^{-1} \hat{U}^T x_q$$
 
 意义：
 

@@ -359,7 +359,7 @@ Good mappings rely on <b>natural analogies</b>
 <b>extreme physical constraints Can help to avoid errors</b>一种极端的物理约束，用于确保操作顺序或防止错误。
 
 - <b>互锁 (Interlock)</b>：<b>enforces correct sequence</b>强制顺序（microwave door）。例如：微波炉门打开时自动断电。
-- <b>锁定 (Lock-in)</b>：<b>prevents prematurely stopping an cation</b>防止过早停止某项行动。例如：计算机的软件关机提示，防止数据丢失。
+- <b>锁定 (Lock-in)</b>：<b>prevents prematurely stopping an action</b>防止过早停止某项行动。例如：计算机的软件关机提示，防止数据丢失。
 - <b>隔绝 (Lock-out)</b>： <b>prevents an action</b>防止某项行动发生。例如：通往地下室的楼梯门，防止火灾时误入。
 
 ---

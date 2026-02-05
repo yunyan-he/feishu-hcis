@@ -48,11 +48,11 @@ sidebar_position: 5
 #### 离散随机变量 Discrete RV
 
 - 取值集合（支持集 support）为有限或可数集合： $S_L = {l_1, \dots, l_n}$ 
-- <b>概率质量函数 (Probability Mass Function, </b><b>PMF</b><b>)</b>： $P_L(l_i) = P(L = l_i)$  满足： $0 \le P_L(l_i) \le 1,\quad \sum_{i=1}^n P_L(l_i) = 1$ 
+- <b>概率质量函数 (Probability </b><b>Mass</b><b> Function, </b><b>PMF</b><b>)</b>： $P_L(l_i) = P(L = l_i)$  满足： $0 \le P_L(l_i) \le 1,\quad \sum_{i=1}^n P_L(l_i) = 1$ 
 
 #### 连续随机变量 Continuous RV
 
-- 有<b>概率密度函数 (Probability Density Function, </b><b>PDF</b><b>)</b> ($f_L(x)$)，对任意区间 ([a,b])：  $P(a \le L \le b) = \int_a^b f_L(x)dx$ 
+- 有<b>概率密度函数 (Probability </b><b>Density</b><b> Function, </b><b>PDF</b><b>)</b> ($f_L(x)$)，对任意区间 ([a,b])：  $P(a \le L \le b) = \int_a^b f_L(x)dx$ 
 - 性质： $f_L(x) \ge 0,\quad \int_{-\infty}^{\infty} f_L(x)dx = 1$ 
 - 支持集可以是 ($\mathbb{R}$) 或子集如 ($[c,d]$)。
 - 对连续型随机变量： $P(L = l) = 0 \quad \forall l$ 

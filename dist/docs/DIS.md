@@ -304,19 +304,19 @@ Good mappings rely on <b>natural analogies</b>
     - <b>规则</b>：按照控制对象在现实世界中的排列方式来排列控制装置。<b>Arrange controls in the same way that their real-world counterparts are arranged</b>
     - <b>例子</b>：房间灯光开关的排列应与灯的位置对应 。
 
-- <b>感知类比 (Perceptual Analogies)</b>：又称“巫术原则”(Voodoo Principle)。
-    - <b>规则</b>：<b>The UI element is an imitation of the device  itself </b>UI 元素（输入或输出）是对设备本身的模仿 。
+- <b>感知类比 (</b><b>Perceptual Analogies</b><b>)</b>：又称“巫术原则”(Voodoo Principle)。
+    - <b>规则</b>：<b>The UI element is an imitation of the device  itself</b><b> </b>UI 元素（输入或输出）是对设备本身的模仿 。
     - <b>例子</b>：奔驰汽车座椅调节按钮的形状就是座椅本身的缩影 。
 
 - <b>物理测量类比 (Analogies for physical measurements)</b>：有些“量”的变化，人类天生就能直觉理解；但有些“量”的变化，人类无法自然理解。
-    - <b>累加维度 (Additive dimensions)</b>：液位上升代表“更多”，下降代表“更少” 。适用于热量、音量、线宽、亮度等 。
+    - <b>累加维度 (Additive dimensions)</b>：液位上升代表“更多”，下降代表“更少” 。适用于热量、音量、线宽、亮度等 。Natural for all additive dimensions 
     - <b>替代维度 (Substitutive dimensions)</b>：<b>不适用</b>于自然映射，例如颜色、音频音调、味道或位置 。<b>这些维度没有“自然方向”</b>，所以不能用自然映射。
 
 - <b>生物与文化类比 (Biological and Cultural Analogies)</b>：
     - <b>例子</b>：Rising level = more, falling level = less ；Left → right depends on reading direction
     - Cultural differences matter (Hebrew, Arabic, Chinese）
 
-1. Advantage: 快速理解，容易记忆，更方便使用easy of use <b>understood</b><b> immediately, easier to </b><b>remember</b><b> and enable better  </b><b>ease-of-use</b><b> </b>
+1. Advantage: 快速理解，容易记忆，更方便使用Natural Mappings are easy of use <b>understood immediately, easier to remember and enable better  ease-of-use </b>
 2. Result — Some Design Principles
 
 - Discoverability: state and actions are easy to determine
@@ -331,20 +331,20 @@ Good mappings rely on <b>natural analogies</b>
 
 ## 约束 (Constraints)
 
-> <b>定义 (Definition)： Limit the ways in which an object can be used</b> to prevent errors 限制对象的使用方式，并为新情境下的正确行动提供线索。
+> <b>定义 (Definition)：</b><b> Limit the ways in which an object can be used</b> to prevent errors 限制对象的使用方式，并为新情境下的正确行动提供线索。
 > 目标 (Goals)：避免操作错误，并将需要记忆的信息最小化。<b>Avoid usage errors , Minimize the information to be remembered</b>
 
 ### 四种约束类型 (Types of Constraints)
 
-1. <b>物理约束 (Physical Constraints)</b>：<b>Rely upon the physical properties (shape,  size, etc.) to constraint possible actions </b>依靠物理属性（形状、大小等）来限制行动 Visible constraints are best. 如果约束提前可见则更有效。
+1. <b>物理约束 </b><b>(Physical Constraints)</b>：<b>Rely upon the physical properties (shape,  size, etc.) to constraint possible actions</b><b> </b>依靠物理属性（形状、大小等）来限制行动 Visible constraints are best. 如果约束提前可见则更有效。
     - <b>例子</b>：传统钥匙只能插入匹配的锁芯 。
     - 物理约束必须 可见、可感知、可预测 才是好设计。
 
-2. <b>语义约束 (Semantic Constraints)</b>：依靠我们对当前情境和现实世界的知识来限制行动。<b>Rely upon our knowledge of the current  situation and of the world to constrain possible  actions </b>
+2. <b>语义约束 </b><b>(Semantic Constraints)</b>：依靠我们对当前情境和现实世界的知识来限制行动。<b>Rely upon our knowledge of the current  situation and of the world to constrain possible  actions </b>
     - <b>例子</b>：拼装模型飞机时，飞行员小人只能面向前方坐在挡风玻璃后面 。
     - Must match user’s cultural background
 
-3. <b>逻辑约束 (Logical Constraints)</b>： 依靠逻辑推断来限制行动 。不依赖文化或物理结构<b>Rely upon logical conclusions to constraint possible  actions </b>
+3. <b>逻辑约束 (</b><b>Logical Constraints</b><b>)</b>： 依靠逻辑推断来限制行动 。不依赖文化或物理结构<b>Rely upon logical conclusions to constraint possible  actions </b>
     - <b>例子</b>：All parts must be used (completeness) 拼装结束时不应剩下任何零件（完整性）；
     - Steps must follow sequence (1 → 2 → 3) 按照 1, 2, 3 的顺序执行任务 。
     - <b>自然映射（natural mapping）通常依赖逻辑约束</b>。
@@ -366,7 +366,7 @@ Good mappings rely on <b>natural analogies</b>
 
 ## 行动的七个阶段 (The Seven Stages of Action)
 
-> <b>这是理解用户如何与系统交互的工程模型。</b>
+> <b>这是理解用户如何与系统交互的工程模型。</b><b>How do people do things?</b>
 
 一个action的Two phases:
 
@@ -388,12 +388,12 @@ Good mappings rely on <b>natural analogies</b>
 2. <b>解释 (Interpret)</b>：解释所感知的现象。the perception
 3. <b>比较 (Compare)</b>：将结果与原始目标进行对比 。
 
-In reality, steps are hard to distinguish 
+<b>In reality, steps are hard to distinguish </b>
 
-- Complex tasks include sequences or hierarchies of goals (feedback loop) 
-- Goals are forgotten, discarded and changed 
-- Many actions are opportunistic, not planned (Meeting leads to talk) 
-- Cycle can be event-driven (world) or goal-driven
+- <b>Complex tasks include sequences or hierarchies of goals (feedback loop) </b>
+- <b>Goals are forgotten, discarded and changed </b>
+- <b>Many actions are opportunistic, not planned (Meeting leads to talk) </b>
+- <b>Cycle can be event-driven (world) or goal-driven</b>
 
 ### 行动鸿沟 (The Gulfs)
 
@@ -401,7 +401,7 @@ In reality, steps are hard to distinguish
 
 设计师的任务是架起桥梁连接这两道鸿沟 ：
 
-- <b>执行隔阂 (Gulf of Execution)</b>：User → <b>how to operate system</b>? 想知道“如何操作设备？” 。
+- <b>执行隔阂 (Gulf of Execution)</b>：User → <b>how to operate a device</b>? 想知道“如何操作设备？” 。
     - Bridged by: <b>signifiers, mappings, constraints, conceptual models </b>通过<b>意符、约束、映射和概念模型</b>来解决。
 
 - <b>评估隔阂 (Gulf of Evaluation)</b>：User → <b>how to understand system state?</b> 想知道“发生了什么？是否成功？” 
@@ -521,7 +521,7 @@ Feedforward (前馈)：Feedforward is to <b>execution</b> what feedback is to <b
 
 ### Feedback
 
-> 定义：系统告知用户其操作结果的方式 。发生在评估 (Evaluation) 阶段。操作后即时、明确的信息回传 。
+> 定义：系统告知用户其操作结果的方式 。发生在评估 (Evaluation) 阶段。操作后即时、明确的信息回传 。Feedback communicates to the user the current system state, success or failure of  actions and results of actions
 
 1. Good Feedback:
     - <b>即时性 (Immediate)</b>：反馈必须在操作后立即发生，即使延迟 0.1 秒也可能导致用户焦虑 。
@@ -540,7 +540,7 @@ Feedforward (前馈)：Feedforward is to <b>execution</b> what feedback is to <b
 
 ### 根本原因分析 (Root Cause Analysis)
 
-- <b>5 Whys (五问法)</b>：不断追问“为什么”，直到找到导致错误的原始系统设计缺陷，而不是责怪最后的操作者 。
+- <b>5 Whys (五问法)</b>：不断追问“为什么”，直到找到导致错误的原始系统设计缺陷，而不是责怪最后的操作者 。Perform root cause analysis: Human error is just the end of causal chain
 - <b>设计责任</b>：所有的“人为错误”实际上都是设计错误，设计应允许用户犯错并能轻松撤回。
 
 ### 错误分类 (Classification of Errors)
@@ -650,14 +650,16 @@ Reversible actions（可撤销）更好（如垃圾桶）
 - 特点（problem）：
     - 线性流程（analysis → design → implementation → test → maintenance）
     - 假设需求稳定，但现实中需求不断变化
-    - 过于理想化，现实需要backtracking，而Backtracking 很困难
+    - 过于理想化，现实需要backtracking，而Backtracking 很困难<b>Phases idealistic, Reality requires backtracking</b>
     - Usage scenarios 太抽象 使用场景往往脱离实际
     - Wrong assumptions 难以早期发现
+    <img src="/assets/An6Nbl5BVo3M73xQK5WcpEEenMc.png" src-width="794" src-height="478" align="center"/>
 
 ### Right Way: DIA Cycle 
 
 - <b>三个阶段</b>：
     DIA = Design → Implement → Analyze（循环迭代）
+    <img src="/assets/QEPSbPdVXoINzWxGidZc4iqinef.png" src-width="906" src-height="602" align="center"/>
     1. <b>Design (设计)</b>：构思解决方案 。
     2. <b>Implement (实现/原型)</b>：制作原型。
     3. <b>Analyze (分析)</b>：理解用户需求 。
@@ -705,6 +707,8 @@ Reversible actions（可撤销）更好（如垃圾桶）
 - Prototyping
 - Testing
 
+<img src="/assets/QaRRbEfD7oW9tRxNtUlcj5oznnb.png" src-width="880" src-height="560" align="center"/>
+
 <b>Norman 名言：</b>
 
 > “Never solve the problem I am asked to solve.”
@@ -731,6 +735,7 @@ Reversible actions（可撤销）更好（如垃圾桶）
 2. <b>Finding the right solution ( Develop → Deliver）</b>
     - <b>Develop (发展)</b>：构思各种潜在的解决方案 。
     - <b>Deliver (交付)</b>：测试并缩小范围，得出最终方案。
+    <img src="/assets/DcOsbtvFio7f2bxOUY0cfawln4g.png" src-width="1062" src-height="580" align="center"/>
 
 ## Design Thinking（设计思维）
 
@@ -750,6 +755,8 @@ Reversible actions（可撤销）更好（如垃圾桶）
 
 - <b>不要只问，要去看 (Don't just ask, watch!)</b>：用户通常无法准确描述他们的行为或需求，他们会告诉你他们“应该”怎么做，而不是实际上怎么做 。
 - <b>目标</b>：理解用户是谁 (Who)、他们想做什么 (What) 以及互动的背景 (Context) 。
+
+> <b>First Three Questions: Who are the Users? What do they want to do with the system? What is the context?</b>
 
 ### 情境访谈 (Contextual Inquiry) ⭐ <b>核心技术</b>
 

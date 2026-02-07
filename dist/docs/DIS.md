@@ -1786,8 +1786,9 @@ Reversible actions（可撤销）更好（如垃圾桶）
 <p>这部分侧重于<b>Analysis (40%)</b> 和 <b>Calculation</b>。核心在于用“信息论”来评估界面的效率，而不是看它长得好不好看。</p>
 <h4><b>1. 信息量计算 (Measuring Information)</b></h4>
 <p>你需要计算完成任务<b>最少</b>需要多少 bit 的信息。</p>
-<p>-<br/><b>公式 1：等概率情况 (Equally likely alternatives)</b> </p>
 <ul>
+<li><p><b>公式 1：等概率情况 (Equally likely alternatives)</b> </p>
+</li>
 <li><p>: 选项的数量。</p>
 </li>
 <li><p><i>例子:</i> 从 4 个菜单项里选 1 个，信息量 =  bits。</p>
@@ -1801,8 +1802,9 @@ Reversible actions（可撤销）更好（如垃圾桶）
 </ul>
 <h4><b>2. 效率评估 (Efficiency Metrics)</b></h4>
 <p>算出“理论最小值”后，对比“实际操作量”来算效率。</p>
-<p>-<br/><b>Information Efficiency ():</b> </p>
 <ul>
+<li><p><b>Information Efficiency ():</b> </p>
+</li>
 <li><p><i>App &amp; Analysis:</i> 如果  很低，说明用户做了很多无用功（提供了很多废话信息）。</p>
 </li>
 <li><p><i>实际计算:</i> 用户的实际输入量通常按<b>按键数</b>估算。PPT 中提到标准键盘每个键约为 5 bits 。</p>
@@ -1946,6 +1948,10 @@ Reversible actions（可撤销）更好（如垃圾桶）
 <li><p><b>Formula</b>: </p>
 </li>
 <li><p><b>解释</b>: 比如转换温度，最少只需要输入数字（例如 &quot;23&quot;），但如果界面让你输入 &quot;23.00&quot; 或者还要打个 &quot;C&quot;，效率就低了。</p>
+<ul>
+<li>理论最少字符：<code>23</code>（2 个字符）</li>
+<li>实际界面要求输入：<code>23.00C</code>（6 个字符）<br/>  Efficiency=2/6=0.33</li>
+</ul>
 </li>
 </ul>
 <h5><b>2. Information Efficiency (信息效率)</b></h5>
@@ -1956,12 +1962,12 @@ Reversible actions（可撤销）更好（如垃圾桶）
 </li>
 </ul>
 <h6><b>如何计算最小信息量 (Minimal Info)?</b></h6>
-<p>使用信息熵公式：</p>
+<p>使用信息熵公式：$H=−∑p_i log_2p_i$</p>
 <ol>
 <li><b>等概率情况 (Equally likely)</b>:</li>
 </ol>
 <ul>
-<li><em>例子</em>: 键盘上有 128 个键，按一个键提供的信息量是  bits。</li>
+<li><em>例子</em>: 键盘上有 128 个键，按一个键提供的信息量是 8 bits。<br/>  $$H=log⁡_2N$$</li>
 </ul>
 <ol>
 <li><b>不等概率情况 (Different probabilities)</b>:</li>
@@ -1969,7 +1975,7 @@ Reversible actions（可撤销）更好（如垃圾桶）
 <ul>
 <li><p><b>🛠️ 【考点】</b>: PPT 第 22 页的计算表。</p>
 </li>
-<li><p>如果输入的值有不同的概率（如 25% 是三位数，12.5% 是负数等），你需要把每种情况的  加起来得到总信息量。</p>
+<li><p>如果输入的值有不同的概率（如 25% 是三位数，12.5% 是负数等），你需要把每种情况的  加起来得到总信息量。<br/>  $$H=−∑p_i log_2 p_i$$<br/>  总信息量：<br/>  H=0.5+0.5+0.375+0.375=1.75 bits</p>
 </li>
 </ul>
 <hr/>

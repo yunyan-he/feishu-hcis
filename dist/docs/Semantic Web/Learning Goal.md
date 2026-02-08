@@ -254,9 +254,9 @@ This section typically begins with `//` and is divided into the <b>Authority</b>
 
 To "Identify and name resources" means assigning a <b>URI</b> to a concept. To "tell them apart" is to recognize that while a URI like `http://example.org/my-photo.jpg` identifies a file (Information Resource), a URI like `http://example.org/person/Einstein` identifies a human being (Non-information Resource), even though both look like web addresses.
 
-# [linked data basics](/X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/PUoIw8e2xi7oG3klHZec3pptnAp)
-
 # Linked Data Basics
+
+[linked data basics](/X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/PUoIw8e2xi7oG3klHZec3pptnAp)
 
 ## Agency
 
@@ -292,7 +292,7 @@ To "Identify and name resources" means assigning a <b>URI</b> to a concept. To "
 
 - <b>使用方式</b>：上下文可以内嵌在文档中，也可以通过外部文件引用，甚至可以通过 HTTP Link Header 提供。
 
-## Example and exercise 1
+## Example and exercise A
 
 ### 第一部分：教学示例 (Detailed Examples)
 
@@ -460,7 +460,7 @@ how two different graphs can be merged if they use shared IRIs：
     - <b>RDF vs 关系型数据库</b>：理解 RDF 的“Schema-flexible”（无模式/后模式）特性。
     - <b>Linked Data 原则</b>：理解全局标识符（Global Identifiers）是 Web of Data 的基石。
 
-## Example and exercise 2
+## Example and exercise B
 
 根据提供的课件 "3. 02-RDF-Turtle.pdf"，我为您整理了<b>教学示例 (Instructional Examples)</b> 和 <b>课后练习 (Exercises)</b> 的详细内容。这些内容主要围绕 <b>Turtle (Terse RDF Triple Language)</b> 语法的各个方面展开。
 
@@ -1586,6 +1586,390 @@ The final step in constructing the dataset for processing is loading the seriali
 
 # Querying RDF with SPARQL 
 
+[query ](/X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/Hiz8wVaj7ibrGrk6Bnzck8lfnfb)
+
+## Example and Exercise  
+
+### Example 
+
+实例 A：查找学生及其姓名 
+
+- <b>代码示例</b>：
+
+```text
+SELECT ?student ?name
+WHERE {
+  ?student rdf:type :Student ;
+           :name ?name .
+}
+LIMIT 10
+```
+
+- <b>每一行是什么</b>：
+
+1. `SELECT ?student ?name`：指定输出表中显示的两个变量。
+2. `?student rdf:type :Student`：寻找所有类型为“学生”的资源。
+3. `:name ?name`：获取该学生的姓名并绑定到变量 `?name`。
+4. `LIMIT 10`：只显示前 10 条结果。
+    
+- <b>考察知识点</b>：<b>基础三元组模式匹配</b> 与 <b>简单结果限制</b>。 
+- <b>知识点内容</b>：SPARQL 通过在 `WHERE` 子句中列出图形模式（Triple Patterns）来工作。共享变量（如 `?student`）会自动执行“内联接”。 
+
+---
+
+实例 B：查找高年级学生并按学期排序 
+
+- <b>代码示例</b>：
+
+```text
+SELECT ?studentName ?semesterCount
+WHERE {
+  ?student a :Student ;
+           :name ?studentName ;
+           :semesterCount ?semesterCount .
+  FILTER (?semesterCount > 2)
+}
+ORDER BY DESC(?semesterCount)
+```
+
+- <b>每一行是什么</b>：
+
+1. 获取学生、姓名及学期总数。
+2. `FILTER (?semesterCount > 2)`：排除学期数小于等于 2 的学生。
+3. `ORDER BY DESC(...)`：按学期数从高到低排列。
+        
+- <b>考察知识点</b>：<b>结果过滤 (FILTER)</b> 与 <b>结果排序</b>。 
+- <b>知识点内容</b>：`FILTER` 不会绑定新变量，它只对<b>已有的绑定进行真假判断</b>；`ORDER BY` 默认升序，`DESC` 表示降序。 
+
+---
+
+实例 C：联合查询（学生和教授名单） 
+
+- <b>代码示例</b>：
+
+```text
+SELECT ?person ?name
+WHERE {
+  { ?person a :Student ; :name ?name }
+  UNION
+  { ?person a :Professor ; :name ?name }
+}
+```
+
+- <b>考察知识点</b>：<b>并集查询 (UNION)</b>。 
+- <b>知识点内容</b>：`UNION` 用于合并两个独立图形模式的结果。如果某个变量在其中一个块中没有绑定，则在该行结果中显示为空。 
+
+【意思是 对于一个块中 查询2个变量 对于另一个块可以查询别的变量。然后最后一个表的列数是2边查的都展示，因为最开始的select 是这2块查询的内容的合并。但是如果这一列在本块中没有查询 然后也没结果绑定，那么就会显示为空？】
+
+对。
+
+```py
+SELECT ?x ?name ?age
+WHERE {
+  { ?x ex:name ?name }
+  UNION
+  { ?x ex:age ?age }
+}
+```
+
+---
+
+### Exercise
+
+Exercise 1: 基础查询 
+
+- <b>题目</b>：编写一个查询，返回所有<b>教授</b>及其姓名。
+- <b>参考答案</b>：
+
+```text
+SELECT ?professor ?name
+WHERE {
+  ?professor rdf:type :Professor ;
+             :name ?name .
+}
+```
+
+- <b>考察点</b>：模仿基本查询结构，将类名从 `:Student` 改为 `:Professor`。 
+
+Exercise 2: 扩展查询（联接教授信息） 
+
+- <b>题目</b>：在学生和课程标题的查询基础上，增加授课教授的姓名。
+- <b>参考答案</b>：
+
+```text
+SELECT ?studentName ?lectureTitle ?professorName
+WHERE {
+  ?student :name ?studentName ; :attends ?lecture .
+  ?lecture :title ?lectureTitle ; :taughtBy ?professor .
+  ?professor :name ?professorName .
+}
+```
+
+- <b>考察点</b>：<b>多重三元组联接</b>。需要通过 `?lecture` 和 `?professor` 这两个<b>中间变量</b>将三个实体连接起来。 
+
+Exercise 3: 复杂过滤（排除法） 
+
+- <b>题目</b>：查找不参加“Logic”课程且名字不以“F”开头的学生。
+- <b>考察点</b>：<b>NOT EXISTS</b> 与 <b>字符串过滤</b> 的组合。 
+- <b>核心内容</b>：利用 `FILTER NOT EXISTS { ... }` 来表达“没有参加某课”这种否定逻辑。 
+
+```sql
+SELECT ?studentName
+WHERE {
+  ?student a :Student ;
+           :name ?studentName .
+  # 过滤条件 1：不存在参加 Logic 课的记录
+  FILTER NOT EXISTS { 
+    ?student :attends ?lecture . 
+    ?lecture :title "Logic" 
+  }
+  # 过滤条件 2：名字不是以 F 开头
+  FILTER (!STRSTARTS(?studentName, "F"))
+}
+```
+
+<b>拆解说明</b>：
+
+- `FILTER NOT EXISTS`：用于检查图中是否存在某种“连接”。这里它检查学生与标题为 "Logic" 的课程之间是否有 `:attends` 关系 。
+- `!STRSTARTS(...)`：`!` 表示逻辑非，`STRSTARTS` 检查字符串前缀
+
+Exercise 4：高级逻辑（前置课程判定）
+
+- <b>题目要求</b>：找出“准备好”修读某课程的学生。条件是：
+    1. 该课程必须有先修课。
+    2. 学生必须已经完成了<b>所有</b>直接先修课。
+    3. 学生目前<b>还没修过</b>这门目标课程。
+
+```py
+SELECT ?name ?title
+WHERE {
+  ?student a :Student ; :name ?name .
+  ?lecture a :Lecture ; :title ?title ;
+           :prerequisiteLecture ?anyPrereq . # 确保课程有先修要求
+
+  # 条件 3：排除已参加该课的学生
+  MINUS { ?student :attends ?lecture }
+
+  # 条件 2：核心逻辑——不存在“学生没修过”的先修课
+  FILTER NOT EXISTS {
+    ?lecture :prerequisiteLecture ?prereq .
+    MINUS { ?student :attends ?prereq }
+  }
+}
+```
+
+> - 外层有变量：`?student` 和 `?lecture`
+> - MINUS 块也使用了：`?student` 和 `?lecture`
+> 👉 这两个块共享变量名，所以 MINUS 才能工作。
+> 如果变量名不一样或者绑定的值不一样 那么minus就完全不起作用
+> 基本上 建议用filter not exist
+> - FILTER NOT EXISTS：它会把外层的变量绑定“带入”到内层去匹配图中是否存在某个模式 ()。
+> - MINUS：它先分别独立算出外层和内层的两张“结果表”，然后对比两张表里有没有共同的变量名且绑定了相同的值 。`MINUS` 更倾向于表达“集合相减”的数学逻辑
+> 只有一种情况，当你只想排除“外层 BGP 和内层 BGP 绑定完全相同的行”，而不是排除所有满足某种条件的行时，你必须用 MINUS。
+> <b>防止“全局误杀”（False Negative）</b>
+> 这是 `MINUS` 唯一的、不可替代的优势。
+
+Exercise 5: 聚合统计（教授教学负荷） 
+
+- <b>题目</b>：计算每位教授教授课程的<b>平均周学时 (SWS)</b> 和<b>课程数量</b>。
+- <b>参考答案核心结构</b>： 
+
+```text
+SELECT <b>?name </b>(AVG(?sws) AS ?averageSWS) (COUNT(?lecture) AS ?count)
+WHERE {
+  ?professor :name ?name .
+  ?lecture :taughtBy ?professor ; :sws ?sws .
+}
+GROUP BY ?professor ?name
+ORDER BY DESC(?averageSWS)
+```
+
+- <b>考察点</b>：<b>分组 (GROUP BY)</b> 与 <b>聚合函数 (AVG, COUNT)</b>。 
+- <b>关键规则</b>：在 `SELECT` 中出现的非聚合变量（如 `?name`）必须包含在 `GROUP BY` 子句中。 
+
+永远优先使用 IRI 变量（如 `?professor`）进行分组，因为它才是资源的唯一标识 。比如这里 group by里面的professor就不能去掉 因为会有重名风险。
+
+## Exercise 3
+
+#### <b>1a) 选择题：关于 SPARQL 的正确表述</b>
+
+- <b>题目内容</b>：Which statements about SPARQL are correct?
+- (a) SPARQL is a query language for RDF data
+- (b) SPARQL can only be used to query data from relational databases
+- (c) SPARQL can query data from multiple RDF graphs simultaneously.
+- (d) SPARQL results always have the form of rdf graphs.
+- (e) SPARQL supports the removal of triples thorugh the <em>DELETE</em> query clause.
+- <b>正确答案</b>：`{'a', 'c', 'e'}`
+    可以同时查多个RDF graph
+    select返回表格biding ask返回布尔值 只有CONSTRUCT还有DESCRIBE返回rdf SPARQL 1.1 Update 支持：DELETE 还有INSERT
+
+#### <b>1b) 列出所有属于 "National Day" (国庆日) 的实体</b>
+
+- <b>考察点</b>：基础三元组模式匹配（`rdf:type` 的缩写 `a`）。
+- <b>正确答案</b>：
+
+```text
+SELECT ?result WHERE {
+    ?result a ex:NationalDay .
+}
+```
+
+#### <b>1c) 列出德国 (ex:Germany) 的法定假日</b>
+
+- <b>考察点</b>：属性匹配。
+- <b>正确答案</b>：
+
+```text
+SELECT ?result WHERE {
+    ?result ex:officialHolidayIn ex:Germany .
+}
+```
+
+#### <b>1d) 列出所有宗教节日 (Religious Holidays) 的日期</b>
+
+- <b>考察点</b>：使用 `UNION` 处理两种不同的日期属性（`ex:gregorianDate` 和 `ex:otherDate`）。
+- <b>正确答案</b>：
+
+```text
+SELECT ?result WHERE {
+  ?holiday a ex:ReligiousHoliday .
+  { ?holiday ex:gregorianDate ?result . }
+  UNION
+  { ?holiday ex:otherDate ?result . }
+}
+```
+
+---
+
+### <b>Task 2: Complex Weather Data (复杂天气数据查询)</b>
+
+#### <b>2a) 每个传感器分别进行了多少次测量？</b>
+
+- <b>考察点</b>：聚合函数 `COUNT` 与 `GROUP BY` 分组。
+- <b>正确答案</b>：
+
+```text
+SELECT ?name (COUNT(?obs) AS ?count)
+WHERE{
+    ?sensor a ssn:Sensor;
+            rdfs:label ?name.
+    ?obs a sosa:Observation;
+         sosa:madeBySensor ?sensor.
+}
+GROUP BY ?name
+```
+
+#### <b>2b) 气压测量的最高值是多少？</b>
+
+- <b>考察点</b>：结果排序 `ORDER BY DESC` 与数量限制 `LIMIT`。
+- <b>正确答案</b>：
+
+```text
+SELECT ?name (?value AS ?max_air_pressure)
+WHERE {
+  ?obs a sosa:Observation ;
+       sosa:madeBySensor ?sensor ;
+       sosa:observedProperty ex:AirPressure ;
+       sosa:hasSimpleResult ?value .
+  ?sensor rdfs:label ?name .
+}
+ORDER BY DESC(?value)
+LIMIT 1
+```
+
+我还考虑用了MAX 但是这种情况 group by name 会给每个传感器都产生一个max值。
+
+而且题目要的是 最大值对应的那一个sensor的名字。
+
+#### <b>2c) 按观测属性和气象站计算测量平均值</b>
+
+- <b>考察点</b>：多变量分组聚合。
+- <b>正确答案</b>：
+
+```text
+SELECT ?property ?station (AVG(?value) AS ?average)
+WHERE {
+    ?obs a sosa:Observation ;
+         sosa:observedProperty ?property ;
+         sosa:madeBySensor ?sensor ;
+         sosa:hasSimpleResult ?value .
+    ?station sosa:hosts ?sensor .
+}
+GROUP BY ?property ?station
+```
+
+#### <b>2d) 两个气压传感器在同一时间的测量平均差值是多少？</b>
+
+- <b>考察点</b>：自连接（Self-join）、`BIND` 赋值及数学函数 `ABS`。
+- <b>正确答案</b>：
+
+```text
+SELECT (AVG(?diff) AS ?average)
+WHERE {
+  ?obs1 sosa:madeBySensor ?sensor1 ; sosa:observedProperty ex:AirPressure ; sosa:hasSimpleResult ?v1 ; sosa:resultTime ?t .
+  ?obs2 sosa:madeBySensor ?sensor2 ; sosa:observedProperty ex:AirPressure ; sosa:hasSimpleResult ?v2 ; sosa:resultTime ?t .
+  FILTER(?sensor1 != ?sensor2)
+  BIND(ABS(?v1 - ?v2) AS ?diff)
+}
+```
+
+要注意 此时obs1 和obs2 并不会因为名字不一样就绑定不一样的 实际上 此时是这样的 找一个obs1 然后t一致的情况下再找找个obs 此时可能还是obs1 这样自己与自己配对 会影响数值。
+
+#### <b>2e) 排除被标记为“忽略”的数据，计算平均气温和气压</b>
+
+- <b>考察点</b>：逻辑排除 `FILTER NOT EXISTS`。
+- <b>正确答案</b>：
+
+```text
+SELECT ?property (AVG(?value) AS ?average)
+WHERE {
+  ?obs a sosa:Observation ;
+       sosa:observedProperty ?property ;
+       sosa:hasSimpleResult ?value .
+  FILTER NOT EXISTS { ?obs ex:shouldBeIgnoredIn "2e" }
+}
+GROUP BY ?property
+```
+
+---
+
+### <b>Task 3: JSON-LD (知识点考察)</b>
+
+#### <b>3a) 选择题：关于 JSON-LD 的正确陈述</b>
+
+Which of the following statements is true regarding JSON-LD?
+
+- (a) JSON-LD uses the @context attribute to define URIs for terms.
+- (b) JSON-LD has syntactical differences to plain JSON
+- (c) JSON-LD is not as expressive as Turtle
+- (d) JSON-LD allows to annotate plain JSON with additional information to turn it into linked data
+- (e) In JSON-LD @id can be used to give an iri.
+- <b>正确答案</b>：`{'a', 'd', 'e'}`
+
+`@context` 是 JSON-LD 的核心，用来把短词（如 `"name"`）映射到完整 IRI。
+
+```py
+{
+  "@context": {
+    "name": "http://schema.org/name"
+  }
+}
+```
+
+JSON-LD <b>是合法的 JSON</b>，没有语法差异。 它只是“在 JSON 里加语义”，但语法仍然是 JSON。
+
+JSON-LD 和 Turtle 在表达能力expressive上是<b>等价的</b>（都能表达 RDF Graph）。 只是语法风格不同。
+
+在普通 JSON 上加一点语义（@context、@id 等），就能变成 Linked Data。
+
+`@id` 用来给一个节点指定 IRI：
+
+```py
+{
+  "@id": "http://example.com/person/123"
+}
+```
+
 ## Basics 
 
 Based on the provided lecture content, here is a detailed explanation of the <b>Basics of SPARQL</b> (Learning Goal 3.1).
@@ -2504,6 +2888,418 @@ The system iterates through $\Omega_1$ and fills in $Q_1$. A critical rule for `
 The union of these triples forms the resulting graph, where each satellite orbits a unique, newly generated blank node entity.
 
 # Vocabularies and Data Modeling
+
+## Example and exercise
+
+## Vocabularies and ontologies
+
+Based on the provided lecture materials, here is a detailed explanation of <b>Vocabularies and Ontologies</b>, corresponding to the concepts outlined in your query.
+
+### 1. Definition of an Ontology
+
+In the context of Informatics and the Semantic Web, an ontology is defined as <b>"a formal specification of a shared conceptualisation of a domain of interest"</b>.
+
+We can break this definition down into its core components:
+
+- <b>Formal specification:</b> The ontology is expressed in a language that is interpretable by machines,.
+- <b>Shared:</b> It captures knowledge based on consensus rather than a single individual's view,.
+- <b>Conceptualisation:</b> It describes the terminology and models the concepts relevant to a specific topic.
+- <b>Domain of interest:</b> It is restricted to a specific area of knowledge.
+    
+As an engineering artifact, an ontology consists of a specific vocabulary used to describe reality, coupled with a set of explicit assumptions regarding the intended meaning of that vocabulary.
+
+### 2. The Ontology Spectrum
+
+While the terms "vocabulary" and "ontology" are often used synonymously in practice, there is a spectrum of expressivity. An ontology can be viewed as a combination of several simpler knowledge organization structures:
+
+- <b>Ontology = Thesaurus + Taxonomy (+ Controlled Vocabulary) + Logical Constraints</b>.
+    
+The spectrum ranges from "weak" semantic models to "strong" logical theories:
+
+1. <b>Controlled Vocabularies:</b> Lists of terms.
+2. <b>Thesauri:</b> Adds "narrower term" or synonym relations,.
+3. <b>Taxonomy:</b> Adds a hierarchy of terms (formal "is-a" relationships),.
+4. <b>Ontology:</b> Adds value restrictions, disjointness, and general logical constraints (such as those found in OWL),.
+    
+### 3. Abstraction
+
+Abstraction is the process of extracting what is essential, characteristic, or lawful from a set of individuals (things, observations) from a certain point of view. It is a central tool for creating models because it enables the visualization of large contexts while omitting unnecessary details.
+
+There are four specific types of abstraction identified in the lecture:
+
+1. <b>Classification:</b> Characterizing individuals by their commonalities, grouping them into <b>types or classes</b>.
+2. <b>Composition:</b> Putting together a set of related individuals to form a <b>whole</b>.
+3. <b>Generalization:</b> Generalizing the characteristics of a set of similar types.
+4. <b>Use:</b> This refers to the use by an individual of services provided by a third party for the purpose of providing their own higher-value services.
+    
+### 4. Vocabularies
+
+Vocabularies provide the set of identifiers (URIs) used to describe things with a shared meaning. They organize knowledge in a machine-comprehensible way and give exploitable meaning to data.
+
+<b>Key Components of Vocabularies:</b>
+
+- <b>Classes (</b><b>rdfs:Class</b><b>):</b> These describe a group or category of resources (individuals) that share common characteristics,.
+- <b>Properties (</b><b>rdf:Property</b><b>):</b> These define characteristics of resources or relationships between them. They act as the "verbs" in RDF triples.
+- <b>Individuals:</b> The concrete instances of classes (e.g., a specific student or book).
+    
+<b>Examples of Vocabularies and Languages:</b>
+
+- <b>RDF (Resource Description Framework):</b> The basic data model for identifying objects and interlinking information.
+- <b>RDFS (RDF Schema):</b> A vocabulary description language that allows for the definition of classes, property hierarchies, domains, and ranges,.
+- <b>OWL (Web Ontology Language):</b> A more expressive language for defining complex ontologies with logical constraints (e.g., cardinality, disjoint classes),.
+- <b>Domain Vocabularies:</b> These provide shared terms for specific topics to ensure interoperability. Examples include:
+    - <b>Dublin Core (DC):</b> For metadata (books, documents).
+    - <b>FOAF (Friend of a Friend):</b> For people and social networks.
+    - <b>SKOS:</b> For thesauri and taxonomies.
+    - <b>Schema.org:</b> For web page annotation and search engines.
+
+## Modeling with semantic web core vocabularies
+
+Based on the provided lecture materials, modeling with Semantic Web core vocabularies involves using standardized languages and pre-existing definitions to structure data, give it explicit meaning, and enable interoperability. This process relies heavily on <b>RDF Schema (RDFS)</b> for defining structure and <b>Domain Vocabularies</b> for reusing established terms.
+
+### 1. The Foundation: RDF Schema (RDFS)
+
+RDFS provides the fundamental mechanisms to define a vocabulary (a schema) for RDF data. It moves beyond "bare" triples by allowing you to define types, hierarchies, and rules for inference.
+
+#### A. Defining Classes and Instances
+
+RDFS allows you to categorize resources into groups called <b>Classes</b>.
+
+- <b>rdfs:Class</b>: Used to define a category of resources (e.g., `Student`, `Professor`). It acts as a template for similar things.
+- <b>rdf:type</b>: Used to assign a specific individual (instance) to a class. For example, declaring `<student28106> rdf:type :Student` explicitly states what that resource is.
+- <b>Hierarchies (</b><b>rdfs:subClassOf</b><b>)</b>: You can organize classes into taxonomies. If `:Student` is a subclass of `:Person`, every instance of a student is automatically inferred to be a person. This enables <b>classification</b> and <b>generalization</b>.
+    
+#### B. Defining Properties
+
+RDFS treats properties (relationships/attributes) as distinct resources that can be defined globally.
+
+- <b>rdf:Property</b>: Declares a resource as a property (e.g., `:name`, `:attends`).
+- <b>Property Hierarchies (</b><b>rdfs:subPropertyOf</b><b>)</b>: Similar to classes, properties can be specialized. If `:hasEmail` is a sub-property of `:hasContactInfo`, any resource with an email automatically has contact info.
+    
+#### C. Domain and Range (Inference Rules)
+
+A critical aspect of RDFS modeling is defining how properties relate to classes. Unlike database schemas that use these for strict validation, RDFS uses them for <b>inference</b>.
+
+- <b>rdfs:domain</b>: Specifies the class of the <b>subject</b>. If the schema states `:attends` has the domain `:Student`, and the data contains `:Peter :attends :Math101`, the system infers that `:Peter` is a `:Student`.
+- <b>rdfs:range</b>: Specifies the class or datatype of the <b>object</b> (value). If `:age` has the range `xsd:integer`, the value is expected to be an integer.
+- <b>Intersection Semantics</b>: If a property has <em>multiple</em> domain or range statements, it implies an <b>AND</b> relationship (intersection). The subject must belong to <em>all</em> listed classes, not just one of them.
+    
+#### D. Containers
+
+RDFS provides specific vocabularies for grouping resources:
+
+- <b>rdfs:Bag</b>: An unordered collection (e.g., a list of hobbies).
+- <b>rdfs:Seq</b>: An ordered sequence (e.g., chapters in a book).
+- <b>rdfs:Alt</b>: A set of alternatives (e.g., alternate file formats).
+    
+---
+
+### 2. Reuse: Standard Domain Vocabularies
+
+Effective modeling in the Semantic Web relies on reusing existing, well-known vocabularies rather than inventing new ones. This ensures <b>semantic interoperability</b>, allowing different systems to "speak the same language".
+
+#### A. Dublin Core (DC)
+
+- <b>Focus:</b> Metadata for documents, books, and media.
+- <b>Key Terms:</b> `dc:title`, `dc:creator`, `dc:date`, `dc:publisher`.
+- <b>Usage:</b> widely used in library systems and for general resource description.
+    
+#### B. FOAF (Friend of a Friend)
+
+- <b>Focus:</b> Describing people, their attributes, and social connections.
+- <b>Key Terms:</b> `foaf:Person`, `foaf:name`, `foaf:knows`, `foaf:img`.
+- <b>Usage:</b> Creating machine-readable profiles and social networks.
+    
+#### C. SKOS (Simple Knowledge Organization System)
+
+- <b>Focus:</b> Thesauri, taxonomies, and classification schemes.
+- <b>Key Terms:</b> `skos:Concept`, `skos:broader` (generalization), `skos:narrower` (specialization), `skos:prefLabel`.
+- <b>Usage:</b> Used when the strict logic of RDFS/OWL classes is too rigid. It supports "concept schemes" where terms have broader/narrower relationships rather than strict class inheritance.
+    
+#### D. Schema.org
+
+- <b>Focus:</b> A broad vocabulary for web page annotation (SEO).
+- <b>Usage:</b> Maintained by major search engines (Google, Bing) to generate "rich snippets" in search results. It covers diverse entities like Events, Recipes, Movies, and Products.
+    
+### 3. Finding Vocabularies (LOV)
+
+To avoid "reinventing the wheel," modelers use the <b>Linked Open Vocabularies (LOV)</b> catalogue. It provides a searchable index of reusable vocabularies, ensuring that developers select widely accepted terms for their data models.
+
+## RDF Vocabulary
+
+Based on the provided sources, the <b>RDF Vocabulary</b> refers to a set of terms defined in the RDF namespace (`http://www.w3.org/1999/02/22-rdf-syntax-ns#`) that are used to create the fundamental structure of RDF data. While often used in conjunction with RDF Schema (RDFS), the RDF vocabulary provides the basic building blocks for typing resources, defining properties, organizing data into groups, and making statements about statements (reification).
+
+Here is a detailed explanation of the key components of the RDF Vocabulary:
+
+### 1. Fundamental Concepts
+
+The core of the RDF vocabulary consists of terms used to define the nature of resources and their relationships.
+
+- <b>rdf:type</b>: This is arguably the most frequently used property in RDF. It states that a specific resource is an instance of a specific class.
+    - <i>Example:</i> `<student28106> rdf:type <Student>` explicitly declares that the resource `<student28106>` belongs to the class `<Student>`.
+
+- <b>rdf:Property</b>: This class represents the set of all properties (predicates). Every specific relationship defined in a vocabulary (e.g., `:name`, `:attends`) is an instance of `rdf:Property`. In the class hierarchy, `rdf:Property` is a subclass of `rdfs:Resource`.
+    
+### 2. RDF Containers
+
+RDF provides specific vocabulary terms to describe groups of resources. These are known as <b>Containers</b>. They allow for open groupings where the number of members is not necessarily fixed or closed. There are three types of container classes:
+
+- <b>rdf:Bag</b>: Represents an <b>unordered</b> collection of resources or literals. Duplicates are allowed. It is used when the order of elements does not matter (e.g., a list of a person's hobbies).
+- <b>rdf:Seq</b>: Represents an <b>ordered</b> collection (sequence). Duplicates are allowed. It is used when the order is significant (e.g., an alphabetical list of authors or steps in a process).
+- <b>rdf:Alt</b>: Represents a set of <b>alternatives</b>. It indicates that the container holds different options for a single value (e.g., alternative file formats for a document or mirror sites for a download).
+    
+To add members to these containers, the RDF vocabulary uses specific membership properties:
+
+- <b>rdf:_1</b><b>, </b><b>rdf:_2</b><b>, </b><b>rdf:_3</b><b>, ...</b>: These properties connect the container to its members. For `rdf:Seq`, the number indicates the position in the order. These properties are instances of the RDFS class `rdfs:ContainerMembershipProperty`.
+    
+### 3. RDF Collections (Lists)
+
+Distinct from containers, RDF Collections are used to describe <b>strictly ordered lists</b> (closed lists) using a linked-list structure. This is often represented in Turtle syntax using parentheses `( ... )`. The RDF vocabulary terms for collections include:
+
+- <b>rdf:List</b>: The class of RDF Lists.
+- <b>rdf:first</b>: The property linking a list node to the actual item (value) at that position.
+- <b>rdf:rest</b>: The property linking a list node to the next node in the list.
+- <b>rdf:nil</b>: An empty list, used to signify the end of the collection.
+    
+### 4. RDF Reification (Statements about Statements)
+
+Reification is a mechanism in the RDF vocabulary that allows one to treat a specific triple (statement) as a resource itself. This enables the addition of metadata to a statement, such as who created it, when it was created, or a confidence score.
+
+The RDF vocabulary provides four terms to model a reified statement:
+
+- <b>rdf:Statement</b>: A class where each instance represents a reified triple.
+- <b>rdf:subject</b>: A property linking the `rdf:Statement` instance to the subject of the original triple.
+- <b>rdf:predicate</b>: A property linking the `rdf:Statement` instance to the predicate of the original triple.
+- <b>rdf:object</b>: A property linking the `rdf:Statement` instance to the object of the original triple.
+    
+<b>Example of Reification:</b>
+
+If you have the triple `:Student :hasGrade "1.7"`, and you want to record that this grade was assigned by `:ProfessorX`, you would create a new resource of type `rdf:Statement` pointing to the subject, predicate, and object of the grade triple, and then add a property `:assignedBy :ProfessorX` to that statement resource.
+
+<i>Note:</i> While defined in the vocabulary, reification is considered verbose (multiplying the number of triples significantly) and is rarely used in practice compared to alternative modeling approaches like Named Graphs.
+
+## RDFS Vocabulary
+
+Based on the provided sources, the <b>RDFS Vocabulary</b> (RDF Schema) acts as an extension to the basic RDF vocabulary. While RDF allows the expression of simple statements (triples), RDFS provides the mechanisms to create <b>ontologies</b> or <b>schemas</b>, giving explicit structure, meaning, and hierarchy to data.
+
+Here is a detailed explanation of the components and functions of the RDFS Vocabulary:
+
+### 1. Core Purpose and Hierarchy
+
+RDFS is a W3C Recommendation designed to define vocabularies for RDF data. It allows data modelers to describe groups of related resources (classes) and relationships (properties), establishing a basis for interoperability and automatic reasoning.
+
+<b>The Class Hierarchy Root:</b>
+
+- <b>rdfs:Resource</b>: This is the top-level class in the RDFS hierarchy. Everything described in RDF—classes, properties, individuals, and literals—is an instance of `rdfs:Resource`.
+- <b>rdfs:Class</b>: This class represents the category of all classes. Since classes are themselves resources, `rdfs:Class` is a subclass of `rdfs:Resource`.
+- <b>rdfs:Literal</b>: This is the class of all literal values (strings, numbers, etc.).
+- <b>rdfs:Datatype</b>: A class used to identify datatypes (such as `xsd:integer` or `xsd:date`).
+    
+### 2. Defining Relationships (Hierarchies)
+
+RDFS allows for the organization of terms into taxonomies, enabling machines to understand that one concept is a specialization of another.
+
+- <b>rdfs:subClassOf</b>: This property defines a hierarchical relationship between classes.
+    - <i>Semantics:</i> If class $C_1$ is a subclass of $C_2$, then every instance of $C_1$ is automatically inferred to be an instance of $C_2$.
+    - <i>Transitivity:</i> The relationship is transitive. If A is a subclass of B, and B is a subclass of C, then A is a subclass of C.
+
+- <b>rdfs:subPropertyOf</b>: This property defines a hierarchy between properties.
+    - <i>Semantics:</i> If property $P_1$ is a subproperty of $P_2$, then every relationship expressed with $P_1$ implies that the relationship $P_2$ also exists.
+    - <i>Example:</i> If `:hasEmail` is a subproperty of `:hasContactInfo`, knowing someone has an email implies they have contact info.
+        
+### 3. Property Constraints (Domain and Range)
+
+RDFS uses `domain` and `range` to specify how properties should be used. Unlike database schemas which use these for strict validation (rejecting data), RDFS uses them for <b>inference</b>.
+
+- <b>rdfs:domain</b>: Specifies the class of the <b>subject</b> in a triple.
+    - <i>Inference:</i> If a triple `x p y` exists and `p` has a domain of Class C, the system infers that `x` is of type Class C.
+
+- <b>rdfs:range</b>: Specifies the class or datatype of the <b>object</b> (value) in a triple.
+    - <i>Inference:</i> If a triple `x p y` exists and `p` has a range of Class D, the system infers that `y` is of type Class D.
+
+- <b>Intersection Semantics (The "AND" Rule):</b> If a property defines multiple domains (e.g., Domain A and Domain B), it does <b>not</b> mean "A or B". It means the subject must be an instance of <b>both</b> A and B (Intersection).
+    
+### 4. Documentation Properties
+
+RDFS includes standard properties to make schemas human-readable and self-documenting:
+
+- <b>rdfs:label</b>: A human-readable name for a resource (supports multiple languages).
+- <b>rdfs:comment</b>: A longer description or explanation of the resource.
+- <b>rdfs:seeAlso</b>: Points to other resources that provide further information.
+- <b>rdfs:isDefinedBy</b>: Links a resource to the ontology or vocabulary that defines it.
+    
+### 5. Containers
+
+RDFS provides specific classes to describe groups of resources. These differ from RDF Collections (lists) because they are open and flexible.
+
+- <b>rdfs:Bag</b>: An <b>unordered</b> collection where duplicates are allowed (e.g., a list of hobbies).
+- <b>rdfs:Seq</b>: An <b>ordered</b> sequence where duplicates are allowed (e.g., an alphabetical list).
+- <b>rdfs:Alt</b>: Represents a set of <b>alternatives</b> (e.g., different file formats for the same document).
+- <b>Membership:</b> Elements are added to these containers using properties like `rdf:_1`, `rdf:_2` (for explicit ordering) or the general property `rdfs:member`.
+    
+### 6. Capabilities and Limitations
+
+While RDFS improves data structure significantly over "bare" RDF, it has limitations compared to more expressive languages like OWL:
+
+- <b>Inference vs. Validation:</b> RDFS does not reject invalid data; it infers new types to make the data fit. For example, if a property intended for a "Student" is used on a "Professor," RDFS simply infers the Professor is <em>also</em> a Student.
+- <b>Expressivity Gaps:</b> RDFS cannot express:
+    - <b>Cardinality:</b> (e.g., "A student has exactly one ID").
+    - <b>Disjointness:</b> (e.g., "A Male cannot be a Female").
+    - <b>Equivalence:</b> (e.g., "Class A is the same as Class B").
+        
+In summary, the RDFS vocabulary provides the essential building blocks (classes, hierarchies, property restrictions) to move from simple data graphs to structured, inferable knowledge bases.
+
+## Inference 
+
+Based on the provided lecture materials and sources, here is a detailed explanation of <b>Inference</b> in RDFS, specifically focusing on hierarchical relationships, property constraints, and the handling of multiple domains/ranges (Learning Goal 5.5).
+
+### 1. Inference via Class Hierarchies (`rdfs:subClassOf`)
+
+RDFS allows for the automatic derivation of new facts based on the class hierarchy. This is the mechanism by which information is "passed on" from specific classes to more general ones.
+
+- <b>The Logic:</b> If a resource is an instance of a class, it is automatically an instance of all its superclasses.
+- <b>Transitivity:</b> The `rdfs:subClassOf` relationship is transitive.
+    - <i>Rule:</i> If $C_1$ is a subclass of $C_2$, and $C_2$ is a subclass of $C_3$, then $C_1$ is implicitly a subclass of $C_3$.
+    - <i>Instance Inference:</i> If an individual $x$ is of type $C_1$, an RDFS reasoner infers that $x$ is also of type $C_2$ and $C_3$,.
+        
+<b>Applying your example:</b>
+
+If explicit data states `Tim rdf:type Person` and the schema states `Person rdfs:subClassOf Agent`:
+
+- The system infers `Tim rdf:type Agent`.
+- Although not emphasized as heavily as transitivity in the provided slides, `rdfs:subClassOf` is indeed reflexive (every class is a subclass of itself), meaning `Person rdfs:subClassOf Person` is always true.
+    
+### 2. Inference via Property Constraints (`domain` and `range`)
+
+RDFS uses `rdfs:domain` and `rdfs:range` as <b>inference rules</b>, not as strict validation constraints like in SQL databases. They characterize the resources connected by a property,.
+
+- <b>rdfs:domain</b><b>:</b> Specifies the class of the <b>subject</b>. If a triple `x P y` exists and `P` has a domain of class $C$, the reasoner infers that `x` is an instance of $C$.
+- <b>rdfs:range</b><b>:</b> Specifies the class of the <b>object</b>. If a triple `x P y` exists and `P` has a range of class $D$, the reasoner infers that `y` is an instance of $D$.
+    
+<b>Applying your example:</b>
+
+Given the schema:
+
+- `:author rdfs:domain :Document`
+- `:author rdfs:range :Person`
+    
+And the instance data:
+
+- `:InformationProposal :author :Tim`
+    
+The system performs the following inferences:
+
+1. Because `:InformationProposal` is the subject of `:author`, it infers `:InformationProposal rdf:type :Document`.
+2. Because `:Tim` is the object of `:author`, it infers `:Tim rdf:type :Person`.
+    
+### 3. Multiple Ranges and Domains (Intersection Semantics)
+
+A common pitfall in RDFS modeling is defining multiple domains or ranges for a single property to represent "OR" logic. In RDFS, multiple definitions imply <b>Intersection (AND)</b> semantics.
+
+<b>The "AND" Rule:</b>
+
+If you state:
+
+1. `ex:drives rdfs:range ex:Car`
+2. `ex:drives rdfs:range ex:Ship`
+    
+RDFS interprets this as: "The object of `ex:drives` must be <b>both</b> a Car <b>AND</b> a Ship."
+
+- <i>Inference:</i> If you state `ex:Max ex:drives ex:VehicleX`, the system infers that `ex:VehicleX` is an instance of `ex:Car` AND an instance of `ex:Ship`.
+- <i>Outcome:</i> Unless you have a class of amphibious vehicles that are explicitly both cars and ships, this usually results in a logical error or an empty set of valid instances.
+    
+### 4. Modeling "OR" (Union) via Generalization
+
+To express that a property can accept <em>either</em> a Car <em>or</em> a Ship (Union semantics), you cannot list both classes directly as ranges. Instead, you must use <b>abstraction/generalization</b>.
+
+<b>The Solution:</b>
+
+1. <b>Create a Superclass:</b> Define a general class, such as `ex:Vehicle`.
+2. <b>Define Hierarchy:</b> Make the specific classes subclasses of this general class.
+    - `ex:Car rdfs:subClassOf ex:Vehicle`
+    - `ex:Ship rdfs:subClassOf ex:Vehicle`
+
+3. <b>Set Range to Superclass:</b> Set the range of the property to the general class.
+    - `ex:drives rdfs:range ex:Vehicle`
+        
+<b>Inference Result:</b>
+
+When you state `ex:Max ex:drives ex:Titanic`:
+
+- The system infers `ex:Titanic` is a `ex:Vehicle`.
+- <i>Note on your comment ("the class type is not acknowledged"):</i> The system does <b>not</b> automatically know if the vehicle is specifically a `Car` or a `Ship` based purely on the `ex:drives` property. It only knows it is a `Vehicle`. You must explicitly state `ex:Titanic rdf:type ex:Ship` in your instance data (or infer it through other properties) for that specific type to be known.
+    
+<b>Summary:</b>
+
+- <b>Multiple Ranges</b> = Intersection (Subject/Object must match <b>ALL</b> classes).
+- <b>Superclass Range</b> = Generalization (Subject/Object must match <b>AT LEAST</b> the superclass).
+
+## Domain-specific Vocabularie/Ontologies
+
+Based on the provided lecture materials, here is a detailed explanation of domain-specific vocabularies and ontologies, including the specific examples you requested and the importance of reuse.
+
+### 1. Overview: The Role of Domain Vocabularies
+
+Domain vocabularies provide a shared understanding of concepts, classes, and properties within a specific field. They allow diverse data sources on the Web to "speak the same language," enabling semantic interoperability, data integration, and uniform querying. While the terms "vocabulary" and "ontology" are often used synonymously in practice, an ontology typically implies a stronger logical specification (including hierarchies and constraints), whereas a vocabulary may simply be a set of terms.
+
+### 2. Key Domain Vocabularies
+
+#### <b>Dublin Core (DC)</b>
+
+- <b>Focus:</b> Dublin Core is a vocabulary originating from the library community, designed primarily to describe <b>books, documents, and other media items</b>.
+- <b>Key Concepts:</b> It consists of a standard set of properties for metadata description. Common terms include:
+    - `dc:title`: The name given to the resource.
+    - `dc:creator`: The entity primarily responsible for making the resource (e.g., author).
+    - `dc:date`: A point or period of time associated with an event in the lifecycle of the resource.
+    - `dc:publisher`: The entity responsible for making the resource available.
+
+- <b>Usage:</b> It is widely used to integrate metadata from different libraries and archives (e.g., the Virtual International Authority File).
+    
+#### <b>FOAF (Friend of a Friend)</b>
+
+- <b>Focus:</b> FOAF is designed to describe <b>people, their attributes, and their social relationships</b>. It facilitates the creation of machine-readable profiles and social networks.
+- <b>Key Concep</b><b>ts:</b> It defines classes and properties to link people to the things they create and the people they know.
+    - <b>Classes:</b> `foaf:Person`.
+    - <b>Properties:</b> `foaf:name`, `foaf:givenName`, `foaf:img` (image), `foaf:knows` (social connection), and `foaf:made` (creative works).
+
+- <b>Usage:</b> FOAF is essential for aggregating data about people from different sources and establishing interoperability between datasets describing user accounts and social connections.
+    
+#### <b>SKOS (Simple Knowledge Organization System)</b>
+
+- <b>Focus:</b> SKOS is used to describe <b>hierarchies of terms</b>, thesauri, classification schemes, and taxonomies.
+- <b>Why use it?</b> It is chosen when the strict logical semantics of RDFS or OWL class hierarchies (e.g., transitive `subClassOf` relations) are too rigid, or when the domain does not form a strict tree structure.
+- <b>Key Concepts:</b>
+    - <b>Class:</b> `skos:Concept`.
+    - <b>Hierarchical Properties:</b> `skos:broader` (generalization) and `skos:narrower` (specialization).
+    - <b>Labeling:</b> `skos:prefLabel` (preferred label) and `skos:altLabel` (alternative label).
+
+- <b>Usage:</b> It is frequently used in library science, cultural heritage, and knowledge management to represent "concept schemes" rather than formal ontologies.
+    
+#### <b>Schema.org</b>
+
+- <b>Focus:</b> This is a massive, <b>cross-domain vocabulary</b> maintained by major search engines (Google, Bing, Yahoo, Yandex).
+- <b>Purpose:</b> Its primary goal is to annotate web pages so search engines can "understand" the content, enabling features like rich snippets and knowledge panels.
+- <b>Key Concepts:</b> It covers a vast range of entities, including:
+    - `schema:Person`, `schema:Movie`, `schema:Event`, `schema:Product`, `schema:Recipe`.
+    - Properties like `schema:director`, `schema:birthDate`, `schema:genre`.
+
+- <b>Characteristics:</b> Schema.org data often utilizes blank nodes heavily (especially in HTML-embedded formats like JSON-LD or Microdata) and assimilates terms from other vocabularies.
+    
+### 3. The Importance of Reuse
+
+A fundamental principle of Semantic Web modeling is <b>reuse</b>.
+
+- <b>Why Reuse?</b>
+    1. <b>Interoperability:</b> Reusing widely accepted terms ensures that your data can be easily integrated with other datasets (e.g., using `foaf:name` instead of creating a custom `:hasName` allows your data to be queried alongside other FOAF data).
+    2. <b>Efficiency:</b> It prevents the "reinvention of the wheel" and reduces fragmentation of the data landscape.
+    3. <b>Shared Understanding:</b> Using established vocabularies guarantees that the semantics of the data are understood by a broader community.
+        
+- <b>How to Reuse:</b>
+    - <b>Linked Open Vocabularies (LOV):</b> Modelers should use catalogues like LOV to search for and select existing vocabularies before creating new ones.
+    - <b>Mapping:</b> When you must create a domain-specific vocabulary (to capture unique nuances of your data), you should map your new terms to well-known vocabularies. This is often done using RDFS constructs:
+        - <b>Sub-classing:</b> Define your specific class as a `rdfs:subClassOf` a standard class (e.g., define `:MySpecificAuthor` as a subclass of `foaf:Person`).
+        - <b>Sub-properties:</b> Define your specific property as a `rdfs:subPropertyOf` a standard property.
+    - This approach preserves the specific details of your domain while maintaining compatibility with general Semantic Web tools.
 
 # Semantics of RDF and RDF Schema
 

@@ -85,7 +85,7 @@
         "node_token": "BBEOwHkYViRIM1kzyxHc8iKgnMc",
         "parent_node_token": "X5HAwhUxHixmzTkqv9BcS22Cn6c",
         "obj_create_time": "1769194894",
-        "obj_edit_time": "1770223581",
+        "obj_edit_time": "1770505850",
         "obj_token": "JAY1dsDCDoJTZExeCdHcZpZJnFG",
         "children": [
           {
@@ -115,6 +115,20 @@
             "slug": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/PUoIw8e2xi7oG3klHZec3pptnAp",
             "position": 1,
             "filename": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/PUoIw8e2xi7oG3klHZec3pptnAp.md"
+          },
+          {
+            "depth": 2,
+            "title": "Querying RDF with SPARQL  | 使用SPARQL查询RDF",
+            "node_token": "Hiz8wVaj7ibrGrk6Bnzck8lfnfb",
+            "parent_node_token": "BBEOwHkYViRIM1kzyxHc8iKgnMc",
+            "obj_create_time": "1770501925",
+            "obj_edit_time": "1770503816",
+            "obj_token": "YtTCdJCWwoWMAWxYrgXcuSbqn1d",
+            "children": [],
+            "has_child": false,
+            "slug": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/Hiz8wVaj7ibrGrk6Bnzck8lfnfb",
+            "position": 2,
+            "filename": "X5HAwhUxHixmzTkqv9BcS22Cn6c/BBEOwHkYViRIM1kzyxHc8iKgnMc/Hiz8wVaj7ibrGrk6Bnzck8lfnfb.md"
           }
         ],
         "has_child": true,
